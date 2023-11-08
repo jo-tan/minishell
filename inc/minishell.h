@@ -20,18 +20,18 @@
 # include <term.h> //with curses.h
 # include "libft.h"
 
-enum    e_token
+enum	e_token
 {
-	WORD = -1,
-	EMPTY_SPACE = ' ',
-	NEXT_LINE = '\n',
-	QUOTE = '\'',
-	DQUOTE = '\"',
-	PIPE = '|',
-	REDIR_IN = '<',
-	REDIR_OUT = '>',
-	ENV = '$',
-} ;
+	WORD		= -1,
+	EMPTY_SPACE	= ' ',
+	NEXT_LINE	= '\n',
+	QUOTE		= '\'',
+	DQUOTE		= '\"',
+	PIPE		= '|',
+	REDIR_IN	= '<',
+	REDIR_OUT	= '>',
+	ENV			= '$',
+};
 
 // To parse a string like: env > file | cat -e file | grep PID
 // the command table will look like
