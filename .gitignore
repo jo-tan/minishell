@@ -1,0 +1,9 @@
+# Files to be ignored by Git
+
+# Binaries
+obj/
+*.o
+*.d
+
+#Executable
+minishell
