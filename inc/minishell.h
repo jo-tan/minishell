@@ -18,19 +18,19 @@
 # include <termios.h> //tcsetattr, tcgetattr
 # include <curses.h> //getent, tgetflag, tgetnum, tgetstr, tgoto, tputs (direct curses interface to the terminfo capability database)
 # include <term.h> //with curses.h
-# include "../libft/libft.h"
+# include "libft.h"
 
 enum    e_token
 {
-    WORD = -1,
-    EMPTY_SPACE = ' ',
-    NEXT_LINE = '\n',
-    QUOTE = '\'',
-    DQUOTE = '\"',
-    PIPE = '|',
-    REDIR_IN = '<',
-    REDIR_OUT = '>',
-    ENV = '$',
+	WORD = -1,
+	EMPTY_SPACE = ' ',
+	NEXT_LINE = '\n',
+	QUOTE = '\'',
+	DQUOTE = '\"',
+	PIPE = '|',
+	REDIR_IN = '<',
+	REDIR_OUT = '>',
+	ENV = '$',
 } ;
 
 // To parse a string like: env > file | cat -e file | grep PID
@@ -39,7 +39,7 @@ enum    e_token
 // cmd[1] = {cat, 3, -e, file}
 // cmd[2] = {grep, 4, PID}
 // check syntex error before execute any cmd, if error, print error msg, return error num?
-void    change_signal(void);
+void	change_signal(void);
 
 #endif
 

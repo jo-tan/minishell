@@ -1,22 +1,30 @@
-NAME = minishell
-CC = cc
-CF = -Wall -Wextra -Werror -MMD -MP
-INC = inc/
-LIBFT = libft.a
-LIB_DIR = libft/
-S_DIR = src
-O_DIR = obj
-S_FILES = src/main.c
+NAME		= minishell
 
-O_FILES = $(patsubst $(S_DIR)/%.c,$(O_DIR)/%.o,$(S_FILES))
-D_FILES = $(patsubst $(S_DIR)/%.c,$(O_DIR)/%.d,$(S_FILES))
+# Sources
+S_FILES		= src/main.c
+S_DIR		= src
 
-RM = rm -rf
+LIBFT		= libft/libft.a
+LIBFT_DIR	= libft
 
-all: $(LIBFT) $(NAME)
+# Objects
+O_DIR		= obj
 
-$(NAME): $(O_FILES)
-	@$(CC) -I $(INC) -lreadline -L $(LIB_DIR) -lft $(O_FILES) -o $(NAME)
+O_FILES		= $(patsubst $(S_DIR)/%.c,$(O_DIR)/%.o,$(S_FILES))
+D_FILES		= $(patsubst $(S_DIR)/%.c,$(O_DIR)/%.d,$(S_FILES))
+
+# Compilation
+CC			= cc
+CF			= -Wall -Wextra -Werror #-MMD -MP
+INC			= -I inc/ -I $(LIBFT_DIR)
+
+# Cleaning
+RM			= rm -rf
+
+all:		$(LIBFT) $(NAME)
+
+$(NAME):	$(O_FILES)
+	@$(CC) -o $(NAME) $(O_FILES) -L $(LIBFT_DIR) -lreadline -lft $(INC)
 	@echo " [ ok ] | minishell is ready!"
 
 -include $(D_FILES)
@@ -24,20 +32,22 @@ $(NAME): $(O_FILES)
 $(O_DIR)/%.o: $(S_DIR)/%.c
 	@echo "Compiling $<"
 	@mkdir -p $(O_DIR) $(D_DIR)
-	@$(CC) $(CF) -I $(INC) -c $< -o $@
+	@$(CC) $(CF) $(INC) -c $< -o $@
 
 $(LIBFT):
-	@make -C $(LIB_DIR)
+	@make -C $(LIBFT_DIR)
 	@echo "libft is ready."
 
 clean:
 	@$(RM) $(O_DIR)
-	@echo "object and dependend files removed."
+	@make -C libft clean
+	@echo "Objects and dependend files removed."
 
-fclean: clean
+fclean:	clean
 	@$(RM) $(NAME)
-	@echo "binary file removed."
+	@make -C libft fclean
+	@echo "Binary files removed."
 
-re: fclean all
+re:		fclean all
 
-.PHONY: all clean fclean re
+.PHONY:	all clean fclean re
