@@ -20,12 +20,13 @@ static void reprompt(int signal)
 	rl_on_new_line();
 	rl_redisplay();
 }
-/*brief: keep reprompt and disable SIGQUIT
+/*brief: keep reprompt and disable ctr+\ and ctr+Z
 no return value*/
 void    change_signal(void)
 {
 	signal(SIGINT, reprompt);
 	signal(SIGQUIT, SIG_IGN);
+	signal(SIGTSTP, SIG_IGN);
 }
 
 static int ft_empty_str(char *line)
@@ -49,7 +50,7 @@ int main(int argc, char **argv, char **envp)
 	(void)envp;
 	(void)argv;
 	if (argc != 1)
-		return (ft_putstr_fd("ARG_ERR: wrong argument number\nHINT: ./minishell", 2), 1);
+		return (ft_putstr_fd("ARG_ERR: wrong argument number\nHINT: ./minishell\n", 2), 1);
 	/*Initialize*/
 	//initialize signal: to block the parent signal which may affect current terminal
 	/*Clear histroy && create/build current history list*/
