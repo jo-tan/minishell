@@ -20,18 +20,32 @@
 # include <term.h> //with curses.h
 # include "libft.h"
 
-enum	e_token
+typedef enum
 {
-	WORD		= -1,
-	EMPTY_SPACE	= ' ',
-	NEXT_LINE	= '\n',
-	QUOTE		= '\'',
-	DQUOTE		= '\"',
-	PIPE		= '|',
-	REDIR_IN	= '<',
-	REDIR_OUT	= '>',
-	ENV			= '$',
-};
+	NONE, //defaullt
+	ARG, // word
+	PIPE, // word == pipe >> not sure if this is needed
+	FILE_IN, // word == '<'
+	OPEN_FILE, // word after '<'. The file name, if not exit, will return error msg: "bash: hey: No such file or directory"
+	HERE_DOC, // word == '<<'
+	HD_WORD, // word after '<<' The specific word to end stdin/fd(n)
+	FILE_OUT, // word == '>'
+	EXIT_FILE, // word after '>' overwrite the file or create if not exist. If there is cmd before >, it will write result into the file 
+	FILE_OUT_AP, //word == '>>'
+	EXIT_FILE_AP //word after '>>', append the file or create if not exist.
+
+} e_type;
+
+
+/*This is smallest element of cmd line. */
+typedef struct s_token
+{
+	char	*word;
+	e_type	type;
+	int		isquote;
+	struct s_token	*next;
+} t_token;
+
 
 // To parse a string like: env > file | cat -e file | grep PID
 // the command table will look like
@@ -40,6 +54,8 @@ enum	e_token
 // cmd[2] = {grep, 4, PID}
 // check syntex error before execute any cmd, if error, print error msg, return error num?
 void	change_signal(void);
+/*Parsing line to list of tokens*/
+t_token *ft_read_line(const char *line);
 
 #endif
 
