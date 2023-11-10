@@ -40,7 +40,7 @@ $(LIBFT):
 
 clean:
 	@$(RM) $(O_DIR)
-	@make --no-print-directory -C libft clean
+	@make --no-print-directory -C libft fclean
 	@echo "Objects and dependend files removed."
 
 fclean:	clean
