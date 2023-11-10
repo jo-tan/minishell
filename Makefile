@@ -1,7 +1,7 @@
 NAME		= minishell
 
 # Sources
-S_FILES		= src/main.c src/parsing_read_cmd.c
+S_FILES		= src/main.c src/parsing_read_cmd.c src/check_print.c
 S_DIR		= src
 
 LIBFT		= libft/libft.a
