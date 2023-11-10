@@ -15,7 +15,7 @@
 static void reprompt(int signal)
 {
 	(void)signal;
-	ft_putstr_fd("\n", STDOUT_FILENO);
+	write(1, "\n", 1);
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
@@ -38,8 +38,7 @@ static int ft_empty_str(char *line)
 	i = 0;
 	while (line[i])
 	{
-		if (line[i] != ' ')
-		// if (line[i] != ' ' || line[i] != '\t')
+		if (line[i] != ' ' || line[i] != '\t')
 			return (0);
 		i++;
 	}
@@ -49,6 +48,7 @@ static int ft_empty_str(char *line)
 int main(int argc, char **argv, char **envp)
 {
 	char    *line;
+	t_token	*token_lst;
 
 	(void)envp;
 	(void)argv;
@@ -60,17 +60,20 @@ int main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		change_signal();
-		line = readline("minishell:~$>");
+		line = readline("▼・ᴥ・▼ (minishell)");
 		// When Ctrl-D : exit minishell, free everything, return exit code
+		//ft_exit(): clear everything and exit. beaware of the case 'exit | exit'. This should not work
 		if (!line)
 			exit(1);
-		// if (!*line)
+		// if (!*line) EOF, fre everthing and exit
 		// if empty string: is added into history, is not executed, does not change exit code
 		if (ft_strncmp(line, "", 1) == 0 || ft_empty_str(line))
 			continue ;
+
+		token_lst = ft_read_line(line);
+		
 		if (ft_strlen(line) > 0)
 			add_history(line);
-	}
-	//exit(): clear everything and exit. beaware of the case 'exit | exit'. This should not work 
+	}	 
 	return (0);
 }
