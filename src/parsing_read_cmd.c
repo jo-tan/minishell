@@ -70,6 +70,50 @@ int ft_check_quote_pair(const char *line)
     return (1);
 }
 
+int ft_count_word_len(const char *line)
+{
+    int word_len;
+
+    word_len = 0;
+    if (*line == 39 || *line == 34)
+        {
+            while ((*(line + word_len + 1)) != *line && (*(line + word_len)) != '\0')
+                word_len++;
+            word_len += 2;
+            return (word_len);
+        }
+    else if (*line == '|')
+        return (1);
+    else if (*line == '<')
+    {
+        if ((*(line + 1)) == '<')
+            return (2);
+        return (1);
+    }
+    else if (*line == '>')
+    {
+        if ((*(line + 1)) == '>')
+            return (2);
+        return (1);
+    }
+    else
+    {
+        while ((*(line + word_len)) != ' ' && (*(line + word_len)) != '\0')
+        {
+            if (*(line + word_len) == 39 || *(line + word_len) == 34)
+            {
+                while ((*(line + word_len + 1)) != *(line + word_len))
+                    word_len++;
+            }
+            if ((*(line + word_len)) == '<' || (*(line + word_len)) == '>')
+                break ;
+            word_len++;
+        }
+        return (word_len);
+    }
+}
+
+// fd" sdf" should be fd" sdf"; not [fd"] [sdf"]
 t_token *ft_tokenizer(const char  *line)
 {
     int     word_len;
@@ -85,18 +129,7 @@ t_token *ft_tokenizer(const char  *line)
             line++;
         else
         {
-            word_len = 0;
-            if (*line == 39 || *line == 34)
-            {
-                while ((*(line + word_len + 1)) != *line && (*(line + word_len)) != '\0')
-                    word_len++;
-                word_len += 2;
-            }
-            else
-            {
-                while ((*(line + word_len)) != ' ' && (*(line + word_len)) != '\0')
-                    word_len++;
-            }
+            word_len = ft_count_word_len(line);
             word = malloc(word_len + 1);
             if (!word)
                 return (NULL);
@@ -108,11 +141,24 @@ t_token *ft_tokenizer(const char  *line)
             else
                 ft_addtoken(head, new);
             printf("word_len: %d\n", word_len);
+            write(1, "\n", 1);
             line += word_len;
         }
     }
     return (head);
 }
+
+// void    ft_update_token_type(t_token *lst)
+// {
+//     t_token *p;
+
+//     p = lst;
+//     while (p)
+//     {
+//         if (ft_strncmp(p->word, "|", ft_strlen(p->word)) == 0)
+//             p->type = PIPE;
+//     }
+// }
 
 t_token *ft_read_line(const char *line)
 {
@@ -120,6 +166,7 @@ t_token *ft_read_line(const char *line)
 
     printf(".............\n❙input line❙ %s\n.............\n", line);
     token_lst = ft_tokenizer(line);
+    //ft_update_token_type(token_lst);
 
     ft_print_token_lst(token_lst);
 

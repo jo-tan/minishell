@@ -60,7 +60,7 @@ int main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		change_signal();
-		line = readline("▼・ᴥ・▼ฅ 𐆑𐆑minishell𐆑𐆑𐰷");
+		line = readline("▼・ᴥ・▼ฅ 𐆑𐆑minishell𐆑𐆑𐰷 ");
 		// When Ctrl-D : exit minishell, free everything, return exit code
 		//ft_exit(): clear everything and exit. beaware of the case 'exit | exit'. This should not work
 		if (!line)

@@ -2,10 +2,13 @@
 
 void    ft_print_token_lst(t_token *token_lst)
 {
-    while (token_lst)
+    t_token *p;
+
+    p = token_lst;
+    while (p)
     {
-        printf("❮%d/%s❯", token_lst->type, token_lst->word);
-        token_lst = token_lst->next;
+        printf("❮%d/%s❯", p->type, p->word);
+        p = p->next;
     }
     printf("\n");
 }
