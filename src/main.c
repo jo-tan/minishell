@@ -24,7 +24,7 @@ static void reprompt(int signal)
 no return value*/
 void    change_signal(void)
 {
-	// SIGINT sets $? to 130
+	// SIGINT sets $? to 130 (in child, $? will become 131)
 	signal(SIGINT, reprompt);
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGTSTP, SIG_IGN);

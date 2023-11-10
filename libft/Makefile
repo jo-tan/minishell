@@ -57,24 +57,24 @@ RN			= ranlib
 CFLAGS		= -Wall -Wextra -Werror
 
 .c.o:
-	${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
+			@${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
 
 all:		$(NAME) bonus
 
 $(NAME):	${OBJS}
-			${AR} ${NAME} ${OBJS}
-			${RN} ${NAME}
+			@${AR} ${NAME} ${OBJS}
+			@${RN} ${NAME}
 
 bonus:	${B_OBJS}
-			${AR} ${NAME} ${B_OBJS}
-			${RN} ${NAME}
+			@${AR} ${NAME} ${B_OBJS}
+			@${RN} ${NAME}
 
 
 clean:
-			${RM} ${OBJS} ${B_OBJS}
+			@${RM} ${OBJS} ${B_OBJS}
 
 fclean:		clean
-			${RM} $(NAME)
+			@${RM} $(NAME)
 
 re:			fclean all
 

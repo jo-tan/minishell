@@ -35,17 +35,17 @@ $(O_DIR)/%.o: $(S_DIR)/%.c
 	@$(CC) $(CF) $(INC) -c $< -o $@
 
 $(LIBFT):
-	@make -C $(LIBFT_DIR)
+	@make --no-print-directory -C $(LIBFT_DIR)
 	@echo "libft is ready."
 
 clean:
 	@$(RM) $(O_DIR)
-	@make -C libft clean
+	@make --no-print-directory -C libft clean
 	@echo "Objects and dependend files removed."
 
 fclean:	clean
 	@$(RM) $(NAME)
-	@make -C libft fclean
+	@make --no-print-directory -C libft fclean
 	@echo "Binary files removed."
 
 re:		fclean all
