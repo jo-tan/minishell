@@ -41,8 +41,8 @@ void ft_free_token_lst(t_token *lst)
 t_token *ft_tokenizer(const char  *line)
 {
     int     word_len;
-    t_token *new = NULL;
     char    *word;
+    t_token *new = NULL;
     t_token *head = NULL;
 
     while (*line)
@@ -52,10 +52,11 @@ t_token *ft_tokenizer(const char  *line)
         else
         {
             word_len = 0;
-            if (*line == 34 || *line == '"')
+            if (*line == 39 || *line == 34)
             {
-                while ((*(line + word_len)) != *line)
+                while (((*(line + word_len + 1)) != *line) && (*(line + word_len)) != '\0')
                     word_len++;
+                word_len += 2;
             }
             else
             {
