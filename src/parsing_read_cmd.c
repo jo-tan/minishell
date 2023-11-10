@@ -72,45 +72,34 @@ int ft_check_quote_pair(const char *line)
 
 int ft_count_word_len(const char *line)
 {
-    int word_len;
+    int len;
+    int inquote;
 
-    word_len = 0;
-    if (*line == 39 || *line == 34)
-        {
-            while ((*(line + word_len + 1)) != *line && (*(line + word_len)) != '\0')
-                word_len++;
-            word_len += 2;
-            return (word_len);
-        }
-    else if (*line == '|')
-        return (1);
-    else if (*line == '<')
+    len = 0;
+    if (*line == '|' || *line == '<' || *line == '>')
     {
-        if ((*(line + 1)) == '<')
+        if ((*line == '<' || *line == '>') && (*(line + 1)) == *line)
             return (2);
-        return (1);
+        return(1);
     }
-    else if (*line == '>')
+    while (*(line + len))
     {
-        if ((*(line + 1)) == '>')
-            return (2);
-        return (1);
-    }
-    else
-    {
-        while ((*(line + word_len)) != ' ' && (*(line + word_len)) != '\0')
+        if ((*(line + len)) == 39 || (*(line + len)) == 34)
         {
-            if (*(line + word_len) == 39 || *(line + word_len) == 34)
+            inquote = 1;
+            while ((*(line + len + inquote)) != (*(line + len)))
             {
-                while ((*(line + word_len + 1)) != *(line + word_len))
-                    word_len++;
+                inquote++;
             }
-            if ((*(line + word_len)) == '<' || (*(line + word_len)) == '>')
-                break ;
-            word_len++;
+            len += inquote;
+            len ++;
+            break;
         }
-        return (word_len);
+        if ((*(line + len)) == '|' || (*(line + len)) == '<' || (*(line + len)) == '>' || (*(line + len)) == ' ' || (*(line + len)) == '\t')
+            break ;
+        len++;
     }
+    return (len);
 }
 
 // fd" sdf" should be fd" sdf"; not [fd"] [sdf"]
@@ -148,17 +137,44 @@ t_token *ft_tokenizer(const char  *line)
     return (head);
 }
 
-// void    ft_update_token_type(t_token *lst)
-// {
-//     t_token *p;
+void    ft_update_token_type(t_token *lst)
+{
+    t_token *p;
 
-//     p = lst;
-//     while (p)
-//     {
-//         if (ft_strncmp(p->word, "|", ft_strlen(p->word)) == 0)
-//             p->type = PIPE;
-//     }
-// }
+    p = lst;
+    while (p)
+    {
+        if (ft_strncmp(p->word, "|", ft_strlen(p->word)) == 0)
+            p->type = PIPE;
+        else if (ft_strncmp(p->word, "<", ft_strlen(p->word)) == 0)
+        {
+            p->type = FILE_IN;
+            p = p->next;
+            p->type = OPEN_FILE;
+        }
+        else if (ft_strncmp(p->word, "<<", ft_strlen(p->word)) == 0)
+        {
+            p->type = HERE_DOC;
+            p = p->next;
+            p->type = HD_WORD;
+        }
+        else if (ft_strncmp(p->word, ">", ft_strlen(p->word)) == 0)
+        {
+            p->type = FILE_OUT;
+            p = p->next;
+            p->type = EXIT_FILE;
+        }
+        else if (ft_strncmp(p->word, ">>", ft_strlen(p->word)) == 0)
+        {
+            p->type = FILE_OUT_AP;
+            p = p->next;
+            p->type = EXIT_FILE_AP;
+        }
+        else
+            p->type = ARG;
+        p = p->next;
+    }
+}
 
 t_token *ft_read_line(const char *line)
 {
@@ -166,7 +182,8 @@ t_token *ft_read_line(const char *line)
 
     printf(".............\n❙input line❙ %s\n.............\n", line);
     token_lst = ft_tokenizer(line);
-    //ft_update_token_type(token_lst);
+    printf("hi\n");
+    ft_update_token_type(token_lst);
 
     ft_print_token_lst(token_lst);
 

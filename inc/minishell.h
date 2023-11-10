@@ -22,17 +22,17 @@
 
 typedef enum
 {
-	NONE, //defaullt
-	ARG, // word
-	PIPE, // word == pipe >> not sure if this is needed
-	FILE_IN, // word == '<'
-	OPEN_FILE, // word after '<'. The file name, if not exit, will return error msg: "bash: hey: No such file or directory"
-	HERE_DOC, // word == '<<'
-	HD_WORD, // word after '<<' The specific word to end stdin/fd(n)
-	FILE_OUT, // word == '>'
-	EXIT_FILE, // word after '>' overwrite the file or create if not exist. If there is cmd before >, it will write result into the file 
-	FILE_OUT_AP, //word == '>>'
-	EXIT_FILE_AP //word after '>>', append the file or create if not exist.
+	NONE = 0, //defaullt
+	ARG = 1, // word
+	PIPE = 2, // word == pipe >> not sure if this is needed
+	FILE_IN = 3, // word == '<'
+	OPEN_FILE = 33, // word after '<'. The file name, if not exit, will return error msg: "bash: hey: No such file or directory"
+	HERE_DOC = 4, // word == '<<'
+	HD_WORD = 44, // word after '<<' The specific word to end stdin/fd(n)
+	FILE_OUT = 5, // word == '>'
+	EXIT_FILE = 55, // word after '>' overwrite the file or create if not exist. If there is cmd before >, it will write result into the file 
+	FILE_OUT_AP = 6, //word == '>>'
+	EXIT_FILE_AP = 66 //word after '>>', append the file or create if not exist.
 
 } e_type;
 
@@ -51,6 +51,7 @@ void	change_signal(void);
 
 /*Parsing line to list of tokens*/
 t_token *ft_read_line(const char *line);
+void    ft_update_token_type(t_token *lst);
 
 /*struct list*/
 t_token *ft_newtoken(char *s);
