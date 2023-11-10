@@ -54,8 +54,16 @@ typedef struct s_token
 // cmd[2] = {grep, 4, PID}
 // check syntex error before execute any cmd, if error, print error msg, return error num?
 void	change_signal(void);
+
 /*Parsing line to list of tokens*/
 t_token *ft_read_line(const char *line);
+
+/*struct list*/
+t_token *ft_newtoken(char *s);
+void ft_free_token_lst(t_token *lst);
+
+/*Printf for checking progress*/
+void    ft_print_token_lst(t_token *token_lst);
 
 #endif
 

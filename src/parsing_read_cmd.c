@@ -5,29 +5,78 @@ t_token *ft_newtoken(char *s)
 
     new = malloc(sizeof(t_token));
     if (!new)
+    {
+        free(s);
         return(NULL);
+    }
     new->word = s;
     new->type = NONE;
     new->next = NULL;
     return (new);
 }
 
-t_token *ft_lexs(const char  *line)
+void    ft_addtoken(t_token *lst, t_token *new)
 {
-    //char *word;
-    t_token *new = NULL;
-
-    while (!*line)
+    if (!new)
+        return;
+    if (lst == NULL)
     {
-        if (*line == ' ' || *line == '\t')
+        lst = new;
+        return ;
+    }
+    while (lst->next != NULL)
+        lst = lst->next;
+    lst->next = new;
+}
+
+void ft_free_token_lst(t_token *lst)
+{
+    while (lst)
+    {
+        free(lst->word);
+        lst = lst->next;
+    }
+}
+
+t_token *ft_tokenizer(const char  *line)
+{
+    int     word_len;
+    t_token *new = NULL;
+    char    *word;
+    t_token *head = NULL;
+
+    while (*line)
+    {
+        if ((*line == ' ') || (*line == '\t'))
             line++;
         else
         {
-           // ft_word_into_token();
+            word_len = 0;
+            if (*line == 34 || *line == '"')
+            {
+                while ((*(line + word_len)) != *line)
+                    word_len++;
+            }
+            else
+            {
+                while ((*(line + word_len)) != ' ' && (*(line + word_len)) != '\0')
+                    word_len++;
+            }
+            word = malloc(word_len + 1);
+            if (!word)
+                return (NULL);
+            ft_strlcpy(word, line, word_len + 1);
+            printf("word: %s\n", word);
+            new = ft_newtoken(word);
+            if (head == NULL)
+                head = new;
+            else
+                ft_addtoken(head, new);
+            printf("word_len: %d\n", word_len);
+            line += word_len;
         }
     }
-    //while (!*line), if space or tab line++, if word get len and create a token
-    return (new);
+    return (head);
 }
 
 t_token *ft_read_line(const char *line)
@@ -35,9 +84,9 @@ t_token *ft_read_line(const char *line)
     t_token *token_lst;
 
     printf(".............\n❙input line❙ %s\n.............\n", line);
-    token_lst = ft_lexs(line);
+    token_lst = ft_tokenizer(line);
 
-    //ft_print_token_lst(token_lst);
+    ft_print_token_lst(token_lst);
 
     return (token_lst);
 }
