@@ -24,11 +24,13 @@ static void reprompt(int signal)
 no return value*/
 void    change_signal(void)
 {
+	// SIGINT sets $? to 130
 	signal(SIGINT, reprompt);
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGTSTP, SIG_IGN);
 }
 
+// includes spaces and tabs
 static int ft_empty_str(char *line)
 {
 	int i;
@@ -37,6 +39,7 @@ static int ft_empty_str(char *line)
 	while (line[i])
 	{
 		if (line[i] != ' ')
+		// if (line[i] != ' ' || line[i] != '\t')
 			return (0);
 		i++;
 	}
@@ -58,8 +61,11 @@ int main(int argc, char **argv, char **envp)
 	{
 		change_signal();
 		line = readline("minishell:~$>");
+		// When Ctrl-D : exit minishell, free everything, return exit code
 		if (!line)
 			exit(1);
+		// if (!*line)
+		// if empty string: is added into history, is not executed, does not change exit code
 		if (ft_strncmp(line, "", 1) == 0 || ft_empty_str(line))
 			continue ;
 		if (ft_strlen(line) > 0)
