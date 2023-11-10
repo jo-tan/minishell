@@ -46,13 +46,7 @@ typedef struct s_token
 	struct s_token	*next;
 } t_token;
 
-
-// To parse a string like: env > file | cat -e file | grep PID
-// the command table will look like
-// cmd[0] = {env, 3, >, file} redirect to find or create "file" and input result of env to file **remember to unlink(file)
-// cmd[1] = {cat, 3, -e, file}
-// cmd[2] = {grep, 4, PID}
-// check syntex error before execute any cmd, if error, print error msg, return error num?
+/*signal*/
 void	change_signal(void);
 
 /*Parsing line to list of tokens*/
@@ -66,35 +60,3 @@ void ft_free_token_lst(t_token *lst);
 void    ft_print_token_lst(t_token *token_lst);
 
 #endif
-
-/*Parsing test:
-o-tan@made-f0Cr5s1:~/Documents/minishell$ export hi='ls     -l '
-jo-tan@made-f0Cr5s1:~/Documents/minishell$ $hi'a'
-ls: cannot access 'a': No such file or directory
-jo-tan@made-f0Cr5s1:~/Documents/minishell$ ls -l a
-ls: cannot access 'a': No such file or directory
-jo-tan@made-f0Cr5s1:~/Documents/minishell$ >$hi
-bash: $hi: ambiguous redirect
-jo-tan@made-f0Cr5s1:~/Documents/minishell$ >"$hi"
-jo-tan@made-f0Cr5s1:~/Documents/minishell$ << $hi
-> sldkjf
-> sldkj
-> $hi
-jo-tan@made-f0Cr5s1:~/Documents/minishell$ echo $hi
-ls -l
-jo-tan@made-f0Cr5s1:~/Documents/minishell$ << $hi
-sldkjf
-sldkj
-$hi
-jo-tan@made-f0Cr5s1:~/Documents/minishell$ << $hi
-> ls -l
-> $hi
-jo-tan@made-f0Cr5s1:~/Documents/minishell$ cat <<$hi
-> $USER
-> $hi
-jo-tan
-jo-tan@made-f0Cr5s1:~/Documents/minishell$ cat <<$hi""
-> $USER
-> $hi
-$USER
-*/
