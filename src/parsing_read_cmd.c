@@ -38,6 +38,38 @@ void ft_free_token_lst(t_token *lst)
     }
 }
 
+int ft_check_quote_pair(const char *line)
+{
+    int quote;
+    int inquote_len;
+    char    *p;
+
+    quote = 0;
+    p = (char *)line;
+    while (*p)
+    {
+        if (*p == 39 || *p == 34)
+        {
+            inquote_len = 1;
+            quote = 1;
+            while ((*(p + inquote_len)) != '\0')
+            {
+                if ((*(p + inquote_len)) == *p)
+                {
+                    quote = 0;
+                    p += inquote_len;
+                    break ;
+                }
+                inquote_len++;
+            }
+            if (quote != 0)
+                return (0);
+        }
+        p++;
+    }
+    return (1);
+}
+
 t_token *ft_tokenizer(const char  *line)
 {
     int     word_len;
@@ -45,6 +77,8 @@ t_token *ft_tokenizer(const char  *line)
     t_token *new = NULL;
     t_token *head = NULL;
 
+    if (!ft_check_quote_pair(line))
+        return (ft_putstr_fd("ERR: quote isn't closed. Out of project scope\n", 2), NULL);
     while (*line)
     {
         if ((*line == ' ') || (*line == '\t'))
@@ -54,7 +88,7 @@ t_token *ft_tokenizer(const char  *line)
             word_len = 0;
             if (*line == 39 || *line == 34)
             {
-                while (((*(line + word_len + 1)) != *line) && (*(line + word_len)) != '\0')
+                while ((*(line + word_len + 1)) != *line && (*(line + word_len)) != '\0')
                     word_len++;
                 word_len += 2;
             }
