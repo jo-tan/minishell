@@ -144,34 +144,37 @@ void    ft_update_token_type(t_token *lst)
     p = lst;
     while (p)
     {
-        if (ft_strncmp(p->word, "|", ft_strlen(p->word)) == 0)
-            p->type = PIPE;
-        else if (ft_strncmp(p->word, "<", ft_strlen(p->word)) == 0)
+        if (p->type == NONE)
         {
-            p->type = FILE_IN;
-            p = p->next;
-            p->type = OPEN_FILE;
+            if (ft_strncmp(p->word, "|", ft_strlen(p->word)) == 0)
+                p->type = PIPE;
+            else if (ft_strncmp(p->word, "<", ft_strlen(p->word)) == 0)
+            {
+                p->type = FILE_IN;
+                if (p->next != NULL)
+                    p->next->type = OPEN_FILE;
+            }
+            else if (ft_strncmp(p->word, "<<", ft_strlen(p->word)) == 0)
+            {
+                p->type = HERE_DOC;
+                if (p->next != NULL)
+                    p->next->type = HD_WORD;
+            }
+            else if (ft_strncmp(p->word, ">", ft_strlen(p->word)) == 0)
+            {
+                p->type = FILE_OUT;
+                if (p->next != NULL)
+                    p->next->type = EXIT_FILE;
+            }
+            else if (ft_strncmp(p->word, ">>", ft_strlen(p->word)) == 0)
+            {
+                p->type = FILE_OUT_AP;
+                if (p->next != NULL)
+                    p->next->type = EXIT_FILE_AP;
+            }
+            else
+                p->type = ARG;
         }
-        else if (ft_strncmp(p->word, "<<", ft_strlen(p->word)) == 0)
-        {
-            p->type = HERE_DOC;
-            p = p->next;
-            p->type = HD_WORD;
-        }
-        else if (ft_strncmp(p->word, ">", ft_strlen(p->word)) == 0)
-        {
-            p->type = FILE_OUT;
-            p = p->next;
-            p->type = EXIT_FILE;
-        }
-        else if (ft_strncmp(p->word, ">>", ft_strlen(p->word)) == 0)
-        {
-            p->type = FILE_OUT_AP;
-            p = p->next;
-            p->type = EXIT_FILE_AP;
-        }
-        else
-            p->type = ARG;
         p = p->next;
     }
 }
@@ -182,10 +185,7 @@ t_token *ft_read_line(const char *line)
 
     printf(".............\n❙input line❙ %s\n.............\n", line);
     token_lst = ft_tokenizer(line);
-    printf("hi\n");
     ft_update_token_type(token_lst);
-
-    ft_print_token_lst(token_lst);
 
     return (token_lst);
 }

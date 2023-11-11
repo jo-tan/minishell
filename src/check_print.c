@@ -35,8 +35,8 @@ void    ft_print_token_lst(t_token *token_lst)
         else if (p->type == EXIT_FILE)
             type = "EXIT_FILE";
 
-        else if (p->type == EXIT_FILE)
-            type = "EXIT_FILE";
+        else if (p->type == FILE_OUT_AP)
+            type = "FILE_OUT_AP";
 
         else if (p->type == EXIT_FILE_AP)
             type = "EXIT_FILE_AP";
