@@ -23,7 +23,6 @@ int ft_count_word_len(const char *line)
             }
             len += inquote;
             len ++;
-            break;
         }
         if ((*(line + len)) == '|' || (*(line + len)) == '<' || (*(line + len)) == '>' || (*(line + len)) == ' ' || (*(line + len)) == '\t')
             break ;
