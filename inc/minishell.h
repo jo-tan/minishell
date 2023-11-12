@@ -36,13 +36,20 @@ typedef enum
 
 } e_type;
 
+typedef enum
+{
+	UNSET = 100,
+	SINGLE = 101,
+	DOUBLE = 102,
+} e_isquote;
+
 
 /*This is smallest element of cmd line. */
 typedef struct s_token
 {
-	char	*word;
-	e_type	type;
-	int		isquote;
+	char			*word;
+	e_type			type;
+	e_isquote		isquote;
 	struct s_token	*next;
 } t_token;
 
@@ -51,11 +58,20 @@ void	change_signal(void);
 
 /*Parsing line to list of tokens*/
 t_token *ft_read_line(const char *line);
+t_token *ft_tokenizer(const char  *line);
+int 	ft_count_word_len(const char *line);
 void    ft_update_token_type(t_token *lst);
 
-/*struct list*/
+/*Parsing quotes*/
+int 	ft_check_quote_pair(const char *line);
+void    ft_update_token_isquote(t_token *lst);
+void	clear_quote(char **word);
+void    ft_update_token_clean_quote(t_token *lst, void (*clear_quote)(char **));
+
+/*linked list function*/
 t_token *ft_newtoken(char *s);
-void ft_free_token_lst(t_token *lst);
+void    ft_addtoken(t_token *lst, t_token *new);
+void	ft_token_free_lst(t_token *lst);
 
 /*Printf for checking progress*/
 void    ft_print_token_lst(t_token *token_lst);

@@ -72,7 +72,7 @@ int main(int argc, char **argv, char **envp)
 
 		token_lst = ft_read_line(line);
 		ft_print_token_lst(token_lst);
-		ft_free_token_lst(token_lst);
+		ft_token_free_lst(token_lst);
 		
 		if (ft_strlen(line) > 0)
 			add_history(line);

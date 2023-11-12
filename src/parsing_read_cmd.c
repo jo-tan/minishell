@@ -1,74 +1,4 @@
 #include "minishell.h"
-t_token *ft_newtoken(char *s)
-{
-    t_token *new;
-
-    new = malloc(sizeof(t_token));
-    if (!new)
-    {
-        free(s);
-        return(NULL);
-    }
-    new->word = s;
-    new->type = NONE;
-    new->next = NULL;
-    return (new);
-}
-
-void    ft_addtoken(t_token *lst, t_token *new)
-{
-    if (!new)
-        return;
-    if (lst == NULL)
-    {
-        lst = new;
-        return ;
-    }
-    while (lst->next != NULL)
-        lst = lst->next;
-    lst->next = new;
-}
-
-void ft_free_token_lst(t_token *lst)
-{
-    while (lst)
-    {
-        free(lst->word);
-        lst = lst->next;
-    }
-}
-
-int ft_check_quote_pair(const char *line)
-{
-    int quote;
-    int inquote_len;
-    char    *p;
-
-    quote = 0;
-    p = (char *)line;
-    while (*p)
-    {
-        if (*p == 39 || *p == 34)
-        {
-            inquote_len = 1;
-            quote = 1;
-            while ((*(p + inquote_len)) != '\0')
-            {
-                if ((*(p + inquote_len)) == *p)
-                {
-                    quote = 0;
-                    p += inquote_len;
-                    break ;
-                }
-                inquote_len++;
-            }
-            if (quote != 0)
-                return (0);
-        }
-        p++;
-    }
-    return (1);
-}
 
 int ft_count_word_len(const char *line)
 {
@@ -84,7 +14,7 @@ int ft_count_word_len(const char *line)
     }
     while (*(line + len))
     {
-        if ((*(line + len)) == 39 || (*(line + len)) == 34)
+        if ((*(line + len)) == '\'' || (*(line + len)) == '\"')
         {
             inquote = 1;
             while ((*(line + len + inquote)) != (*(line + len)))
@@ -141,6 +71,8 @@ void    ft_update_token_type(t_token *lst)
 {
     t_token *p;
 
+    if (!lst)
+        return ;
     p = lst;
     while (p)
     {
@@ -186,6 +118,10 @@ t_token *ft_read_line(const char *line)
     printf(".............\n❙input line❙ %s\n.............\n", line);
     token_lst = ft_tokenizer(line);
     ft_update_token_type(token_lst);
+    ft_update_token_isquote(token_lst);
+    ft_print_token_lst(token_lst);
 
+    ft_update_token_clean_quote(token_lst, clear_quote);
+    
     return (token_lst);
 }
