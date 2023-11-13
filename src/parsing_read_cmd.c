@@ -6,7 +6,7 @@
 /*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 18:26:48 by jo-tan            #+#    #+#             */
-/*   Updated: 2023/11/13 19:34:23 by jo-tan           ###   ########.fr       */
+/*   Updated: 2023/11/13 19:53:15 by jo-tan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int	ft_count_word_len(const char *line)
 	int	aquote;
 
 	len = 0;
+	aquote = 0;
 	if (*line == '|' || *line == '<' || *line == '>')
 	{
 		if ((*line == '<' || *line == '>') && (*(line + 1)) == *line)
@@ -27,6 +28,11 @@ int	ft_count_word_len(const char *line)
 	}
 	while (*(line + len))
 	{
+		if (ft_isquote(*(line + len)) && aquote == 1)
+		{
+			aquote = 0;
+			break ;
+		}
 		if (ft_isquote(*(line + len)))
 		{
 			aquote = 1;
@@ -40,11 +46,6 @@ int	ft_count_word_len(const char *line)
 			|| (*(line + len)) == '<' || (*(line + len)) == '>'
 			|| ft_isspace(*(line + len)))
 			break ;
-		if (ft_isquote(*(line + len)) && aquote != 0)
-		{
-			aquote = 0;
-			break ;
-		}
 		len++;
 	}
 	return (len);
