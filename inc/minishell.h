@@ -53,6 +53,11 @@ typedef struct s_token
 	struct s_token	*next;
 } t_token;
 
+typedef struct s_cmd
+{
+	
+} t_cmd;
+
 /*signal*/
 void	change_signal(void);
 

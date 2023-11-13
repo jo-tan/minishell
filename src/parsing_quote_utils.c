@@ -4,9 +4,11 @@ int ft_check_quote_pair(const char *line)
 {
     int quote;
     int inquote_len;
+    int quote_type;
     char    *p;
 
     quote = 0;
+    quote_type = 0;
     p = (char *)line;
     while (*p)
     {
@@ -14,6 +16,10 @@ int ft_check_quote_pair(const char *line)
         {
             inquote_len = 1;
             quote = 1;
+            if (*p == '\'')
+                quote_type = 1;
+            else
+                quote_type = 2;
             while ((*(p + inquote_len)) != '\0')
             {
                 if ((*(p + inquote_len)) == *p)
@@ -29,7 +35,7 @@ int ft_check_quote_pair(const char *line)
         }
         p++;
     }
-    return (1);
+    return (quote_type);
 }
 
 void    ft_update_token_isquote(t_token *lst)
@@ -41,29 +47,18 @@ void    ft_update_token_isquote(t_token *lst)
     p = lst;
     while (p)
     {
-        if (ft_strncmp(p->word, "\'", 1) == 0 || ft_strncmp(p->word, "\"", 1) == 0)
-        {
-            if (ft_strncmp(p->word, "\'", 1) == 0)
-                p->isquote = SINGLE;
-            if (ft_strncmp(p->word, "\"", 1) == 0)
-                p->isquote = DOUBLE;
-        }
+        if (ft_check_quote_pair(p->word) == 1)
+            p->isquote = SINGLE;
+        if (ft_check_quote_pair(p->word) == 2)
+            p->isquote = DOUBLE;
         p = p->next;
     }
 }
 
 void clear_quote(char **word)
 {
-    char    *new;
-
-    if (!word || !*word)
-        return ;
-    new = malloc(ft_strlen(*word) - 1);
-    if (!new)
-        return ;
-    ft_strlcpy(new, *word + 1, ft_strlen(*word) - 1);
-    free(*word);
-    *word = new;
+    (void) word;
+    printf("hello! function clear_quote is in progress :P \n");
 }
 
 void    ft_update_token_clean_quote(t_token *lst, void (clear_quote)(char **))

@@ -8,7 +8,7 @@ t_token *ft_newtoken(char *s)
     if (!new)
     {
         free(s);
-        return(NULL);
+        return(NULL); //build a function to handle malloc error and free everything in the end
     }
     new->word = s;
     new->type = NONE;
@@ -24,7 +24,7 @@ void    ft_addtoken(t_token *lst, t_token *new)
     if (lst == NULL)
     {
         lst = new;
-        return ;
+        return ; //build a function to handle malloc error and free everything in the end
     }
     while (lst->next != NULL)
         lst = lst->next;

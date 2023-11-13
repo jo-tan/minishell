@@ -76,6 +76,7 @@ int main(int argc, char **argv, char **envp)
 		
 		if (ft_strlen(line) > 0)
 			add_history(line);
+		free(line);
 	}	 
 	return (0);
 }
