@@ -6,7 +6,7 @@
 /*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 18:26:38 by jo-tan            #+#    #+#             */
-/*   Updated: 2023/11/13 18:50:30 by jo-tan           ###   ########.fr       */
+/*   Updated: 2023/11/13 20:17:54 by jo-tan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int	ft_check_quote_pair(const char *line)
 	char	*p;
 
 	quote = 0;
+	quote_type = 0;
 	p = (char *)line;
 	while (*p)
 	{

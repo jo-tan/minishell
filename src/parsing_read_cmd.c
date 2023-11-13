@@ -6,7 +6,7 @@
 /*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 18:26:48 by jo-tan            #+#    #+#             */
-/*   Updated: 2023/11/13 19:53:15 by jo-tan           ###   ########.fr       */
+/*   Updated: 2023/11/13 19:59:31 by jo-tan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	ft_count_word_len(const char *line)
 		}
 		if ((*(line + len)) == '|'
 			|| (*(line + len)) == '<' || (*(line + len)) == '>'
-			|| ft_isspace(*(line + len)))
+			|| ft_isspace(*(line + len)) || ft_isquote(*(line + len)))
 			break ;
 		len++;
 	}
