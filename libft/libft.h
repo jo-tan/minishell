@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jo-tan <jo-tan@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/08 11:45:24 by jo-tan            #+#    #+#             */
-/*   Updated: 2022/12/14 01:39:27 by jo-tan           ###   ########.fr       */
+/*   Created: 2023/11/13 18:23:54 by jo-tan            #+#    #+#             */
+/*   Updated: 2023/11/13 18:23:56 by jo-tan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ int		ft_isalpha(int c);
 int		ft_isdigit(int c);
 int		ft_isalnum(int c);
 int		ft_isascii(int c);
+int		ft_isspace(int c);
+int		ft_isquote(int c);
 int		ft_isprint(int c);
 size_t	ft_strlen(const char *s);
 void	*ft_memset(void *s, int c, size_t n);
