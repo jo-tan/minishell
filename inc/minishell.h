@@ -6,7 +6,7 @@
 /*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 18:25:28 by jo-tan            #+#    #+#             */
-/*   Updated: 2023/11/13 18:25:30 by jo-tan           ###   ########.fr       */
+/*   Updated: 2023/11/14 15:23:51 by jo-tan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,9 @@ typedef struct s_cmd
 
 /*signal*/
 void	change_signal(void);
+
+/*Check valid input string*/
+int	ft_valid_line(const char *line);
 
 /*Parsing line to list of tokens*/
 t_token *ft_read_line(const char *line);

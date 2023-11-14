@@ -6,7 +6,7 @@
 #    By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/13 18:25:12 by jo-tan            #+#    #+#              #
-#    Updated: 2023/11/13 18:25:18 by jo-tan           ###   ########.fr        #
+#    Updated: 2023/11/14 15:25:27 by jo-tan           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,7 @@ NAME		= minishell
 
 # Sources
 S_FILES		= src/main.c \
+				src/check_valid_input.c \
 				src/parsing_read_cmd.c \
 				src/check_print.c \
 				src/linked_list.c \

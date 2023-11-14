@@ -6,7 +6,7 @@
 /*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 18:26:48 by jo-tan            #+#    #+#             */
-/*   Updated: 2023/11/13 19:59:31 by jo-tan           ###   ########.fr       */
+/*   Updated: 2023/11/14 15:24:04 by jo-tan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,8 @@ t_token	*ft_tokenizer(const char *line)
 
 	new = NULL;
 	head = NULL;
-	if (!ft_check_quote_pair(line))
-		return (ft_putstr_fd("ERR: quote isn't closed. Out of project scope\n", 2), NULL);
+	if (!ft_valid_line(line))
+		return (NULL);
 	while (*line)
 	{
 		if (ft_isspace(*line))
