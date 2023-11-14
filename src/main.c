@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aauthier <aauthier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 18:25:57 by jo-tan            #+#    #+#             */
-/*   Updated: 2023/11/13 18:33:11 by jo-tan           ###   ########.fr       */
+/*   Updated: 2023/11/14 17:01:01 by aauthier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	main(int argc, char **argv, char **envp)
 		//ft_exit(): clear everything and exit. beaware of the case 'exit | exit'. This should not work
 		if (!line)
 			exit(1);
-		// if (!*line) EOF, fre everthing and exit
+		// if (!*line) EOF, free everything and exit
 		// if empty string: is added into history, is not executed, does not change exit code
 		if (ft_strncmp(line, "", 1) == 0 || ft_empty_str(line))
 			continue ;
@@ -76,3 +76,6 @@ int	main(int argc, char **argv, char **envp)
 	}
 	return (0);
 }
+
+
+// Where do you'll call the executive part ?
