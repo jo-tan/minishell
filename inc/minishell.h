@@ -67,7 +67,8 @@ typedef struct s_token
 
 typedef struct s_cmd
 {
-	
+	struct s_token	*token;
+	struct s_cmd	*next;
 } t_cmd;
 
 /*signal*/
@@ -88,12 +89,16 @@ void    ft_update_token_isquote(t_token *lst);
 void	clear_quote(char **word);
 void    ft_update_token_clean_quote(t_token *lst, void (*clear_quote)(char **));
 
-/*linked list function*/
+/*token list function*/
 t_token *ft_newtoken(char *s);
 void    ft_addtoken(t_token *lst, t_token *new);
 void	ft_token_free_lst(t_token *lst);
 
+/*cmd list function*/
+t_cmd    *ft_token_to_cmd_array(t_token *token_lst);
+
 /*Printf for checking progress*/
 void    ft_print_token_lst(t_token *token_lst);
+void	print_cmd_array(t_cmd **cmd_array);
 
 #endif

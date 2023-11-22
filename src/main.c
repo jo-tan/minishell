@@ -12,6 +12,18 @@
 
 #include "minishell.h"
 
+int	exit_minishell(char *line, int exit_status)
+{
+	if (exit_status == 130) //EOF
+	{
+		write(1, "exit\n", ft_strlen("exit\n"));
+		//free everything
+		free(line);
+		rl_clear_history();
+	}
+	return (exit_status);
+}
+
 static void	reprompt(int signal)
 {
 	(void)signal;
@@ -59,17 +71,14 @@ int	main(int argc, char **argv, char **envp)
 	{
 		change_signal();
 		line = readline("▼・ᴥ・▼ฅ 𐆑𐆑minishell𐆑𐆑𐰷 ");
-		// When Ctrl-D : exit minishell, free everything, return exit code
-		//ft_exit(): clear everything and exit. beaware of the case 'exit | exit'. This should not work
 		if (!line)
-			exit(1);
-		// if (!*line) EOF, free everything and exit
+			return (exit_minishell(line, 130));
 		// if empty string: is added into history, is not executed, does not change exit code
 		if (ft_strncmp(line, "", 1) == 0 || ft_empty_str(line))
 			continue ;
 		token_lst = ft_read_line(line);
 		ft_print_token_lst(token_lst);
-		ft_token_free_lst(token_lst);
+	
 		if (ft_strlen(line) > 0)
 			add_history(line);
 		free(line);

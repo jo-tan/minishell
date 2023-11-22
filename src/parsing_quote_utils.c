@@ -20,7 +20,7 @@ int	ft_check_quote_pair(const char *line)
 	char	*p;
 
 	quote = 0;
-	quote_type = 0;
+	quote_type = 3;
 	p = (char *)line;
 	while (*p)
 	{
@@ -63,6 +63,8 @@ void	ft_update_token_isquote(t_token *lst)
 			p->isquote = SINGLE;
 		if (ft_check_quote_pair(p->word) == 2)
 			p->isquote = DOUBLE;
+        if (ft_check_quote_pair(p->word) == 3)
+            p->isquote = UNSET;
 		p = p->next;
 	}
 }

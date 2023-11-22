@@ -32,9 +32,9 @@ int	ft_valid_line(const char *line)
 {
 	if (!ft_check_backslash(line))
 		return (ft_putstr_fd("Invalid input: backslash '\\' is found\n", 2), 0);
-	else if (!ft_check_semicolon(line))
+	if (!ft_check_semicolon(line))
 		return (ft_putstr_fd("Invalid input: semicolon ';' is found\n", 2), 0);
-	else if (!ft_check_quote_pair(line))
+	if (!ft_check_quote_pair(line))
 		return (ft_putstr_fd("Invalid input: quote isn't closed\n", 2), 0);
 	return (1);
 }

@@ -17,7 +17,8 @@ S_FILES		= src/main.c \
 				src/check_valid_input.c \
 				src/parsing_read_cmd.c \
 				src/check_print.c \
-				src/linked_list.c \
+				src/token_list.c \
+				src/cmd_table.c \
 				src/parsing_quote_utils.c
 S_DIR		= src
 
@@ -28,11 +29,10 @@ LIBFT_DIR	= libft
 O_DIR		= obj
 
 O_FILES		= $(patsubst $(S_DIR)/%.c,$(O_DIR)/%.o,$(S_FILES))
-D_FILES		= $(patsubst $(S_DIR)/%.c,$(O_DIR)/%.d,$(S_FILES))
 
 # Compilation
-CC			= cc
-CF			= -Wall -Wextra -Werror #-MMD -MP
+CC			= clang
+CF			= -Wall -Wextra -Werror
 INC			= -I inc/ -I $(LIBFT_DIR)
 
 # Cleaning
@@ -41,15 +41,13 @@ RM			= rm -rf
 all:		$(LIBFT) $(NAME)
 
 $(NAME):	$(O_FILES)
-	@$(CC) -o $(NAME) $(O_FILES) -L $(LIBFT_DIR) -lreadline -lft $(INC)
+	@$(CC) -L $(LIBFT_DIR) -L /usr/local/Cellar/readline/8.2.1/lib -o $(NAME) $(O_FILES) -lreadline -lft $(INC)
 	@echo " [ ok ] | minishell is ready!"
-
--include $(D_FILES)
 
 $(O_DIR)/%.o: $(S_DIR)/%.c
 	@echo "Compiling $<"
 	@mkdir -p $(O_DIR) $(D_DIR)
-	@$(CC) $(CF) $(INC) -c $< -o $@
+	@$(CC) $(CF) -I/usr/local/Cellar/readline/8.2.1/include $(INC) -c $< -o $@
 
 $(LIBFT):
 	@make --no-print-directory -C $(LIBFT_DIR)
