@@ -18,7 +18,6 @@ S_FILES		= src/main.c \
 				src/parsing_read_cmd.c \
 				src/check_print.c \
 				src/token_list.c \
-				src/cmd_table.c \
 				src/parsing_quote_utils.c
 S_DIR		= src
 
