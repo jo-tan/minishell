@@ -124,16 +124,15 @@ void	ft_update_token_type(t_token *lst)
 	}
 }
 
-t_token	*ft_read_line(const char *line)
+t_token	*ft_read_line(const char *line, const char **envp)
 {
 	t_token	*token_lst;
-
+	(void)envp;
 	printf(".............\n❙input line❙ %s\n.............\n", line);
 	token_lst = ft_tokenizer(line);
 	ft_update_token_type(token_lst);
-	ft_update_token_isquote(token_lst);
+	//ft_update_token_isquote(token_lst, envp);
 	ft_print_token_lst(token_lst);
-	ft_update_token_clean_quote(token_lst, clear_quote);
 
 	return (token_lst);
 }

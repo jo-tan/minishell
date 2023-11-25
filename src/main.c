@@ -58,10 +58,10 @@ static int	ft_empty_str(char *line)
 int	main(int argc, char **argv, char **envp)
 {
 	char	*line;
-	t_token	*token_lst;
+	t_mini	mini;
 
-	(void)envp;
 	(void)argv;
+	(void)envp;
 	if (argc != 1)
 		return (ft_putstr_fd("HINT: ./minishell\n", 2), 1);
 	/*Initialize*/
@@ -76,8 +76,8 @@ int	main(int argc, char **argv, char **envp)
 		// if empty string: is added into history, is not executed, does not change exit code
 		if (ft_strncmp(line, "", 1) == 0 || ft_empty_str(line))
 			continue ;
-		token_lst = ft_read_line(line);
-		ft_print_token_lst(token_lst);
+		mini.token_lst = ft_read_line(line, (const char **)envp);
+		ft_print_token_lst(mini.token_lst);
 	
 		if (ft_strlen(line) > 0)
 			add_history(line);
