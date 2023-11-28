@@ -3,103 +3,101 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aauthier <aauthier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/13 18:12:43 by jo-tan            #+#    #+#             */
-/*   Updated: 2023/11/13 18:12:44 by jo-tan           ###   ########.fr       */
+/*   Created: 2020/08/26 17:24:18 by aauthier          #+#    #+#             */
+/*   Updated: 2023/11/28 15:34:24 by aauthier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_count_str(char const *s, char c)
+static int	ft_is_charset(char c, char *charset)
+{
+	while (*charset)
+	{
+		if (c == *charset)
+			return (1);
+		charset++;
+	}
+	return (0);
+}
+
+static char	ft_wsize(char *str, char *charset, int pos)
 {
 	int	i;
-	int	count;
 
 	i = 0;
-	count = 0;
-	if (!s[i])
-		return (0);
-	if (s[i] == c)
-		i++;
-	while (s[i])
+	while (str[pos])
 	{
-		if (s[i] == c && s[i - 1] != c)
-			count++;
-		i++;
+		if (!ft_is_charset(str[pos], charset))
+			i++;
+		pos++;
 	}
-	if (s[i] == '\0' && s[i - 1] != c)
-		count++;
-	return (count);
+	return (i);
 }
 
-int	ft_str_len(char const *s, char c, int i)
+static void	ft_splitu(char *str, char *to_find, char **res)
 {
-	int	len;
+	int	i[3];
 
-	len = 0;
-	while (s[i] && s[i] != c)
+	i[0] = -1;
+	i[1] = 0;
+	i[2] = 0;
+	while (str[++i[0]])
 	{
-		len++;
-		i++;
-	}
-	return (len);
-}
-
-char	*ft_write_string(char const *s, char **ptr, int j, int len)
-{
-	int		x;
-	char	*p;
-
-	x = 0;
-	p = (char *)s;
-	ptr[j] = malloc((len + 1) * sizeof(char));
-	if (!ptr[j])
-	{
-		while (j != 0)
+		if (!ft_is_charset(str[i[0]], to_find))
 		{
-			free(ptr[j]);
-			j--;
+			if (i[2] == 0)
+			{
+				res[i[1]] = malloc(sizeof(char) * (ft_wsize(str, to_find, i[0])
+							+ 1));
+				if (!res[i[1]])
+					return ;
+			}
+			res[i[1]][i[2]] = str[i[0]];
+			res[i[1]][++i[2]] = '\0';
 		}
-		free(ptr);
-		return (NULL);
+		if (ft_is_charset(str[i[0]], to_find) && i[2] > 0)
+		{
+			i[2] = 0;
+			i[1]++;
+		}
 	}
-	while (len != 0)
-	{
-		ptr[j][x] = p[x];
-		x++;
-		len--;
-	}
-	ptr[j][x] = '\0';
-	return (ptr[j]);
 }
 
-char	**ft_split(char const *s, char c)
+static int	ft_wordcount(char *str, char *charset)
 {
-	char	**ptr;
-	int		i;
-	int		j;
+	int	i;
+	int	wcount;
+	int	word;
 
-	if (!s)
-		return (NULL);
-	i = 0;
-	j = 0;
-	ptr = malloc((ft_count_str(s, c) + 1) * sizeof(char *));
-	if (!ptr)
-		return (NULL);
-	while (s[i])
+	i = -1;
+	wcount = 0;
+	word = 0;
+	while (str[++i])
 	{
-		if (s[i] != c)
+		if (ft_is_charset(str[i], charset))
+			word = 0;
+		else if (word == 0)
 		{
-			ptr[j] = ft_write_string(s + i, ptr, j, ft_str_len(s, c, i));
-			j++;
-			i += ft_str_len(s, c, i);
-			if (s[i] == '\0')
-				break ;
+			word = 1;
+			wcount++;
 		}
-		i++;
 	}
-	ptr[j] = NULL;
-	return (ptr);
+	return (wcount);
+}
+
+char	**ft_split(char *str, char *charset)
+{
+	char	**result;
+
+	if (!(str))
+		return (NULL);
+	result = malloc(sizeof(char *) * (ft_wordcount(str, charset) + 1));
+	if (!result)
+		return (NULL);
+	ft_splitu(str, charset, result);
+	result[ft_wordcount(str, charset)] = NULL;
+	return (result);
 }
