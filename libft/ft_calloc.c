@@ -3,26 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aauthier <aauthier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/13 18:11:38 by jo-tan            #+#    #+#             */
-/*   Updated: 2023/11/13 18:11:40 by jo-tan           ###   ########.fr       */
+/*   Created: 2020/09/20 17:57:17 by aauthier          #+#    #+#             */
+/*   Updated: 2023/11/28 15:40:44 by aauthier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_calloc(size_t nmemb, size_t size)
+static void	*ft_memset(void *s, int c, size_t n)
 {
-	char	*ptr;
+	int		i;
+	char	*s_char;
 
-	if (nmemb == SIZE_MAX || size == SIZE_MAX)
+	i = -1;
+	s_char = (char *)s;
+	while (n--)
+		s_char[++i] = c;
+	return (s_char);
+}
+
+static void	ft_bzero(void *s, size_t n)
+{
+	ft_memset(s, 0, n);
+}
+
+void	*ft_calloc(size_t count, size_t size)
+{
+	void	*result;
+
+	result = malloc(count * size);
+	if (!result)
 		return (NULL);
-	if (size != 0 && nmemb >= SIZE_MAX / size)
-		return (NULL);
-	ptr = malloc(nmemb * size);
-	if (!ptr)
-		return (NULL);
-	ft_memset((int *)ptr, 0, nmemb * size);
-	return (ptr);
+	ft_bzero(result, size * count);
+	return (result);
 }
