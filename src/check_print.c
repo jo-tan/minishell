@@ -16,7 +16,6 @@ void    ft_print_token_lst(t_token *token_lst)
 {
     t_token *p;
     char    *type;
-    char    *quote;
 
     p = token_lst;
     while (p)
@@ -43,16 +42,23 @@ void    ft_print_token_lst(t_token *token_lst)
             type = "FILE_OUT_AP";
         if (p->type == EXIT_FILE_AP)
             type = "EXIT_FILE_AP";
-        
-        if (p->isquote == UNSET)
-            quote = "UNSET";
-        if (p->isquote == SINGLE)
-            quote = "SINGLE";
-        if (p->isquote == DOUBLE)
-            quote = "DOUBLE";
 
-        printf("❮%s/%s/%s❯   ", type, quote, p->word);
+        printf("❮%s/%s❯   ", type, p->word);
         p = p->next;
     }
     printf("\n");
+}
+
+void    ft_print_env_list(t_env *env)
+{
+    t_env   *p;
+    int     i = 0;
+
+    p = env;
+    while (p)
+    {
+        printf("❮line: %i/%s❯\n", i + 1, p->line);
+        i++;
+        p = p->next;
+    }
 }

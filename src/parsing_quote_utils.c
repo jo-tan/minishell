@@ -50,19 +50,6 @@ int	ft_check_quote_pair(const char *line)
 	return (quote_type);
 }
 
-void	ft_update_token_isquote(t_token *lst, const char **envp)
-{
-	t_token	*p;
-	(void)envp;
-	if (!lst)
-		return ;
-	p = lst;
-	while (p)
-	{
-		ft_update_token_clean_quote(lst, clear_quote);
-		p = p->next;
-	}
-}
 
 void	clear_quote(char **word)
 {
@@ -70,17 +57,3 @@ void	clear_quote(char **word)
 	printf("work in progress.\n");
 }
 
-void	ft_update_token_clean_quote(t_token *lst, void (clear_quote)(char **))
-{
-	t_token	*p;
-
-	if (!lst || !clear_quote)
-		return ;
-	p = lst;
-	while (p)
-	{
-		if (p->isquote != UNSET)
-			clear_quote(&p->word);
-		p = p->next;
-	}
-}

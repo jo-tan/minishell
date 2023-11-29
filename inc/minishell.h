@@ -48,20 +48,11 @@ typedef enum
 
 } e_type;
 
-typedef enum
-{
-	UNSET = 100,
-	SINGLE = 101,
-	DOUBLE = 102,
-} e_isquote;
-
-
 /*This is smallest element of cmd line. */
 typedef struct s_token
 {
 	char			*word;
 	e_type			type;
-	e_isquote		isquote;
 	struct s_token	*next;
 } t_token;
 
@@ -75,15 +66,15 @@ typedef struct	s_mini
 {
 	t_token			*token_lst;
 	t_env			*env;
-	t_env			*buildin_env;
+	char			*line;
 	int				exit_code;
 } t_mini;
 
 /*signal*/
-void	change_signal(void);
+void	parent_signal(void);
 
 /*Check valid input string*/
-int	ft_valid_line(onst char *line);
+int	ft_valid_line(const char *line);
 
 /*Parsing line to list of tokens*/
 t_token *ft_read_line(const char *line, const char **envp);
@@ -104,5 +95,6 @@ void	ft_token_free_lst(t_token *lst);
 
 /*Printf for checking progress*/
 void    ft_print_token_lst(t_token *token_lst);
+void    ft_print_env_list(t_env *env);
 
 #endif

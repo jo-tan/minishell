@@ -12,13 +12,24 @@
 
 #include "minishell.h"
 
-int	exit_minishell(char *line, int exit_status)
+void	ft_free_envp(t_env *env)
+{
+	while (env)
+	{
+		free(env->line);
+		env = env->next;
+	}
+}
+
+int	exit_minishell(t_mini *mini, int exit_status)
 {
 	if (exit_status == 130) //EOF
 	{
 		write(1, "exit\n", ft_strlen("exit\n"));
 		//free everything
-		free(line);
+		free(mini->line);
+		ft_token_free_lst(mini->token_lst);
+		ft_free_envp(mini->env);
 		rl_clear_history();
 	}
 	return (exit_status);
@@ -33,7 +44,7 @@ static void	reprompt(int signal)
 	rl_redisplay();
 }
 
-void	change_signal(void)
+void	parent_signal(void)
 {
 	// SIGINT sets $? to 130 (in child, $? will become 131)
 	signal(SIGINT, reprompt);
@@ -55,33 +66,62 @@ static int	ft_empty_str(char *line)
 	return (1);
 }
 
+int	init_envp(t_mini *mini, char **envp)
+{
+	t_env	*env;
+	t_env	*new;
+	int		i;
+
+	i = 0;
+	env = NULL;
+	while (envp && envp[i])
+	{
+		if (!(new = malloc(sizeof(t_env))))
+            return (1);
+
+        new->line = ft_strdup(envp[i]);
+        new->next = NULL;
+
+        if (!env)
+            mini->env = env = new;
+        else
+        {
+            env->next = new;
+            env = new;
+        }
+        i++;
+	}
+	return (0);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
-	char	*line;
 	t_mini	mini;
 
 	(void)argv;
-	(void)envp;
 	if (argc != 1)
 		return (ft_putstr_fd("HINT: ./minishell\n", 2), 1);
 	/*Initialize*/
+	if (init_envp(&mini, envp) == 1)
+		return (ft_putstr_fd("fail to copy environment variables.\n", 2), 1);
+	ft_print_env_list(mini.env);
 	//initialize signal: to block the parent signal which may affect current terminal
 	/*Clear histroy && create/build current history list*/
 	while (1)
 	{
-		change_signal();
-		line = readline("▼・ᴥ・▼ฅ 𐆑𐆑minishell𐆑𐆑𐰷 ");
-		if (!line)
-			return (exit_minishell(line, 130));
+		parent_signal();
+		mini.line = readline("▼・ᴥ・▼ฅ 𐆑𐆑minishell𐆑𐆑𐰷 ");
+		if (!mini.line)
+			return (exit_minishell(&mini, 130));
 		// if empty string: is added into history, is not executed, does not change exit code
-		if (ft_strncmp(line, "", 1) == 0 || ft_empty_str(line))
+		if (ft_strncmp(mini.line, "", 1) == 0 || ft_empty_str(mini.line))
 			continue ;
-		mini.token_lst = ft_read_line(line, (const char **)envp);
+		mini.token_lst = ft_read_line(mini.line, (const char **)envp);
 		ft_print_token_lst(mini.token_lst);
 	
-		if (ft_strlen(line) > 0)
-			add_history(line);
-		free(line);
+		if (ft_strlen(mini.line) > 0)
+			add_history(mini.line);
+		free(mini.line);
 	}
 	return (0);
 }
