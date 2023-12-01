@@ -137,9 +137,9 @@ void	ft_process_quote(t_token *lst, t_env *env)
 	p = lst;
 	while (p)
 	{
-		if (ft_check_quote_pair(p->word) == 1)
+		if ((p->word[0]) == '\'')
 			process_single(&(p->word));
-		if (ft_check_quote_pair(p->word) == 2)
+		if ((p->word[0]) == '\"')
 			process_double(&(p->word), env);
 		p = p->next;
 	}

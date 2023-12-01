@@ -62,7 +62,6 @@ t_token	*ft_tokenizer(const char *line)
 			if (!word)
 				return (NULL); //handle malloc failure
 			ft_strlcpy(word, line, word_len + 1);
-			printf("word: %s\n", word);
 			new = ft_newtoken(word);
 			if (head == NULL)
 				head = new;
