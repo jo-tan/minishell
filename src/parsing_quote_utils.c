@@ -148,6 +148,7 @@ void	ft_process_quote(t_token *lst, t_env *env)
 char	*ft_combine(t_token *lst)
 {
 	char	*ret;
+	char	*tmp;
 	t_token	*p;
 
 	ret = malloc(1);
@@ -157,7 +158,9 @@ char	*ft_combine(t_token *lst)
 	p = lst;
 	while (p)
 	{
-		ret = ft_strjoin(ret, p->word);
+		tmp = ft_strjoin(ret, p->word);
+		free(ret);
+		ret = tmp;
 		p = p->next;
 	}
 	return (ret);
