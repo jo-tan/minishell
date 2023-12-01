@@ -70,23 +70,27 @@ typedef struct	s_mini
 	int				exit_code;
 } t_mini;
 
+/*envp*/
+int		init_envp(t_mini *mini, char **envp);
+void	ft_free_envp(t_env *env);
+
 /*signal*/
 void	parent_signal(void);
 
 /*Check valid input string*/
-int	ft_valid_line(const char *line);
+int		ft_valid_line(const char *line);
 
 /*Parsing line to list of tokens*/
-t_token *ft_read_line(const char *line, const char **envp);
+t_token *ft_read_line(const char *line, t_env *env);
 t_token *ft_tokenizer(const char  *line);
 int 	ft_count_word_len(const char *line);
 void    ft_update_token_type(t_token *lst);
 
 /*Parsing quotes*/
 int 	ft_check_quote_pair(const char *line);
-void    ft_update_token_isquote(t_token *lst, const char **envp);
-void	clear_quote(char **word);
-void    ft_update_token_clean_quote(t_token *lst, void (*clear_quote)(char **));
+void    ft_expansion(t_token *lst, t_env *env);
+void	clear_quote(char **word, t_env *env);
+//void    ft_update_token_clean_quote(t_token *lst, void (*clear_quote)(char **));
 
 /*token list function*/
 t_token *ft_newtoken(char *s);

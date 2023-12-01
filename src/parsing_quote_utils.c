@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int	ft_check_quote_pair(const char *line)
+int	ft_check_quote_pair(const char *string)
 {
 	int		quote;
 	int		inquote_len;
@@ -21,7 +21,7 @@ int	ft_check_quote_pair(const char *line)
 
 	quote = 0;
 	quote_type = 3;
-	p = (char *)line;
+	p = (char *)string;
 	while (*p)
 	{
 		if (ft_isquote(*p))
@@ -50,10 +50,145 @@ int	ft_check_quote_pair(const char *line)
 	return (quote_type);
 }
 
-
-void	clear_quote(char **word)
+int	ft_count_quote_len(char  *string)
 {
-	(void) word;
-	printf("work in progress.\n");
+	int	len;
+
+	len = 0;
+	if (ft_isquote(string[len]))
+	{
+		len = 1;
+		while (string[len] != string[0])
+			len++;
+		len++;
+	}
+	else
+	{
+		len = 0;
+		while (string[len] && !ft_isquote(string[len]))
+			len++;
+	}
+	return (len);
 }
 
+t_token	*ft_break_string(char *string)
+{
+	int		word_len;
+	char	*word;
+	t_token	*new;
+	t_token	*head;
+
+	head = new = NULL;
+	while (*string)
+	{
+		word_len = ft_count_quote_len(string);
+		word = malloc(word_len + 1);
+		if (!word)
+			return (NULL); //handle malloc failure
+		ft_strlcpy(word, string, word_len + 1);
+		new = ft_newtoken(word);
+		if (head == NULL)
+			head = new;
+		else
+			ft_addtoken(head, new);
+		string += word_len;
+	}
+	return (head);
+}
+
+void	process_single(char	**word)
+{
+	char	*clean;
+	int		len;
+	int		i;
+	int		j;
+
+	i = 1;
+	j = 0;
+	len = ft_strlen(*word);
+	clean = malloc(len - 1);
+	if (!clean)
+		return ;
+	while (i < len - 1)
+	{
+		clean[j] = (*word)[i];
+		j++;
+		i++;
+	}
+	clean[j] = '\0';
+	free(*word);
+	*word = clean;
+}
+
+void	process_double(char	**word, t_env *env)
+{
+	char	*copy;
+
+	process_single(word);
+	copy = ft_strdup(*word);
+	printf("check copy: %s\n", copy);
+	(void)env;
+}
+
+void	ft_process_quote(t_token *lst, t_env *env)
+{
+	t_token	*p;
+
+	p = lst;
+	while (p)
+	{
+		if (ft_check_quote_pair(p->word) == 1)
+			process_single(&(p->word));
+		if (ft_check_quote_pair(p->word) == 2)
+			process_double(&(p->word), env);
+		p = p->next;
+	}
+}
+
+char	*ft_combine(t_token *lst)
+{
+	char	*ret;
+	t_token	*p;
+
+	ret = malloc(1);
+	if (!ret)
+		return (NULL); //handle malloc failure
+	ret[0] = '\0';
+	p = lst;
+	while (p)
+	{
+		ret = ft_strjoin(ret, p->word);
+		p = p->next;
+	}
+	return (ret);
+}
+
+void	clear_quote(char **string, t_env *env)
+{
+	t_token	*pre;
+	char *new;
+
+	pre = ft_break_string(*string);
+	ft_print_token_lst(pre);
+	ft_process_quote(pre, env);
+	ft_print_token_lst(pre);
+	new = ft_combine(pre);
+	ft_token_free_lst(pre);
+	free(*string);
+	*string = new;
+}
+
+void    ft_expansion(t_token *lst, t_env *env)
+{
+	t_token	*p;
+
+	p = lst;
+	while (p)
+	{
+		if (ft_check_quote_pair(p->word) != 3)
+		{
+			clear_quote(&(p->word), env);
+		}
+		p = p->next;
+	}
+}

@@ -14,6 +14,7 @@ NAME		= minishell
 
 # Sources
 S_FILES		= src/main.c \
+				src/init_envp.c \
 				src/check_valid_input.c \
 				src/parsing_read_cmd.c \
 				src/check_print.c \

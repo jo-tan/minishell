@@ -43,7 +43,6 @@ int	ft_count_word_len(const char *line)
 	return (len);
 }
 
-// fd" sdf" should be fd" sdf"; not [fd"] [sdf"]
 t_token	*ft_tokenizer(const char *line)
 {
 	int		word_len;
@@ -51,10 +50,7 @@ t_token	*ft_tokenizer(const char *line)
 	t_token	*new;
 	t_token	*head;
 
-	new = NULL;
-	head = NULL;
-	if (!ft_valid_line(line))
-		return (NULL);
+	head = new = NULL;
 	while (*line)
 	{
 		if (ft_isspace(*line))
@@ -64,16 +60,13 @@ t_token	*ft_tokenizer(const char *line)
 			word_len = ft_count_word_len(line);
 			word = malloc(word_len + 1);
 			if (!word)
-				return (NULL); //need ft_malloc_fail
+				return (NULL); //handle malloc failure
 			ft_strlcpy(word, line, word_len + 1);
-			// printf("word: %s\n", word);
 			new = ft_newtoken(word);
 			if (head == NULL)
 				head = new;
 			else
 				ft_addtoken(head, new);
-			// printf("word_len: %d\n", word_len);
-			// write(1, "\n", 1);
 			line += word_len;
 		}
 	}
@@ -124,15 +117,17 @@ void	ft_update_token_type(t_token *lst)
 	}
 }
 
-t_token	*ft_read_line(const char *line, const char **envp)
+t_token	*ft_read_line(const char *line, t_env *env)
 {
 	t_token	*token_lst;
-	(void)envp;
+
+	if (!ft_valid_line(line))
+		return (NULL);
 	printf(".............\n❙input line❙ %s\n.............\n", line);
 	token_lst = ft_tokenizer(line);
 	ft_update_token_type(token_lst);
-	//ft_extension(token_lst, envp)
-	ft_print_token_lst(token_lst);
+	ft_expansion(token_lst, env);
+	//ft_print_token_lst(token_lst);
 
 	return (token_lst);
 }

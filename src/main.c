@@ -12,15 +12,6 @@
 
 #include "minishell.h"
 
-void	ft_free_envp(t_env *env)
-{
-	while (env)
-	{
-		free(env->line);
-		env = env->next;
-	}
-}
-
 int	exit_minishell(t_mini *mini, int exit_status)
 {
 	if (exit_status == 130) //EOF
@@ -66,34 +57,6 @@ static int	ft_empty_str(char *line)
 	return (1);
 }
 
-int	init_envp(t_mini *mini, char **envp)
-{
-	t_env	*env;
-	t_env	*new;
-	int		i;
-
-	i = 0;
-	env = NULL;
-	while (envp && envp[i])
-	{
-		if (!(new = malloc(sizeof(t_env))))
-            return (1);
-
-        new->line = ft_strdup(envp[i]);
-        new->next = NULL;
-
-        if (!env)
-            mini->env = env = new;
-        else
-        {
-            env->next = new;
-            env = new;
-        }
-        i++;
-	}
-	return (0);
-}
-
 int	main(int argc, char **argv, char **envp)
 {
 	t_mini	mini;
@@ -116,7 +79,7 @@ int	main(int argc, char **argv, char **envp)
 		// if empty string: is added into history, is not executed, does not change exit code
 		if (ft_strncmp(mini.line, "", 1) == 0 || ft_empty_str(mini.line))
 			continue ;
-		mini.token_lst = ft_read_line(mini.line, (const char **)envp);
+		mini.token_lst = ft_read_line(mini.line, mini.env);
 		ft_print_token_lst(mini.token_lst);
 	
 		if (ft_strlen(mini.line) > 0)
