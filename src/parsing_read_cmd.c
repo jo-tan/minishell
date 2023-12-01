@@ -32,7 +32,6 @@ int	ft_count_word_len(const char *line)
 			while ((*(line + len + inquote)) != (*(line + len)))
 				inquote++;
 			len += inquote;
-			len ++;
 		}
 		if ((*(line + len)) == '|'
 			|| (*(line + len)) == '<' || (*(line + len)) == '>'
@@ -50,7 +49,8 @@ t_token	*ft_tokenizer(const char *line)
 	t_token	*new;
 	t_token	*head;
 
-	head = new = NULL;
+	head = NULL;
+	new = NULL;
 	while (*line)
 	{
 		if (ft_isspace(*line))
@@ -62,6 +62,7 @@ t_token	*ft_tokenizer(const char *line)
 			if (!word)
 				return (NULL); //handle malloc failure
 			ft_strlcpy(word, line, word_len + 1);
+			printf("word: %s\n", word);
 			new = ft_newtoken(word);
 			if (head == NULL)
 				head = new;
@@ -126,8 +127,8 @@ t_token	*ft_read_line(const char *line, t_env *env)
 	printf(".............\n❙input line❙ %s\n.............\n", line);
 	token_lst = ft_tokenizer(line);
 	ft_update_token_type(token_lst);
+	ft_print_token_lst(token_lst);
 	ft_expansion(token_lst, env);
-	//ft_print_token_lst(token_lst);
 
 	return (token_lst);
 }
