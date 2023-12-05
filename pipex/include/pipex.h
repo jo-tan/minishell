@@ -6,7 +6,7 @@
 /*   By: aauthier <aauthier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/04 23:42:38 by aauthier          #+#    #+#             */
-/*   Updated: 2023/11/28 15:50:25 by aauthier         ###   ########.fr       */
+/*   Updated: 2023/12/01 12:15:48 by aauthier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ typedef struct s_params
 // size_t		ft_strlen(const char *s);
 char		*ft_strcpy(char *dest, const char *src);
 char		*ft_strcat(char *dest, const char *src);
-size_t	ft_strlcat(char *dst, const char *src, size_t size);
+size_t		ft_strlcat(char *dst, const char *src, size_t size);
 void		*ft_memcpy(void *dest, const void *src, size_t n);
 
 // int			ft_putstr_fd(char *s, int fd);

@@ -6,7 +6,7 @@
 /*   By: aauthier <aauthier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 18:25:57 by jo-tan            #+#    #+#             */
-/*   Updated: 2023/11/14 17:01:01 by aauthier         ###   ########.fr       */
+/*   Updated: 2023/12/01 12:33:02 by aauthier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ int	main(int argc, char **argv, char **envp)
 		if (ft_strncmp(line, "", 1) == 0 || ft_empty_str(line))
 			continue ;
 		mini.token_lst = ft_read_line(line, (const char **)envp);
+		// Call exec here
 		ft_print_token_lst(mini.token_lst);
 	
 		if (ft_strlen(line) > 0)

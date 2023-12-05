@@ -3,22 +3,26 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+         #
+#    By: aauthier <aauthier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/13 18:25:12 by jo-tan            #+#    #+#              #
-#    Updated: 2023/11/14 15:25:27 by jo-tan           ###   ########.fr        #
+#    Updated: 2023/12/01 12:28:50 by aauthier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		= minishell
 
 # Sources
-S_FILES		= src/main.c \
-				src/check_valid_input.c \
-				src/parsing_read_cmd.c \
-				src/check_print.c \
-				src/token_list.c \
-				src/parsing_quote_utils.c
+S_FILES		=	main.c \
+				check_valid_input.c \
+				parsing_read_cmd.c \
+				check_print.c \
+				token_list.c \
+				parsing_quote_utils.c \
+				child.c \
+				error.c \
+				execution.c \
+				path_finding.c
 S_DIR		= src
 
 LIBFT		= libft/libft.a

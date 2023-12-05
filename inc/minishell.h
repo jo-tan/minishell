@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aauthier <aauthier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 18:25:28 by jo-tan            #+#    #+#             */
-/*   Updated: 2023/11/14 15:23:51 by jo-tan           ###   ########.fr       */
+/*   Updated: 2023/12/01 12:32:49 by aauthier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include <stdio.h> //printf
 # include <readline/readline.h>//readline library for readline
 # include <readline/history.h>//readline library for readline history
-# include <stdlib.h> //maloc, free, getenv (get env variables)
+# include <stdlib.h> //malloc, free, getenv (get env variables)
 # include <unistd.h> //write, access, exit, getcwd(get_current_directory), chdir (change working directory), unlink (delete a name and possibly the file it refers to), execve (execute program), dup, dup2, pipe, isatty, ttyname, ttyslot
 # include <fcntl.h>
 # include <sys/wait.h> // wait, waitpid, wait3, wait4
@@ -79,6 +79,34 @@ typedef struct	s_mini
 	int				exit_code;
 } t_mini;
 
+// Execution structures
+typedef enum e_result
+{
+	ERROR,
+	OK
+}				t_result;
+
+typedef enum e_error
+{
+	TOO_FEW_ARG_ERROR,
+	TOO_MANY_ARG_ERROR
+}			t_error;
+
+typedef struct s_var
+{
+	char	*var_path;
+	char	*var_temp;
+	char	*cmd_path;
+	size_t	len;
+}				t_var;
+
+typedef struct s_params
+{
+	char		**argv;
+	int			pipefd[2];
+	char *const	*env;
+}				t_params;
+
 /*signal*/
 void	change_signal(void);
 
@@ -104,5 +132,18 @@ void	ft_token_free_lst(t_token *lst);
 
 /*Printf for checking progress*/
 void    ft_print_token_lst(t_token *token_lst);
+
+/*Pipes*/
+t_result	child_a(int infile, t_params *params);
+t_result	child_b(int outfile, t_params *params);
+void		pipex(int infile, int outfile, t_params *params);
+
+/*Path finding functions*/
+char		*find_var_path(char *const env[]);
+char		*find_cmd(char *cmd, char *const env[]);
+char		*access_cmd(int *errcode, char *cmd_path);
+t_result	error(t_error error_code);
+t_result	print_path_cmd_error(char *cmd, int errcode);
+
 
 #endif
