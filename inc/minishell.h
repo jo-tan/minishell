@@ -45,7 +45,6 @@ typedef enum
 	EXIT_FILE = 55, // word after '>' overwrite the file or create if not exist. If there is cmd before >, it will write result into the file 
 	FILE_OUT_AP = 6, //word == '>>'
 	EXIT_FILE_AP = 66 //word after '>>', append the file or create if not exist.
-
 } e_type;
 
 /*This is smallest element of cmd line. */
@@ -81,16 +80,24 @@ void	parent_signal(void);
 int		ft_valid_line(const char *line);
 
 /*Parsing line to list of tokens*/
-t_token *ft_read_line(const char *line, t_env *env);
+int ft_read_line(t_mini *mini);
 t_token *ft_tokenizer(const char  *line);
 int 	ft_count_word_len(const char *line);
 void    ft_update_token_type(t_token *lst);
 
 /*Parsing quotes*/
 int 	ft_check_quote_pair(const char *line);
-void    ft_expansion(t_token *lst, t_env *env);
-void	clear_quote(char **word, t_env *env);
+void    ft_parsing(t_mini *mini);
+void	clear_quote(char **word, t_env *env, int exit_code);
+int	ft_isenvname(char c);
+int	ft_ismeta(char c);
+
 //void    ft_update_token_clean_quote(t_token *lst, void (*clear_quote)(char **));
+
+/*expansion_utils*/
+int		get_var_len(char *p);
+char	*copy_var_name(char *p, int exit_code);
+void    expansion(char **word, t_env *env, int exit_code);
 
 /*token list function*/
 t_token *ft_newtoken(char *s);
@@ -100,5 +107,9 @@ void	ft_token_free_lst(t_token *lst);
 /*Printf for checking progress*/
 void    ft_print_token_lst(t_token *token_lst);
 void    ft_print_env_list(t_env *env);
+
+/*libft*/
+int	ft_ismeta(char c);
+int	ft_isenvname(char c);
 
 #endif

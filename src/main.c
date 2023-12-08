@@ -68,6 +68,7 @@ int	main(int argc, char **argv, char **envp)
 	if (init_envp(&mini, envp) == 1)
 		return (ft_putstr_fd("fail to copy environment variables.\n", 2), 1);
 	ft_print_env_list(mini.env);
+	mini.exit_code = 0;
 	//initialize signal: to block the parent signal which may affect current terminal
 	/*Clear histroy && create/build current history list*/
 	while (1)
@@ -79,7 +80,8 @@ int	main(int argc, char **argv, char **envp)
 		// if empty string: is added into history, is not executed, does not change exit code
 		if (ft_strncmp(mini.line, "", 1) == 0 || ft_empty_str(mini.line))
 			continue ;
-		mini.token_lst = ft_read_line(mini.line, mini.env);
+		if (ft_read_line(&mini) == -1)
+			return (ft_putstr_fd("ERROR: read_line\n", 2), 1);
 		ft_print_token_lst(mini.token_lst);
 	
 		if (ft_strlen(mini.line) > 0)

@@ -19,7 +19,8 @@ S_FILES		= src/main.c \
 				src/parsing_read_cmd.c \
 				src/check_print.c \
 				src/token_list.c \
-				src/parsing_quote_utils.c
+				src/parsing_quote_utils.c \
+				src/expansion_utils.c
 S_DIR		= src
 
 LIBFT		= libft/libft.a

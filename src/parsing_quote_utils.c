@@ -12,6 +12,16 @@
 
 #include "minishell.h"
 
+int	ft_ismeta(char c)
+{
+	return (c == '|' || c == '<' || c == '<');
+}
+
+int	ft_isenvname(char c)
+{
+	return (ft_isalnum(c) || c == '_');
+}
+
 int	ft_check_quote_pair(const char *string)
 {
 	int		quote;
@@ -120,17 +130,17 @@ void	process_single(char	**word)
 	*word = clean;
 }
 
-void	process_double(char	**word, t_env *env)
+void	process_double(char	**word, t_env *env, int exit_code)
 {
 	char	*copy;
 
 	process_single(word);
 	copy = ft_strdup(*word);
 	printf("check copy: %s\n", copy);
-	(void)env;
+	expansion(word, env, exit_code);
 }
 
-void	ft_process_quote(t_token *lst, t_env *env)
+void	ft_process_quote(t_token *lst, t_env *env, int	exit_code)
 {
 	t_token	*p;
 
@@ -140,7 +150,7 @@ void	ft_process_quote(t_token *lst, t_env *env)
 		if ((p->word[0]) == '\'')
 			process_single(&(p->word));
 		if ((p->word[0]) == '\"')
-			process_double(&(p->word), env);
+			process_double(&(p->word), env, exit_code);
 		p = p->next;
 	}
 }
@@ -166,14 +176,14 @@ char	*ft_combine(t_token *lst)
 	return (ret);
 }
 
-void	clear_quote(char **string, t_env *env)
+void	clear_quote(char **string, t_env *env, int exit_code)
 {
 	t_token	*pre;
 	char *new;
 
 	pre = ft_break_string(*string);
 	ft_print_token_lst(pre);
-	ft_process_quote(pre, env);
+	ft_process_quote(pre, env, exit_code);
 	ft_print_token_lst(pre);
 	new = ft_combine(pre);
 	ft_token_free_lst(pre);
@@ -181,17 +191,17 @@ void	clear_quote(char **string, t_env *env)
 	*string = new;
 }
 
-void    ft_expansion(t_token *lst, t_env *env)
+void    ft_parsing(t_mini *mini)
 {
 	t_token	*p;
 
-	p = lst;
+	p = mini->token_lst;
 	while (p)
 	{
 		if (ft_check_quote_pair(p->word) != 3)
-		{
-			clear_quote(&(p->word), env);
-		}
+			clear_quote(&(p->word), mini->env, mini->exit_code);
+		else
+			expansion(&(p->word), mini->env, mini->exit_code);
 		p = p->next;
 	}
 }

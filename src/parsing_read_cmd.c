@@ -18,7 +18,7 @@ int	ft_count_word_len(const char *line)
 	int	inquote;
 
 	len = 0;
-	if (*line == '|' || *line == '<' || *line == '>')
+	if (ft_ismeta(*line))
 	{
 		if ((*line == '<' || *line == '>') && (*(line + 1)) == *line)
 			return (2);
@@ -33,9 +33,7 @@ int	ft_count_word_len(const char *line)
 				inquote++;
 			len += inquote;
 		}
-		if ((*(line + len)) == '|'
-			|| (*(line + len)) == '<' || (*(line + len)) == '>'
-			|| ft_isspace(*(line + len)))
+		if (ft_ismeta(*(line + len)) || ft_isspace(*(line + len)))
 			break ;
 		len++;
 	}
@@ -117,17 +115,14 @@ void	ft_update_token_type(t_token *lst)
 	}
 }
 
-t_token	*ft_read_line(const char *line, t_env *env)
+int	ft_read_line(t_mini *mini)
 {
-	t_token	*token_lst;
+	if (!ft_valid_line(mini->line))
+		return (0);
+	printf(".............\n❙input line❙ %s\n.............\n", mini->line);
+	mini->token_lst = ft_tokenizer(mini->line);
+	ft_update_token_type(mini->token_lst);
+	ft_parsing(mini);
 
-	if (!ft_valid_line(line))
-		return (NULL);
-	printf(".............\n❙input line❙ %s\n.............\n", line);
-	token_lst = ft_tokenizer(line);
-	ft_update_token_type(token_lst);
-	ft_print_token_lst(token_lst);
-	ft_expansion(token_lst, env);
-
-	return (token_lst);
+	return (0);
 }
