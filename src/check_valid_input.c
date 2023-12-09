@@ -28,6 +28,44 @@ static int	ft_check_semicolon(const char *line)
 	return (1);
 }
 
+int	ft_check_quote_pair(const char *string)
+{
+	int		quote;
+	int		inquote_len;
+	int		quote_type;
+	char	*p;
+
+	quote = 0;
+	quote_type = 3;
+	p = (char *)string;
+	while (*p)
+	{
+		if (ft_isquote(*p))
+		{
+			inquote_len = 1;
+			quote = 1;
+			if (*p == '\'')
+				quote_type = 1;
+			else
+				quote_type = 2;
+			while ((*(p + inquote_len)) != '\0')
+			{
+				if ((*(p + inquote_len)) == *p)
+				{
+					quote = 0;
+					p += inquote_len;
+					break ;
+				}
+				inquote_len++;
+			}
+			if (quote != 0)
+				return (0);
+		}
+		p++;
+	}
+	return (quote_type);
+}
+
 int	ft_valid_line(const char *line)
 {
 	if (!ft_check_backslash(line))

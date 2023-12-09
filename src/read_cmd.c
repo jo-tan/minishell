@@ -18,7 +18,7 @@ int	ft_count_word_len(const char *line)
 	int	inquote;
 
 	len = 0;
-	if (*line == '|' || *line == '<' || *line == '>')
+	if (ft_ismeta(*line))
 	{
 		if ((*line == '<' || *line == '>') && (*(line + 1)) == *line)
 			return (2);
@@ -32,18 +32,14 @@ int	ft_count_word_len(const char *line)
 			while ((*(line + len + inquote)) != (*(line + len)))
 				inquote++;
 			len += inquote;
-			len ++;
 		}
-		if ((*(line + len)) == '|'
-			|| (*(line + len)) == '<' || (*(line + len)) == '>'
-			|| ft_isspace(*(line + len)))
+		if (ft_ismeta(*(line + len)) || ft_isspace(*(line + len)))
 			break ;
 		len++;
 	}
 	return (len);
 }
 
-// fd" sdf" should be fd" sdf"; not [fd"] [sdf"]
 t_token	*ft_tokenizer(const char *line)
 {
 	int		word_len;
@@ -51,10 +47,8 @@ t_token	*ft_tokenizer(const char *line)
 	t_token	*new;
 	t_token	*head;
 
-	new = NULL;
 	head = NULL;
-	if (!ft_valid_line(line))
-		return (NULL);
+	new = NULL;
 	while (*line)
 	{
 		if (ft_isspace(*line))
@@ -64,16 +58,13 @@ t_token	*ft_tokenizer(const char *line)
 			word_len = ft_count_word_len(line);
 			word = malloc(word_len + 1);
 			if (!word)
-				return (NULL); //need ft_malloc_fail
+				return (NULL); //handle malloc failure
 			ft_strlcpy(word, line, word_len + 1);
-			// printf("word: %s\n", word);
 			new = ft_newtoken(word);
 			if (head == NULL)
 				head = new;
 			else
 				ft_addtoken(head, new);
-			// printf("word_len: %d\n", word_len);
-			// write(1, "\n", 1);
 			line += word_len;
 		}
 	}
@@ -94,29 +85,13 @@ void	ft_update_token_type(t_token *lst)
 			if (ft_strncmp(p->word, "|", ft_strlen(p->word)) == 0)
 				p->type = PIPE;
 			else if (ft_strncmp(p->word, "<", ft_strlen(p->word)) == 0)
-			{
 				p->type = FILE_IN;
-				if (p->next != NULL)
-					p->next->type = OPEN_FILE;
-			}
 			else if (ft_strncmp(p->word, "<<", ft_strlen(p->word)) == 0)
-			{
 				p->type = HERE_DOC;
-				if (p->next != NULL)
-					p->next->type = HD_WORD;
-			}
 			else if (ft_strncmp(p->word, ">", ft_strlen(p->word)) == 0)
-			{
 				p->type = FILE_OUT;
-				if (p->next != NULL)
-					p->next->type = EXIT_FILE;
-			}
 			else if (ft_strncmp(p->word, ">>", ft_strlen(p->word)) == 0)
-			{
 				p->type = FILE_OUT_AP;
-				if (p->next != NULL)
-					p->next->type = EXIT_FILE_AP;
-			}
 			else
 				p->type = ARG;
 		}
@@ -124,15 +99,14 @@ void	ft_update_token_type(t_token *lst)
 	}
 }
 
-t_token	*ft_read_line(const char *line, const char **envp)
+int	ft_read_line(t_mini *mini)
 {
-	t_token	*token_lst;
-	(void)envp;
-	printf(".............\n❙input line❙ %s\n.............\n", line);
-	token_lst = ft_tokenizer(line);
-	ft_update_token_type(token_lst);
-	//ft_update_token_isquote(token_lst, envp);
-	ft_print_token_lst(token_lst);
+	if (!ft_valid_line(mini->line))
+		return (0);
+	printf(".............\n❙input line❙ %s\n.............\n", mini->line);
+	mini->token_lst = ft_tokenizer(mini->line);
+	ft_update_token_type(mini->token_lst);
+	ft_parsing(mini);
 
-	return (token_lst);
+	return (0);
 }

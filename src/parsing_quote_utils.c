@@ -12,75 +12,93 @@
 
 #include "minishell.h"
 
-int	ft_check_quote_pair(const char *line)
+int	ft_count_quote_len(char  *string)
 {
-	int		quote;
-	int		inquote_len;
-	int		quote_type;
-	char	*p;
+	int	len;
 
-	quote = 0;
-	quote_type = 3;
-	p = (char *)line;
-	while (*p)
+	len = 0;
+	if (ft_isquote(string[len]))
 	{
-		if (ft_isquote(*p))
-		{
-			inquote_len = 1;
-			quote = 1;
-			if (*p == '\'')
-				quote_type = 1;
-			else
-				quote_type = 2;
-			while ((*(p + inquote_len)) != '\0')
-			{
-				if ((*(p + inquote_len)) == *p)
-				{
-					quote = 0;
-					p += inquote_len;
-					break ;
-				}
-				inquote_len++;
-			}
-			if (quote != 0)
-				return (0);
-		}
-		p++;
+		len = 1;
+		while (string[len] != string[0])
+			len++;
+		len++;
 	}
-	return (quote_type);
+	else
+	{
+		len = 0;
+		while (string[len] && !ft_isquote(string[len]))
+			len++;
+	}
+	return (len);
 }
 
-void	ft_update_token_isquote(t_token *lst, const char **envp)
+t_token	*ft_break_string(char *string)
+{
+	int		word_len;
+	char	*word;
+	t_token	*new;
+	t_token	*head;
+
+	head = new = NULL;
+	while (*string)
+	{
+		word_len = ft_count_quote_len(string);
+		word = malloc(word_len + 1);
+		if (!word)
+			return (NULL); //handle malloc failure
+		ft_strlcpy(word, string, word_len + 1);
+		new = ft_newtoken(word);
+		if (head == NULL)
+			head = new;
+		else
+			ft_addtoken(head, new);
+		string += word_len;
+	}
+	return (head);
+}
+
+void	process_single(char	**word)
+{
+	char	*clean;
+	int		len;
+	int		i;
+	int		j;
+
+	i = 1;
+	j = 0;
+	len = ft_strlen(*word);
+	clean = malloc(len - 1);
+	if (!clean)
+		return ;
+	while (i < len - 1)
+	{
+		clean[j] = (*word)[i];
+		j++;
+		i++;
+	}
+	clean[j] = '\0';
+	free(*word);
+	*word = clean;
+}
+
+void	process_double(char	**word, t_env *env, int exit_code)
+{
+	process_single(word);
+	expansion(word, env, exit_code);
+}
+
+void	ft_process_quote(t_token *lst, t_env *env, int	exit_code)
 {
 	t_token	*p;
-	(void)envp;
-	if (!lst)
-		return ;
+
 	p = lst;
 	while (p)
 	{
-		ft_update_token_clean_quote(lst, clear_quote);
-		p = p->next;
-	}
-}
-
-void	clear_quote(char **word)
-{
-	(void) word;
-	printf("work in progress.\n");
-}
-
-void	ft_update_token_clean_quote(t_token *lst, void (clear_quote)(char **))
-{
-	t_token	*p;
-
-	if (!lst || !clear_quote)
-		return ;
-	p = lst;
-	while (p)
-	{
-		if (p->isquote != UNSET)
-			clear_quote(&p->word);
+		if ((p->word[0]) == '\'')
+			process_single(&(p->word));
+		if ((p->word[0]) == '\"')
+			process_double(&(p->word), env, exit_code);
 		p = p->next;
 	}
 }

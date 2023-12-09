@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   jo-tan_ft_memset.c                                 :+:      :+:    :+:   */
+/*   ft_ismeta.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aauthier <aauthier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,13 +12,7 @@
 
 #include "libft.h"
 
-void	*ft_memset(void *s, int c, size_t n)
+int	ft_ismeta(char c)
 {
-	char	*ptr;
-
-	ptr = (char *)s;
-	while (n--)
-	{
-		*(ptr++) = (char)c;
-	}
-	return (s);
+	return (c == '|' || c == '<' || c == '<');
+}

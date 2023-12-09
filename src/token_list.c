@@ -24,7 +24,6 @@ t_token	*ft_newtoken(char *s)
 	}
 	new->word = s;
 	new->type = NONE;
-	new->isquote = UNSET;
 	new->next = NULL;
 	return (new);
 }

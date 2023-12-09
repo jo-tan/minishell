@@ -1,0 +1,63 @@
+#include "minishell.h"
+
+int check_expansion_sign(char *word)
+{
+    char *p;
+
+    p = word;
+    while (*p)
+    {
+        if (*p == '$')
+            return (1);
+        p++;
+    }
+    return (0);
+}
+
+int ft_count_parsing_len(char *word)
+{
+    char *p;
+    int len;
+
+    p = word;
+    len = 0;
+    if (p[len] == '$')
+    {
+        len++;
+        if (p[len] == '?' || ft_isdigit(p[len]))
+            return (2);
+        while (ft_isenvname(word[len]) && p[len] && p[len] != '$')
+            len++;
+    }
+    else
+    {
+        while (p[len] != '$' && p[len])
+            len++;
+    }
+    return (len);
+}
+
+t_token	*ft_divide_arg_env(char *string)
+{
+	int		word_len;
+	char	*word;
+	t_token	*new;
+	t_token	*head;
+
+	head = new = NULL;
+	while (*string)
+	{
+		word_len = ft_count_parsing_len(string);
+		word = malloc(word_len + 1);
+		if (!word)
+			return (NULL); //handle malloc failure
+		ft_strlcpy(word, string, word_len + 1);
+		new = ft_newtoken(word);
+		if (head == NULL)
+			head = new;
+		else
+			ft_addtoken(head, new);
+		string += word_len;
+	}
+	return (head);
+}

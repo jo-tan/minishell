@@ -1,24 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   jo-tan_ft_memset.c                                 :+:      :+:    :+:   */
+/*   ft_isenvname.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aauthier <aauthier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/13 18:19:25 by jo-tan            #+#    #+#             */
-/*   Updated: 2023/11/28 15:39:10 by aauthier         ###   ########.fr       */
+/*   Created: 2023/11/13 18:09:51 by jo-tan            #+#    #+#             */
+/*   Updated: 2023/11/28 16:17:59 by aauthier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memset(void *s, int c, size_t n)
+int	ft_isenvname(char c)
 {
-	char	*ptr;
-
-	ptr = (char *)s;
-	while (n--)
-	{
-		*(ptr++) = (char)c;
-	}
-	return (s);
+	return (ft_isalnum(c) || c == '_');
+}

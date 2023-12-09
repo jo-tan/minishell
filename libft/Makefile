@@ -5,6 +5,8 @@ SRCS		= ft_isalpha.c \
 			ft_isalnum.c \
 			ft_isascii.c \
 			ft_isspace.c \
+			ft_ismeta.c \
+			ft_isenvname.c \
 			ft_isquote.c \
 			ft_isprint.c \
 			ft_strlen.c \
