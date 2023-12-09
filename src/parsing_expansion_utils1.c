@@ -1,0 +1,69 @@
+#include "minishell.h"
+
+char    *get_env_value(char *word, t_env *env)
+{
+    int pos;
+    int var_len;
+    char    *var_value;
+    t_env *p;
+
+    pos = 1;
+    var_len = ft_strlen(word) - 1;
+    var_value = NULL;
+    p = env;
+    while (p->next)
+    {
+        if (ft_strncmp((word + pos), p->line, var_len) == 0 && *(p->line + var_len) == '=')
+        {
+            var_value = ft_strdup(p->line + (var_len + pos));
+            break;
+        }
+        p = p->next;
+    }
+    if (!var_value)
+        ft_strdup("");
+    return (var_value);
+}
+
+void	switch_arg_env(char	**word, t_env *env, int exit_code)
+{
+    char    *var_value;
+
+    if ((*word)[1] == '?')
+		var_value = ft_itoa(exit_code);
+	else if (ft_isdigit((*word)[1]))
+        var_value = ft_strdup("");
+    else
+        var_value = get_env_value(*word, env);
+	free(*word);
+	*word = var_value;
+}
+
+void	ft_process_env(t_token *pre, t_env *env, int exit_code)
+{
+	t_token *p;
+
+    p = pre;
+    while (p)
+    {
+        if ((p->word[0]) == '$')
+            switch_arg_env(&(p->word), env, exit_code);
+        p = p->next;
+    }
+}
+
+void    expansion(char **word, t_env *env, int exit_code)
+{
+    t_token	*pre;
+	char *new;
+
+    if (check_expansion_sign(*word) == 0)
+        return ;
+	pre = ft_divide_arg_env(*word);
+	ft_process_env(pre, env, exit_code);
+	new = ft_combine(pre);
+	ft_token_free_lst(pre);
+	free(*word);
+	*word= new;
+
+}

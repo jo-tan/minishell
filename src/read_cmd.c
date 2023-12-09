@@ -85,29 +85,13 @@ void	ft_update_token_type(t_token *lst)
 			if (ft_strncmp(p->word, "|", ft_strlen(p->word)) == 0)
 				p->type = PIPE;
 			else if (ft_strncmp(p->word, "<", ft_strlen(p->word)) == 0)
-			{
 				p->type = FILE_IN;
-				if (p->next != NULL)
-					p->next->type = OPEN_FILE;
-			}
 			else if (ft_strncmp(p->word, "<<", ft_strlen(p->word)) == 0)
-			{
 				p->type = HERE_DOC;
-				if (p->next != NULL)
-					p->next->type = HD_WORD;
-			}
 			else if (ft_strncmp(p->word, ">", ft_strlen(p->word)) == 0)
-			{
 				p->type = FILE_OUT;
-				if (p->next != NULL)
-					p->next->type = EXIT_FILE;
-			}
 			else if (ft_strncmp(p->word, ">>", ft_strlen(p->word)) == 0)
-			{
 				p->type = FILE_OUT_AP;
-				if (p->next != NULL)
-					p->next->type = EXIT_FILE_AP;
-			}
 			else
 				p->type = ARG;
 		}

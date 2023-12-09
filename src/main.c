@@ -67,7 +67,7 @@ int	main(int argc, char **argv, char **envp)
 	/*Initialize*/
 	if (init_envp(&mini, envp) == 1)
 		return (ft_putstr_fd("fail to copy environment variables.\n", 2), 1);
-	ft_print_env_list(mini.env);
+	//ft_print_env_list(mini.env);
 	mini.exit_code = 0;
 	//initialize signal: to block the parent signal which may affect current terminal
 	/*Clear histroy && create/build current history list*/

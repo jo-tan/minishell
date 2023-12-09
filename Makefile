@@ -16,11 +16,13 @@ NAME		= minishell
 S_FILES		= src/main.c \
 				src/init_envp.c \
 				src/check_valid_input.c \
-				src/parsing_read_cmd.c \
-				src/check_print.c \
-				src/token_list.c \
+				src/read_cmd.c \
+				src/parsing.c \
 				src/parsing_quote_utils.c \
-				src/expansion_utils.c
+				src/parsing_expansion_utils1.c \
+				src/parsing_expansion_utils2.c \
+				src/check_print.c \
+				src/token_list.c
 S_DIR		= src
 
 LIBFT		= libft/libft.a
