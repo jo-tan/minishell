@@ -69,15 +69,12 @@ int	main(int argc, char **argv, char **envp)
 		return (ft_putstr_fd("fail to copy environment variables.\n", 2), 1);
 	//ft_print_env_list(mini.env);
 	mini.exit_code = 0;
-	//initialize signal: to block the parent signal which may affect current terminal
-	/*Clear histroy && create/build current history list*/
 	while (1)
 	{
 		parent_signal();
 		mini.line = readline("▼・ᴥ・▼ฅ 𐆑𐆑minishell𐆑𐆑𐰷 ");
 		if (!mini.line)
 			return (exit_minishell(&mini, 130));
-		// if empty string: is added into history, is not executed, does not change exit code
 		if (ft_strncmp(mini.line, "", 1) == 0 || ft_empty_str(mini.line))
 			continue ;
 		if (ft_read_line(&mini) == -1)
@@ -87,6 +84,7 @@ int	main(int argc, char **argv, char **envp)
 		if (ft_strlen(mini.line) > 0)
 			add_history(mini.line);
 		free(mini.line);
+		//execution();
 	}
 	return (0);
 }
