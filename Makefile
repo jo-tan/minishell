@@ -6,7 +6,7 @@
 #    By: aauthier <aauthier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/13 18:25:12 by jo-tan            #+#    #+#              #
-#    Updated: 2023/12/01 12:28:50 by aauthier         ###   ########.fr        #
+#    Updated: 2023/12/19 12:43:06 by aauthier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,7 @@ S_FILES		=	main.c \
 				child.c \
 				error.c \
 				execution.c \
+				dummy_builtins.c \
 				path_finding.c
 S_DIR		= src
 

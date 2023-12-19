@@ -6,7 +6,7 @@
 /*   By: aauthier <aauthier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 18:25:28 by jo-tan            #+#    #+#             */
-/*   Updated: 2023/12/15 16:30:22 by aauthier         ###   ########.fr       */
+/*   Updated: 2023/12/19 12:36:47 by aauthier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,15 @@ void	ft_token_free_lst(t_token *lst);
 
 /*Printf for checking progress*/
 void    ft_print_token_lst(t_token *token_lst);
+
+// Built-in functions 
+int	ft_echo(t_token *token_list);
+int	ft_cd(t_token *token_list, char **envp);
+int	ft_pwd(t_token *token_list, char **envp);
+int	ft_export(t_token *token_list);
+int	ft_unset(t_token *token_list);
+int	ft_env(t_token *token_list, char **envp);
+int	ft_exit(t_token *token_list);
 
 /*Pipes*/
 t_result	child_a(int infile, t_params *params);
