@@ -6,7 +6,7 @@
 /*   By: aauthier <aauthier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 18:25:28 by jo-tan            #+#    #+#             */
-/*   Updated: 2023/12/01 12:32:49 by aauthier         ###   ########.fr       */
+/*   Updated: 2023/12/15 16:30:22 by aauthier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@
 
 typedef enum
 {
-	NONE = 0, //defaullt
+	NONE = 0, //default
 	ARG = 1, // word
 	PIPE = 2, // word == pipe >> not sure if this is needed
 	FILE_IN = 3, // word == '<'
@@ -137,6 +137,7 @@ void    ft_print_token_lst(t_token *token_lst);
 t_result	child_a(int infile, t_params *params);
 t_result	child_b(int outfile, t_params *params);
 void		pipex(int infile, int outfile, t_params *params);
+int			main_pipex(int argc, char **argv, char *const env[]);
 
 /*Path finding functions*/
 char		*find_var_path(char *const env[]);
