@@ -6,7 +6,7 @@
 /*   By: aauthier <aauthier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 15:32:51 by aauthier          #+#    #+#             */
-/*   Updated: 2023/12/19 17:17:49 by aauthier         ###   ########.fr       */
+/*   Updated: 2023/12/20 19:38:11 by aauthier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,18 +31,45 @@ static int	isbuiltin(t_token *token_list, char **envp)
 	return (9); //?
 }
 
+static e_type	next_delimiter(t_token *token_list)
+{
+	e_type	token_type;
+
+	while (token_list)
+	{
+		token_type = token_list->type;
+		if (token_type == PIPE || token_type == FILE_IN
+			|| token_type == HERE_DOC || token_type == FILE_OUT
+			|| token_type == FILE_OUT_AP)
+		{
+			return (token_type);
+		}
+		token_list = token_list->next;
+	}
+	return (0);
+}
+
 int	main_exec(t_token *token_list, char **envp)
 {
-	int	ret;
+	int		ret;
+	e_type	delimit;
+	t_token	*head;
 
-	if (token_list->type == ARG)
+	head = token_list;
+//check number of delimiter ?
+//find next delimiter
+	delimit = next_delimiter(head);
+
+	if (head->type == ARG)
 	{
 		//word is command 
 		//check for builtins
-		ret = isbuiltin(token_list);
+		ret = isbuiltin(head);
 		if (ret != 9)
 			return(ret);
 		else
-			
+
+
+		head = head->next;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: aauthier <aauthier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 18:25:28 by jo-tan            #+#    #+#             */
-/*   Updated: 2023/12/19 12:36:47 by aauthier         ###   ########.fr       */
+/*   Updated: 2023/12/20 18:02:03 by aauthier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ typedef enum
 {
 	NONE = 0, //default
 	ARG = 1, // word
-	PIPE = 2, // word == pipe >> not sure if this is needed
+	PIPE = 2, // word == pipe
 	FILE_IN = 3, // word == '<'
 	OPEN_FILE = 33, // word after '<'. The file name, if not exit, will return error msg: "bash: hey: No such file or directory"
 	HERE_DOC = 4, // word == '<<'
@@ -45,7 +45,7 @@ typedef enum
 	EXIT_FILE = 55, // word after '>' overwrite the file or create if not exist. If there is cmd before >, it will write result into the file 
 	FILE_OUT_AP = 6, //word == '>>'
 	EXIT_FILE_AP = 66 //word after '>>', append the file or create if not exist.
-
+	BUITLIN = 7 //builtin functions such as echo, cd, pwd, expot unset, env, exit
 } e_type;
 
 typedef enum
