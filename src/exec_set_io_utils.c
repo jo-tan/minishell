@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   exec_set_io_utils.c                                :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: aolwagen <aolwagen@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/27 17:08:42 by aolwagen          #+#    #+#             */
-/*   Updated: 2023/10/27 20:46:26 by aolwagen         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 void	ft_dup(t_cmd **cmd_list, int i, int single_flag)
@@ -54,4 +42,16 @@ void	ft_ambig(char *str)
 	write(2, "minishell: ", 11);
 	write(2, str, ft_strlen(str));
 	write(2, ": ambiguous redirect\n", 21);
+}
+
+int	find_space(char *word)
+{
+	int	i = 0;
+	while (word[i])
+	{
+		if (ft_isspace(word[i]))
+			return (1);
+		i++;
+	}
+	return (0);
 }

@@ -106,7 +106,7 @@ int	ft_read_line(t_mini *mini)
 		mini->exit_code = 258;
 		return (-1);
 	}
-	printf(".............\n❙input line❙ %s\n.............\n", mini->line);
+	//printf(".............\n❙input line❙ %s\n.............\n", mini->line);
 	mini->token_lst = ft_tokenizer(mini->line);
 	ft_update_token_type(mini->token_lst);
 	if (!ft_valid_syntax_order(mini->token_lst))

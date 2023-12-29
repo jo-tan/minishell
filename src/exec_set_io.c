@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   exec_set_io.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: aolwagen <aolwagen@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/05 14:55:13 by aolwagen          #+#    #+#             */
-/*   Updated: 2023/10/27 20:43:46 by aolwagen         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 int	ft_file(t_cmd **cmd_list, int i, char *filename, enum e_type type)
@@ -49,17 +37,10 @@ int	ft_set_io(t_cmd **cmd_list, int i, int single_flag)
 	exit_status = 0;
 	while (t != NULL && exit_status == 0)
 	{
-		// if (t->type == AMBIG_REDIR)
-		// 	return (ft_ambig(t->word), 1);
+		if (t->type == HERE_DOC && find_space(t->word))
+		 	return (ft_ambig(t->word), 1);
 		if (t->type == FILE_IN || t->type == FILE_OUT || t->type == FILE_OUT_AP)
 			exit_status = ft_file(cmd_list, i, t->word, t->type);
-		// if (t->type == DELIMITER || t->type == DELIMITER_Q)
-		// {
-		// 	if (cmd_list[i]->in_fd != 0)
-		// 		close(cmd_list[i]->in_fd);
-		// 	cmd_list[i]->in_fd = t->fd;
-		// 	t->fd = 0;
-		// }
 		t = t->next;
 	}
 	if (exit_status == 0)
@@ -73,9 +54,9 @@ int	ft_heredoc(char *limitor, enum e_type type, int old_exit, t_env *msh_env)
 	char	*str;
 	size_t	len;
 
-	(void) old_exit;
-	(void) type;
-	(void) msh_env;
+	(void)old_exit;
+	(void)msh_env;
+	(void)type;
 	if (pipe(pipe_ends))
 		return (ft_error(NULL, 0, 0));
 	len = ft_strlen(limitor);
@@ -103,11 +84,14 @@ int	ft_set_hdoc(t_cmd **cmd_list, int e, t_env *msh_env)
 	while (cmd_list[i])
 	{
 		token = cmd_list[i]->tokens;
-		while (token->type > PIPE)
+		while (token)
 		{
-			token->fd = ft_heredoc(token->word, token->type, e, msh_env);
-			if (token->fd == 0)
-				return (1);
+			if (token->type == HERE_DOC)
+			{
+				token->fd = ft_heredoc(token->word, token->type, e, msh_env);
+				if (token->fd == 0)
+					return (1);
+			}
 			token = token->next;
 		}
 		i++;

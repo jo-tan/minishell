@@ -11,20 +11,23 @@ void	ft_free_all(t_cmd **cmd_list, t_env *msh_env)
 		ft_free_envp(msh_env);
 	}
 	i = 0;
-	while (cmd_list[i])
+	if (cmd_list != NULL)
 	{
-		head = cmd_list[i]->tokens;
-		while (head)
+		while (cmd_list[i])
 		{
-			temp = head;
-			head = head->next;
-			free(temp->word);
-			free(temp);
+			head = cmd_list[i]->tokens;
+			while (head)
+			{
+				temp = head;
+				head = head->next;
+				free(temp->word);
+				free(temp);
+			}
+			free(cmd_list[i]);
+			i++;
 		}
-		free(cmd_list[i]);
-		i++;
+		free(cmd_list);
 	}
-	free(cmd_list);
 }
 
 void	ft_close_all(t_cmd **cmd_list)

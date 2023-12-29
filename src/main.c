@@ -99,7 +99,7 @@ int	main(int argc, char **argv, char **envp)
 		if (input_and_parse(&mini))
 			continue ;
 		//ft_print_token_lst(mini.token_lst);
-		//print_cmd(mini.cmd_table);
+		print_cmd(mini.cmd_table);
 		mini.exit_code = ft_exec(mini.cmd_table, mini.env, mini.exit_code, &mini);
 		update_exit_status(&mini, mini.exit_code);
 	}

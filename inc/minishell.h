@@ -163,6 +163,7 @@ void	ft_free_char_vector_index(char **vector, int i);
 int		ft_str_contains_char(char *str, char c);
 void	ft_dup(t_cmd **cmd_list, int i, int single_flag);
 void	ft_ambig(char *str);
+int		find_space(char *word);
 // exec_set_io
 int		ft_set_io(t_cmd **cmd, int i, int single_flag);
 int		ft_hdoc_write(char *str, int *pipe_ends);

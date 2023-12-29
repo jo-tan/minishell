@@ -36,9 +36,13 @@ t_cmd	*split_into_simplecmds(t_token *tokens)
 		while (tokens && tokens->type != PIPE)
 		{
 			if (tokens->type > PIPE)
+			{
+				type = tokens->type;
 				tokens = remove_current_token(prev, tokens);
+			}
 			prev = tokens;
             prev->type = type;
+			type = 1;
 			tokens = tokens->next;
 		}
 		prev->next = NULL;

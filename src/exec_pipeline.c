@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   exec_pipeline.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: aolwagen <aolwagen@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/21 14:06:00 by aolwagen          #+#    #+#             */
-/*   Updated: 2023/10/30 19:06:58 by aolwagen         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 void	sigquit_handler(int signum)
@@ -34,7 +22,7 @@ void	free_env_arr(char **env_arr)
 		free(env_arr);
 }
 
-int	ft_path_err(char **args)
+int	ft_path_err(char **args, char **env)
 {
 	struct stat	buf;
 
@@ -47,6 +35,7 @@ int	ft_path_err(char **args)
 		return (126);
 	}
 	ft_free_char_vector(args);
+	free_env_arr(env);
 	return (127);
 }
 
@@ -122,9 +111,6 @@ int	ft_child(t_cmd **cmd_list, int i, t_env *env, int single_flag)
 	char	*ptr;
 	char	**env_arr;
 
-	ptr = env_to_str(env);
-	env_arr = ft_split(ptr, '\n');
-	free(ptr);
 	exit_status = ft_set_io(cmd_list, i, single_flag);
 	if (exit_status)
 		return (exit_status);
@@ -133,11 +119,14 @@ int	ft_child(t_cmd **cmd_list, int i, t_env *env, int single_flag)
 	args = ft_make_args(cmd_list[i]->tokens);
 	if (!args)
 		return (1);
+	ptr = env_to_str(env);
+	env_arr = ft_split(ptr, '\n');
+	free(ptr);
 	if (single_flag || ft_is_builtin(cmd_list[i]->tokens))
 		return (ft_do_builtin(args, &env_arr, cmd_list, i));
 	path = ft_find_cmd_path(args[0], env_arr);
 	if (!path)
-		return (ft_path_err(args));
+		return (ft_path_err(args, env_arr));
 	execve(path, args, env_arr);
 	ft_error(args[1], 0, 1);
 	return (ft_free_char_vector(args), free(path), free_env_arr(env_arr), 1);
