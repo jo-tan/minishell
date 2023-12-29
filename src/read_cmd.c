@@ -58,7 +58,7 @@ t_token	*ft_tokenizer(const char *line)
 			word_len = ft_count_word_len(line);
 			word = malloc(word_len + 1);
 			if (!word)
-				return (NULL); //handle malloc failure
+				return (ft_putstr_fd("ft_tokenizer: Malloc failure.\n", 2), NULL);
 			ft_strlcpy(word, line, word_len + 1);
 			new = ft_newtoken(word);
 			if (head == NULL)
@@ -102,11 +102,20 @@ void	ft_update_token_type(t_token *lst)
 int	ft_read_line(t_mini *mini)
 {
 	if (!ft_valid_line(mini->line))
-		return (0);
+	{
+		mini->exit_code = 258;
+		return (-1);
+	}
 	printf(".............\n❙input line❙ %s\n.............\n", mini->line);
 	mini->token_lst = ft_tokenizer(mini->line);
 	ft_update_token_type(mini->token_lst);
+	if (!ft_valid_syntax_order(mini->token_lst))
+	{
+		mini->exit_code = 258;
+		return (-1);
+	}
 	ft_parsing(mini);
+	mini->cmd_table = create_cmd_arr(mini->token_lst);
 
 	return (0);
 }

@@ -20,7 +20,7 @@ char	*ft_combine(t_token *lst)
 
 	ret = malloc(1);
 	if (!ret)
-		return (NULL); //handle malloc failure
+		return (ft_putstr_fd("ft_parsing: ft_combine: Malloc failure.\n", 2), NULL);
 	ret[0] = '\0';
 	p = lst;
 	while (p)

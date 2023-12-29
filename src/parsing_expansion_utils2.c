@@ -50,7 +50,7 @@ t_token	*ft_divide_arg_env(char *string)
 		word_len = ft_count_parsing_len(string);
 		word = malloc(word_len + 1);
 		if (!word)
-			return (NULL); //handle malloc failure
+			return (ft_putstr_fd("ft_parsing: ft_divide_arg_env: Malloc failure.\n", 2), NULL);
 		ft_strlcpy(word, string, word_len + 1);
 		new = ft_newtoken(word);
 		if (head == NULL)

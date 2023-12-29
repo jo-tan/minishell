@@ -54,3 +54,15 @@ void    ft_print_env_list(t_env *env)
         p = p->next;
     }
 }
+
+void	print_cmd(t_cmd **arr)
+{
+    printf("------------CMD Table--------------\n");
+	while (*arr)
+	{
+		printf("--------------------------\n");
+		ft_print_token_lst((*arr)->tokens);
+		++arr;
+	}
+	printf("--------------------------\n");
+}

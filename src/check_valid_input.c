@@ -69,10 +69,39 @@ int	ft_check_quote_pair(const char *string)
 int	ft_valid_line(const char *line)
 {
 	if (!ft_check_backslash(line))
-		return (ft_putstr_fd("Invalid input: backslash '\\' is found\n", 2), 0);
+		return (ft_putstr_fd("Invalid Syntax: backslash '\\' is found\n", 2), 0);
 	if (!ft_check_semicolon(line))
-		return (ft_putstr_fd("Invalid input: semicolon ';' is found\n", 2), 0);
+		return (ft_putstr_fd("Invalid Syntax: semicolon ';' is found\n", 2), 0);
 	if (!ft_check_quote_pair(line))
-		return (ft_putstr_fd("Invalid input: quote isn't closed\n", 2), 0);
+		return (ft_putstr_fd("Invalid Syntax: quote isn't closed\n", 2), 0);
+	return (1);
+}
+
+/*Rule:
+If token type is not ARG, it should follow with at least one ARG after.
+The last token cannot be PIPE or redirection*/
+
+int	ft_valid_syntax_order(t_token *current)
+{
+	t_token	*prev;
+
+	if (current->type == PIPE)
+		return (0);
+	while (current)
+	{
+		prev = current;
+		current = current->next;
+		if (!current)
+			break ;
+		if (prev->type == PIPE && current->type == PIPE)
+			break ;
+		if (prev->type > PIPE)
+		{
+			if (current->type != ARG)
+				break ;
+		}
+	}
+	if (prev->type > ARG)
+		return (0);
 	return (1);
 }

@@ -1,0 +1,173 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_pipeline.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aolwagen <aolwagen@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/21 14:06:00 by aolwagen          #+#    #+#             */
+/*   Updated: 2023/10/30 19:06:58 by aolwagen         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+
+void	sigquit_handler(int signum)
+{
+	global_signal = signum;
+	write(2, "Quit (core dumped)\n", 19);
+	return ;
+}
+
+void	free_env_arr(char **env_arr)
+{
+	int	i;
+
+	i = 0;
+	while (env_arr[i])
+	{
+		if (env_arr[i])
+			free(env_arr[i]);
+		i++;
+	}
+	if (env_arr)
+		free(env_arr);
+}
+
+int	ft_path_err(char **args)
+{
+	struct stat	buf;
+
+	if (stat(args[0], &buf) == 0 && S_ISDIR(buf.st_mode))
+	{
+		write(2, "minishell: ", 11);
+		write(2, args[0], ft_strlen(args[0]));
+		write(2, ": Is a directory\n", 17);
+		ft_free_char_vector(args);
+		return (126);
+	}
+	ft_free_char_vector(args);
+	return (127);
+}
+
+int	ft_wait(pid_t *pids, int cmd_amnt, t_cmd **cmd_list)
+{
+	int	i;
+	int	status;
+
+	i = 0;
+	ft_close_all(cmd_list);
+	while (i < cmd_amnt)
+	{
+		waitpid(pids[i], &status, 0);
+		i++;
+	}
+	free(pids);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	return ((WTERMSIG(status) + 128));
+}
+
+size_t			size_env(t_env *lst)
+{
+	size_t	lst_len;
+
+	lst_len = 0;
+	while (lst && lst->next != NULL)
+	{
+		if (lst->line != NULL)
+		{
+			lst_len += ft_strlen(lst->line);
+			lst_len++;
+		}
+		lst = lst->next;
+	}
+	return (lst_len);
+}
+
+char			*env_to_str(t_env *lst)
+{
+	char	*env;
+	int		i;
+	int		j;
+
+	if (!(env = malloc(sizeof(char) * size_env(lst) + 1)))
+		return (NULL);
+	i = 0;
+	while (lst && lst->next != NULL)
+	{
+		if (lst->line != NULL)
+		{
+			j = 0;
+			while (lst->line[j])
+			{
+				env[i] = lst->line[j];
+				i++;
+				j++;
+			}
+		}
+		if (lst->next->next != NULL)
+			env[i++] = '\n';
+		lst = lst->next;
+	}
+	env[i] = '\0';
+	return (env);
+}
+
+int	ft_child(t_cmd **cmd_list, int i, t_env *env, int single_flag)
+{
+	int		exit_status;
+	char	**args;
+	char	*path;
+	char	*ptr;
+	char	**env_arr;
+
+	ptr = env_to_str(env);
+	env_arr = ft_split(ptr, '\n');
+	free(ptr);
+	exit_status = ft_set_io(cmd_list, i, single_flag);
+	if (exit_status)
+		return (exit_status);
+	if (!ft_get_arg_amnt(cmd_list[i]->tokens))
+		return (0);
+	args = ft_make_args(cmd_list[i]->tokens);
+	if (!args)
+		return (1);
+	if (single_flag || ft_is_builtin(cmd_list[i]->tokens))
+		return (ft_do_builtin(args, &env_arr, cmd_list, i));
+	path = ft_find_cmd_path(args[0], env_arr);
+	if (!path)
+		return (ft_path_err(args));
+	execve(path, args, env_arr);
+	ft_error(args[1], 0, 1);
+	return (ft_free_char_vector(args), free(path), free_env_arr(env_arr), 1);
+}
+
+int	ft_pipeline(t_cmd **cmd_list, int cmd_amnt, t_env *msh_env, t_mini *msh)
+{
+	pid_t	*pids;
+	int		i;
+	int		exit_status;
+
+	pids = malloc(sizeof(pid_t) * cmd_amnt);
+	if (pids == NULL)
+		return (ft_error(NULL, 0, 1));
+	signal(SIGQUIT, &sigquit_handler);
+	i = 0;
+	while (i < cmd_amnt)
+	{
+		pids[i] = fork();
+		if (pids[i] < 0)
+			return (ft_error(NULL, 0, 1), ft_wait(pids, (i - 1), cmd_list));
+		if (pids[i] == 0)
+		{
+			free(pids);
+			exit_status = ft_child(cmd_list, i, msh_env, 0);
+			ft_close_all(cmd_list);
+			ft_exec_msh_free(msh);
+			exit (exit_status);
+		}
+		i++;
+	}
+	return (ft_wait(pids, i, cmd_list));
+}

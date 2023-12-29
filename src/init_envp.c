@@ -30,6 +30,8 @@ int	init_envp(t_mini *mini, char **envp)
 
 void	ft_free_envp(t_env *env)
 {
+	if (!env)
+		return ;
 	while (env)
 	{
 		free(env->line);

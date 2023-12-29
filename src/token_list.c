@@ -42,6 +42,15 @@ void	ft_addtoken(t_token *lst, t_token *new)
 	lst->next = new;
 }
 
+void	free_single_token(t_token *token)
+{
+	if (!token)
+		return ;
+	free(token->word);
+	token->word = NULL;
+	free(token);
+}
+
 void	ft_token_free_lst(t_token *lst)
 {
 	while (lst)

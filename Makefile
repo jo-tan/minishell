@@ -22,7 +22,25 @@ S_FILES		= src/main.c \
 				src/parsing_expansion_utils1.c \
 				src/parsing_expansion_utils2.c \
 				src/check_print.c \
-				src/token_list.c
+				src/token_list.c \
+				src/cmd_list.c \
+				src/token_to_cmd.c \
+				src/buildin_cd.c \
+				src/buildin_echo.c \
+				src/buildin_env.c \
+				src/buildin_export.c \
+				src/buildin_pwd.c \
+				src/buildin_unset.c \
+				src/buildin_exit.c \
+				src/buildin.c \
+				src/execution.c \
+				src/exec_utils.c \
+				src/exec_args.c \
+				src/exec_path.c \
+				src/exec_pipeline.c \
+				src/exec_set_io.c \
+				src/exec_set_io_utils.c \
+				src/env_utils.c 
 S_DIR		= src
 
 LIBFT		= libft/libft.a
@@ -37,7 +55,7 @@ D_FILES		= $(patsubst $(S_DIR)/%.c,$(O_DIR)/%.d,$(S_FILES))
 # Compilation
 CC			= cc
 CF			= -Wall -Wextra -Werror #-MMD -MP
-INC			= -I inc/ -I $(LIBFT_DIR)
+INC			= -I inc/ -I $(LIBFT_DIR) -I/usr/local/Cellar/readline/8.2.1/include
 
 # Cleaning
 RM			= rm -rf
@@ -45,7 +63,7 @@ RM			= rm -rf
 all:		$(LIBFT) $(NAME)
 
 $(NAME):	$(O_FILES)
-	@$(CC) -o $(NAME) $(O_FILES) -L $(LIBFT_DIR) -lreadline -lft $(INC)
+	@$(CC) -o $(NAME) $(O_FILES) -L $(LIBFT_DIR) -lreadline -lft -L /usr/local/Cellar/readline/8.2.1/lib $(INC)
 	@echo " [ ok ] | minishell is ready!"
 
 -include $(D_FILES)

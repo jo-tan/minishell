@@ -30,9 +30,20 @@
 # include <termios.h> //tcsetattr, tcgetattr
 # include <curses.h> //getent, tgetflag, tgetnum, tgetstr, tgoto, tputs (direct curses interface to the terminfo capability database)
 # include <term.h> //with curses.h
+# include <limits.h>
 # include "libft.h"
 
-typedef enum
+extern int	global_signal;
+
+# define B_ECHO 1
+# define B_CD 2
+# define B_PWD 3
+# define B_EXPORT 4
+# define B_UNSET 5
+# define B_ENV 6
+# define B_EXIT 7
+
+enum e_type
 {
 	NONE = 0, //defaullt
 	ARG = 1, // word
@@ -45,15 +56,25 @@ typedef enum
 	//word after '>' overwrite the file or create if not exist. If there is cmd before >, it will write result into the file 
 	FILE_OUT_AP = 6 //word == '>>'
 	//word after '>>', append the file or create if not exist.
-} e_type;
+};
 
 /*This is smallest element of cmd line. */
 typedef struct s_token
 {
 	char			*word;
-	e_type			type;
+	enum e_type		type;
+	int				fd;
 	struct s_token	*next;
 } t_token;
+
+typedef struct s_cmd
+{
+	int				in_fd;
+	int				out_fd;
+	int				old_exit;
+	struct s_token	*tokens;
+	struct s_cmd	*next;
+}					t_cmd;
 
 typedef struct s_env
 {
@@ -67,6 +88,8 @@ typedef struct	s_mini
 	t_env			*env;
 	char			*line;
 	int				exit_code;
+	char			*exit_code_str;
+	t_cmd			**cmd_table;
 } t_mini;
 
 /*envp*/
@@ -79,6 +102,7 @@ void	parent_signal(void);
 /*check valid input*/
 int 	ft_check_quote_pair(const char *line);
 int		ft_valid_line(const char *line);
+int		ft_valid_syntax_order(t_token *token_lst);
 
 /*read_cmd*/
 int 	ft_read_line(t_mini *mini);
@@ -94,7 +118,7 @@ void    ft_parsing(t_mini *mini);
 /*parsing quotes*/
 int		ft_count_quote_len(char  *string);
 t_token	*ft_break_string(char *string);
-void	process_single(char	**word);
+void	process_quote(char	**word);
 void	process_double(char	**word, t_env *env, int exit_code);
 void	ft_process_quote(t_token *lst, t_env *env, int	exit_code);
 
@@ -110,11 +134,66 @@ int 	check_expansion_sign(char *word);
 /*token list function*/
 t_token *ft_newtoken(char *s);
 void    ft_addtoken(t_token *lst, t_token *new);
+void	free_single_token(t_token *token);
 void	ft_token_free_lst(t_token *lst);
+
+/*cmd list function*/
+void	free_cmd(t_cmd *cmd);
+t_cmd	*ft_lstnew_cmd(t_token *tokens);
+t_cmd	*ft_lstlast_cmd(t_cmd *lst);
+void	ft_lstadd_back_cmd(t_cmd **lst, t_cmd *new);
+void	free_cmd_list(t_cmd **lst);
+int		ft_lstsize_cmd(t_cmd *lst);
+
+/*create cmd table for execution*/
+t_token	*remove_current_token(t_token *prev, t_token *token);
+t_cmd	*split_into_simplecmds(t_token *tokens);
+t_cmd	**lst_to_arr(t_cmd *lst);
+t_cmd	**create_cmd_arr(t_token *tokens);
+
+// EXEC
+int		ft_exec(t_cmd **cmd_list, t_env *env, int old_exit, t_mini *msh);
+void	ft_exec_msh_free(t_mini *msh);
+// exec_utils
+void	ft_close_all(t_cmd **cmd);
+void	ft_free_char_vector(char **args);
+int		ft_error(char *name, int type, int exit_code);
+void	ft_free_all(t_cmd **cmd_list, t_env *env);
+void	ft_free_char_vector_index(char **vector, int i);
+int		ft_str_contains_char(char *str, char c);
+void	ft_dup(t_cmd **cmd_list, int i, int single_flag);
+void	ft_ambig(char *str);
+// exec_set_io
+int		ft_set_io(t_cmd **cmd, int i, int single_flag);
+int		ft_hdoc_write(char *str, int *pipe_ends);
+void	ft_hdoc_sig(char *limitor);
+// exec_set_io_heredoc
+int		ft_set_hdoc(t_cmd **cmd_list, int old_exit, t_env *env);
+// exec_pipeline
+int		ft_child(t_cmd **cmd_list, int i, t_env *env, int single_flag);
+int		ft_pipeline(t_cmd **cmd_list, int cmd_amt, t_env *env, t_mini *msh);
+// exec_child_path
+char	*ft_find_cmd_path(char *cmd_name, char **env);
+// exec_child_args
+char	**ft_make_args(t_token *tokens);
+int		ft_get_arg_amnt(t_token *tokens);
+// BUILTIN
+int		ft_is_builtin(t_token *tokens);
+int		ft_do_builtin(char **args, char ***env, t_cmd **list, int i);
+int		ft_cd(char **args, char ***env, int fd);
+int		ft_echo(char **args, int fd);
+int		ft_env(char **args, char **env, int fd);
+int		ft_export(char **args, char ***env, int fd);
+int		ft_pwd(int fd);
+int		ft_unset(char **args, char ***env);
+int		ft_exit(char **args, t_cmd **cmd_list, int i);
+// env_utils
+int		ft_add_to_msh_env(char ***env, char *new_str);
+int		ft_find_in_env(char **env, char *target, int len);
 
 /*Printf for checking progress*/
 void    ft_print_token_lst(t_token *token_lst);
 void    ft_print_env_list(t_env *env);
-
+void	print_cmd(t_cmd **arr);
 
 #endif

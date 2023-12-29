@@ -46,7 +46,7 @@ t_token	*ft_break_string(char *string)
 		word_len = ft_count_quote_len(string);
 		word = malloc(word_len + 1);
 		if (!word)
-			return (NULL); //handle malloc failure
+			return (ft_putstr_fd("ft_parsing: ft_break_string: Malloc failure.\n", 2), NULL);
 		ft_strlcpy(word, string, word_len + 1);
 		new = ft_newtoken(word);
 		if (head == NULL)
@@ -58,7 +58,7 @@ t_token	*ft_break_string(char *string)
 	return (head);
 }
 
-void	process_single(char	**word)
+void	process_quote(char	**word)
 {
 	char	*clean;
 	int		len;
@@ -70,7 +70,7 @@ void	process_single(char	**word)
 	len = ft_strlen(*word);
 	clean = malloc(len - 1);
 	if (!clean)
-		return ;
+		return (ft_putstr_fd("ft_parsing: process_quote: Malloc failure.\n", 2));
 	while (i < len - 1)
 	{
 		clean[j] = (*word)[i];
@@ -84,7 +84,7 @@ void	process_single(char	**word)
 
 void	process_double(char	**word, t_env *env, int exit_code)
 {
-	process_single(word);
+	process_quote(word);
 	expansion(word, env, exit_code);
 }
 
@@ -96,7 +96,7 @@ void	ft_process_quote(t_token *lst, t_env *env, int	exit_code)
 	while (p)
 	{
 		if ((p->word[0]) == '\'')
-			process_single(&(p->word));
+			process_quote(&(p->word));
 		if ((p->word[0]) == '\"')
 			process_double(&(p->word), env, exit_code);
 		p = p->next;
