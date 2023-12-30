@@ -86,6 +86,7 @@ typedef struct	s_mini
 {
 	t_token			*token_lst;
 	t_env			*env;
+	char			**env_arr;
 	char			*line;
 	int				exit_code;
 	char			*exit_code_str;
@@ -152,7 +153,7 @@ t_cmd	**lst_to_arr(t_cmd *lst);
 t_cmd	**create_cmd_arr(t_token *tokens);
 
 // EXEC
-int		ft_exec(t_cmd **cmd_list, t_env *env, int old_exit, t_mini *msh);
+int		ft_exec(t_cmd **cmd_list, char **env_arr, int old_exit, t_mini *msh);
 void	ft_exec_msh_free(t_mini *msh);
 // exec_utils
 void	ft_close_all(t_cmd **cmd);
@@ -171,8 +172,8 @@ void	ft_hdoc_sig(char *limitor);
 // exec_set_io_heredoc
 int		ft_set_hdoc(t_cmd **cmd_list);
 // exec_pipeline
-int		ft_child(t_cmd **cmd_list, int i, t_env *env, int single_flag);
-int		ft_pipeline(t_cmd **cmd_list, int cmd_amt, t_env *env, t_mini *msh);
+int		ft_child(t_cmd **cmd_list, int i, char **env_arr, int single_flag);
+int		ft_pipeline(t_cmd **cmd_list, int cmd_amt, char **env_arr, t_mini *msh);
 // exec_child_path
 char	*ft_find_cmd_path(char *cmd_name, char **env);
 // exec_child_args
@@ -191,6 +192,11 @@ int		ft_exit(char **args, t_cmd **cmd_list, int i);
 // env_utils
 int		ft_add_to_msh_env(char ***env, char *new_str);
 int		ft_find_in_env(char **env, char *target, int len);
+size_t	size_env(t_env *lst);
+char	*env_to_str(t_env *lst);
+char	**create_env_arr(t_env *env, t_mini *mini);
+
+int		exit_minishell(t_mini *mini, int exit_status);
 
 /*Printf for checking progress*/
 void    ft_print_token_lst(t_token *token_lst);

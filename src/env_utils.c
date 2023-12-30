@@ -52,6 +52,52 @@ int	ft_add_to_msh_env(char ***msh_env, char *new_str)
 	return (msh_env[0] = new_env, 0);
 }
 
+size_t	size_env(t_env *lst)
+{
+	size_t	lst_len;
+
+	lst_len = 0;
+	while (lst && lst->next != NULL)
+	{
+		if (lst->line != NULL)
+		{
+			lst_len += ft_strlen(lst->line);
+			lst_len++;
+		}
+		lst = lst->next;
+	}
+	return (lst_len);
+}
+
+char	*env_to_str(t_env *lst)
+{
+	char	*env;
+	int		i;
+	int		j;
+
+	if (!(env = malloc(sizeof(char) * size_env(lst) + 1)))
+		return (NULL);
+	i = 0;
+	while (lst && lst->next != NULL)
+	{
+		if (lst->line != NULL)
+		{
+			j = 0;
+			while (lst->line[j])
+			{
+				env[i] = lst->line[j];
+				i++;
+				j++;
+			}
+		}
+		if (lst->next->next != NULL)
+			env[i++] = '\n';
+		lst = lst->next;
+	}
+	env[i] = '\0';
+	return (env);
+}
+
 char	*ft_get_env(char **msh_env, char *var_name)
 {
 	int		i;
@@ -64,4 +110,19 @@ char	*ft_get_env(char **msh_env, char *var_name)
 	if (i == -1)
 		return (NULL);
 	return (&msh_env[i][len + 1]);
+}
+
+char	**create_env_arr(t_env *env, t_mini *mini)
+{
+	char *p;
+
+	p = env_to_str(env);
+	mini->env_arr = ft_split(p, '\n');
+	free(p);
+	if (!mini->env_arr)
+	{
+		ft_putstr_fd("Malloc: fail to create env_arr for execv.\n", 2);
+		mini->exit_code = 1;
+	}
+	return (mini->env_arr);
 }

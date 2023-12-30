@@ -21,9 +21,18 @@ int	exit_minishell(t_mini *mini, int exit_status)
 	else
 		write(1, "exit\n", ft_strlen("exit\n"));
 	//free everything
-	free(mini->line);
-	ft_token_free_lst(mini->token_lst);
-	ft_free_envp(mini->env);
+	if (mini->line != NULL)
+		free(mini->line);
+	if (mini->token_lst != NULL)
+		ft_token_free_lst(mini->token_lst);
+	if (mini->env != NULL)
+		ft_free_envp(mini->env);
+	if (mini->cmd_table != NULL)
+		free_cmd_list(mini->cmd_table);
+	if (mini->env_arr != NULL)
+		ft_free_char_vector(mini->env_arr);
+	if (mini->exit_code_str != NULL)
+		free(mini->exit_code_str);
 	rl_clear_history();
 	exit (exit_status);
 }
@@ -39,7 +48,6 @@ static void	parent_signal_handler(int signal)
 
 void	parent_signal(void)
 {
-	// SIGINT sets $? to 130 (in child, $? will become 131)
 	signal(SIGINT, &parent_signal_handler);
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGTSTP, SIG_IGN);
@@ -55,7 +63,8 @@ void	update_exit_status(t_mini *msh, int exit_status)
 	str = ft_itoa(exit_status);
 	if (!str)
 		exit_minishell(msh, -1);
-	free(msh->exit_code_str);
+	if (msh->exit_code_str != NULL)
+		free(msh->exit_code_str);
 	msh->exit_code_str = str;
 }
 
@@ -73,10 +82,7 @@ int	input_and_parse(t_mini *mini)
 	if (ft_strlen(mini->line) > 0)
 		add_history(mini->line);
 	if (ft_read_line(mini) == -1)
-	{
-		ft_putstr_fd("minishell: Invalid Syntax\n", 2);
 		return (free(mini->line), 1);
-	}
 	free(mini->line);
 	return (0);
 }
@@ -90,17 +96,14 @@ int	main(int argc, char **argv, char **envp)
 		return (ft_putstr_fd("HINT: ./minishell\n", 2), 1);
 	/*Initialize*/
 	if (init_envp(&mini, envp) == 1)
-		return (ft_putstr_fd("fail to copy environment variables.\n", 2), 1);
-	//ft_print_env_list(mini.env);
+		return (ft_putstr_fd("Malloc: fail to copy environment variables.\n", 2), 1);
 	mini.exit_code = 0;
 	parent_signal();
 	while (1)
 	{
 		if (input_and_parse(&mini))
 			continue ;
-		//ft_print_token_lst(mini.token_lst);
-		print_cmd(mini.cmd_table);
-		mini.exit_code = ft_exec(mini.cmd_table, mini.env, mini.exit_code, &mini);
+		mini.exit_code = ft_exec(mini.cmd_table, mini.env_arr, mini.exit_code, &mini);
 		update_exit_status(&mini, mini.exit_code);
 	}
 	return (0);

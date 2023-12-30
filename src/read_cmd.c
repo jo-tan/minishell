@@ -116,6 +116,7 @@ int	ft_read_line(t_mini *mini)
 	}
 	ft_parsing(mini);
 	mini->cmd_table = create_cmd_arr(mini->token_lst);
+	mini->env_arr = create_env_arr(mini->env, mini);
 
 	return (0);
 }

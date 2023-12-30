@@ -76,17 +76,38 @@ int	ft_valid_line(const char *line)
 		return (ft_putstr_fd("Invalid Syntax: quote isn't closed\n", 2), 0);
 	return (1);
 }
+static void	print_syntax_err(t_token *err)
+{
+	char	*token;
+	char	*err_msg;
 
-/*Rule:
-If token type is not ARG, it should follow with at least one ARG after.
-The last token cannot be PIPE or redirection*/
+	token = "newline";
+	err_msg = "minishell: Syntax error near unexpected token";
+	if (err)
+		token = err->word;
+	printf("%s `%s'\n", err_msg, token);
+}
+
+// RULES :
+// Pipes must be preceeded and followed by at least one Argument
+// Input Redirection must be followed by an Input File
+// Here Tag must be followed by a DELIMITER
+// Output Redirection must be followed by an Output File
+// Append Redirection must be followed by an Append File
+// LOGIC :
+// Check until and including NULL node
+// If nothing preceeding, must be ARG or REDIR (not PIPE)
+// If ARG preceeding, can be anything
+// If PIPE preceeding, must be ARG or REDIR (not PIPE)
+// If REDIR preceeding, must be ARG
+// If end reached, previous must not be PIPE or REDIR)
 
 int	ft_valid_syntax_order(t_token *current)
 {
 	t_token	*prev;
 
 	if (current->type == PIPE)
-		return (0);
+		return (print_syntax_err(current), 0);
 	while (current)
 	{
 		prev = current;
@@ -102,6 +123,6 @@ int	ft_valid_syntax_order(t_token *current)
 		}
 	}
 	if (prev->type > ARG)
-		return (0);
+		return (print_syntax_err(current), 0);
 	return (1);
 }

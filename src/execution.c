@@ -43,13 +43,12 @@ void	ft_exec_msh_free(t_mini *msh)
 {
 	if (!msh)
 		return ;
+	ft_free_char_vector(msh->env_arr);
 	ft_free_all(msh->cmd_table, msh->env);
-	free(msh);
 }
 
-int	ft_exec(t_cmd **cmd_list, t_env *msh_env, int e, t_mini *msh)
+int	ft_exec(t_cmd **cmd_list, char **env_arr, int e, t_mini *msh)
 {
-	int		exit_status;
 	int		nbr_cmd;
 	int		buildin_num;
 
@@ -64,14 +63,14 @@ int	ft_exec(t_cmd **cmd_list, t_env *msh_env, int e, t_mini *msh)
 	buildin_num = ft_is_buildin(cmd_list[0]->tokens);
 	if (nbr_cmd == 1 && buildin_num)
 	{
-		exit_status = ft_child(cmd_list, 0, msh_env, 1);
+		e = ft_child(cmd_list, 0, env_arr, 1);
 		if (buildin_num == B_EXIT)
 		{
 			ft_exec_msh_free(msh);
-			exit (exit_status);
+			exit (e);
 		}
 	}
 	else
-		exit_status = ft_pipeline(cmd_list, nbr_cmd, msh_env, msh);
-	return (ft_free_all(cmd_list, NULL), exit_status);
+		e = ft_pipeline(cmd_list, nbr_cmd, env_arr, msh);
+	return (ft_free_all(cmd_list, NULL), e);
 }
