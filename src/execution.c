@@ -67,7 +67,7 @@ int	ft_exec(t_cmd **cmd_list, char **env_arr, int e, t_mini *msh)
 		if (buildin_num == B_EXIT)
 		{
 			ft_exec_msh_free(msh);
-			exit (e);
+			exit (0);
 		}
 	}
 	else
