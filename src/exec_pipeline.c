@@ -122,8 +122,8 @@ int	ft_child(t_cmd **cmd_list, int i, t_env *env, int single_flag)
 	ptr = env_to_str(env);
 	env_arr = ft_split(ptr, '\n');
 	free(ptr);
-	if (single_flag || ft_is_builtin(cmd_list[i]->tokens))
-		return (ft_do_builtin(args, &env_arr, cmd_list, i));
+	if (single_flag || ft_is_buildin(cmd_list[i]->tokens))
+		return (ft_do_buildin(args, &env_arr, cmd_list, i));
 	path = ft_find_cmd_path(args[0], env_arr);
 	if (!path)
 		return (ft_path_err(args, env_arr));

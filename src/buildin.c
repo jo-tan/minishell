@@ -1,50 +1,50 @@
 #include "minishell.h"
 
-int	ft_get_builtin_num(char	*cmd_name)
+int	ft_get_buildin_num(char	*cmd_name)
 {
-	int	builtin_num;
+	int	buildin_num;
 	int	len;
 
 	len = ft_strlen(cmd_name);
 	if (len == 4 && ft_strncmp(cmd_name, "echo", len) == 0)
-		builtin_num = B_ECHO;
+		buildin_num = B_ECHO;
 	else if (len == 2 && ft_strncmp(cmd_name, "cd", len) == 0)
-		builtin_num = B_CD;
+		buildin_num = B_CD;
 	else if (len == 3 && ft_strncmp(cmd_name, "pwd", len) == 0)
-		builtin_num = B_PWD;
+		buildin_num = B_PWD;
 	else if (len == 6 && ft_strncmp(cmd_name, "export", len) == 0)
-		builtin_num = B_EXPORT;
+		buildin_num = B_EXPORT;
 	else if (len == 5 && ft_strncmp(cmd_name, "unset", len) == 0)
-		builtin_num = B_UNSET;
+		buildin_num = B_UNSET;
 	else if (len == 3 && ft_strncmp(cmd_name, "env", len) == 0)
-		builtin_num = B_ENV;
+		buildin_num = B_ENV;
 	else if (len == 4 && ft_strncmp(cmd_name, "exit", len) == 0)
-		builtin_num = B_EXIT;
+		buildin_num = B_EXIT;
 	else
-		builtin_num = 0;
-	return (builtin_num);
+		buildin_num = 0;
+	return (buildin_num);
 }
 
-int	ft_do_builtin(char **args, char ***env, t_cmd **cmd_list, int i)
+int	ft_do_buildin(char **args, char ***env, t_cmd **cmd_list, int i)
 {
-	int	builtin_num;
+	int	buildin_num;
 	int	exit_code;
 
 	exit_code = 0;
-	builtin_num = ft_get_builtin_num(args[0]);
-	if (builtin_num == B_ECHO)
+	buildin_num = ft_get_buildin_num(args[0]);
+	if (buildin_num == B_ECHO)
 		exit_code = ft_echo(args, cmd_list[i]->out_fd);
-	else if (builtin_num == B_CD)
+	else if (buildin_num == B_CD)
 		exit_code = ft_cd(args, env, cmd_list[i]->out_fd);
-	else if (builtin_num == B_PWD)
+	else if (buildin_num == B_PWD)
 		exit_code = ft_pwd(cmd_list[i]->out_fd);
-	else if (builtin_num == B_EXPORT)
+	else if (buildin_num == B_EXPORT)
 		exit_code = ft_export(args, env, cmd_list[i]->out_fd);
-	else if (builtin_num == B_UNSET)
+	else if (buildin_num == B_UNSET)
 		exit_code = ft_unset(args, env);
-	else if (builtin_num == B_ENV)
+	else if (buildin_num == B_ENV)
 		exit_code = ft_env(args, env[0], cmd_list[i]->out_fd);
-	else if (builtin_num == B_EXIT)
+	else if (buildin_num == B_EXIT)
 		exit_code = ft_exit(args, cmd_list, i);
 	if (cmd_list[i]->out_fd != 1)
 	{
@@ -54,7 +54,7 @@ int	ft_do_builtin(char **args, char ***env, t_cmd **cmd_list, int i)
 	return (ft_free_char_vector(args), exit_code);
 }
 
-int	ft_is_builtin(t_token *tokens)
+int	ft_is_buildin(t_token *tokens)
 {
 	t_token	*current_token;
 
@@ -62,7 +62,7 @@ int	ft_is_builtin(t_token *tokens)
 	while (current_token)
 	{
 		if (current_token->type == ARG)
-			return (ft_get_builtin_num(current_token->word));
+			return (ft_get_buildin_num(current_token->word));
 		current_token = current_token->next;
 	}
 	return (0);

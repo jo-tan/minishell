@@ -57,7 +57,10 @@ void    ft_parsing(t_mini *mini)
 	while (p)
 	{
 		if (ft_check_quote_pair(p->word) != 3)
+		{
 			clear_quote(&(p->word), mini->env, mini->exit_code);
+			expansion(&(p->word), mini->env, mini->exit_code);
+		}
 		else
 			expansion(&(p->word), mini->env, mini->exit_code);
 		p = p->next;

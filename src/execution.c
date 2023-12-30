@@ -51,21 +51,21 @@ int	ft_exec(t_cmd **cmd_list, t_env *msh_env, int e, t_mini *msh)
 {
 	int		exit_status;
 	int		nbr_cmd;
-	int		builtin_num;
+	int		buildin_num;
 
 	nbr_cmd = ft_exec_init(cmd_list, e);
-	if (ft_set_hdoc(cmd_list, e, msh_env) || ft_set_pipes(cmd_list, nbr_cmd))
+	if (ft_set_hdoc(cmd_list) || ft_set_pipes(cmd_list, nbr_cmd))
 	{
 		ft_close_all(cmd_list);
 		if (global_signal)
 			return (ft_free_all(cmd_list, NULL), global_signal + 128);
 		return (ft_free_all(cmd_list, NULL), 1);
 	}
-	builtin_num = ft_is_builtin(cmd_list[0]->tokens);
-	if (nbr_cmd == 1 && builtin_num)
+	buildin_num = ft_is_buildin(cmd_list[0]->tokens);
+	if (nbr_cmd == 1 && buildin_num)
 	{
 		exit_status = ft_child(cmd_list, 0, msh_env, 1);
-		if (builtin_num == B_EXIT)
+		if (buildin_num == B_EXIT)
 		{
 			ft_exec_msh_free(msh);
 			exit (exit_status);

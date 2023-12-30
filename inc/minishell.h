@@ -169,7 +169,7 @@ int		ft_set_io(t_cmd **cmd, int i, int single_flag);
 int		ft_hdoc_write(char *str, int *pipe_ends);
 void	ft_hdoc_sig(char *limitor);
 // exec_set_io_heredoc
-int		ft_set_hdoc(t_cmd **cmd_list, int old_exit, t_env *env);
+int		ft_set_hdoc(t_cmd **cmd_list);
 // exec_pipeline
 int		ft_child(t_cmd **cmd_list, int i, t_env *env, int single_flag);
 int		ft_pipeline(t_cmd **cmd_list, int cmd_amt, t_env *env, t_mini *msh);
@@ -178,9 +178,9 @@ char	*ft_find_cmd_path(char *cmd_name, char **env);
 // exec_child_args
 char	**ft_make_args(t_token *tokens);
 int		ft_get_arg_amnt(t_token *tokens);
-// BUILTIN
-int		ft_is_builtin(t_token *tokens);
-int		ft_do_builtin(char **args, char ***env, t_cmd **list, int i);
+// buildin
+int		ft_is_buildin(t_token *tokens);
+int		ft_do_buildin(char **args, char ***env, t_cmd **list, int i);
 int		ft_cd(char **args, char ***env, int fd);
 int		ft_echo(char **args, int fd);
 int		ft_env(char **args, char **env, int fd);

@@ -48,15 +48,12 @@ int	ft_set_io(t_cmd **cmd_list, int i, int single_flag)
 	return (exit_status);
 }
 
-int	ft_heredoc(char *limitor, enum e_type type, int old_exit, t_env *msh_env)
+int	ft_heredoc(char *limitor)
 {
 	int		pipe_ends[2];
 	char	*str;
 	size_t	len;
 
-	(void)old_exit;
-	(void)msh_env;
-	(void)type;
 	if (pipe(pipe_ends))
 		return (ft_error(NULL, 0, 0));
 	len = ft_strlen(limitor);
@@ -75,7 +72,7 @@ int	ft_heredoc(char *limitor, enum e_type type, int old_exit, t_env *msh_env)
 	return (free(str), close(pipe_ends[1]), pipe_ends[0]);
 }
 
-int	ft_set_hdoc(t_cmd **cmd_list, int e, t_env *msh_env)
+int	ft_set_hdoc(t_cmd **cmd_list)
 {
 	int		i;
 	t_token	*token;
@@ -88,7 +85,7 @@ int	ft_set_hdoc(t_cmd **cmd_list, int e, t_env *msh_env)
 		{
 			if (token->type == HERE_DOC)
 			{
-				token->fd = ft_heredoc(token->word, token->type, e, msh_env);
+				token->fd = ft_heredoc(token->word);
 				if (token->fd == 0)
 					return (1);
 			}

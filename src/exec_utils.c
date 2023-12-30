@@ -58,6 +58,8 @@ void	ft_free_char_vector(char **args)
 	int	i;
 
 	i = 0;
+	if (!args || !args[i])
+		return ;
 	while (args[i])
 	{
 		free(args[i]);
