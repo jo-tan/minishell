@@ -60,6 +60,8 @@ void    ft_parsing(t_mini *mini, t_token *lst)
 	{
 		if (p->type == NONE && ft_check_quote_pair(p->word) == 3)
 			expansion(&(p->word), mini->env, mini->exit_code);
+		else if (p->type != NONE && ft_check_quote_pair(p->word) == 3)
+			expansion(&(p->word), mini->env, mini->exit_code);
 		else if (p->type != NONE && ft_check_quote_pair(p->word) != 3)
 			clear_quote(&(p->word), mini->env, mini->exit_code, mini);
 		p = p->next;
