@@ -111,9 +111,9 @@ int 	ft_count_word_len(const char *line);
 void    ft_update_token_type(t_token *lst);
 
 /*parsing*/
-void	clear_quote(char **word, t_env *env, int exit_code);
+void	clear_quote(char **word, t_env *env, int exit_code, t_mini *mini);
 char	*ft_combine(t_token *lst);
-void    ft_parsing(t_mini *mini);
+void    ft_parsing(t_mini *mini, t_token *lst);
 
 /*parsing quotes*/
 int		ft_count_quote_len(char  *string);

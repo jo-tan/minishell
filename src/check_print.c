@@ -35,7 +35,7 @@ void    ft_print_token_lst(t_token *token_lst)
         if (p->type == FILE_OUT_AP)
             type = "FILE_OUT_AP";
 
-        printf("❮%s/%s❯   ", type, p->word);
+        printf("❮%d%s/%s❯   ", p->type, type, p->word);
         p = p->next;
     }
     printf("\n");

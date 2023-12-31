@@ -114,7 +114,8 @@ int	ft_read_line(t_mini *mini)
 		mini->exit_code = 258;
 		return (-1);
 	}
-	ft_parsing(mini);
+	ft_parsing(mini, mini->token_lst);
+	ft_print_token_lst(mini->token_lst);
 	mini->cmd_table = create_cmd_arr(mini->token_lst);
 
 	return (0);

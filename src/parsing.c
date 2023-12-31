@@ -20,7 +20,7 @@ char	*ft_combine(t_token *lst)
 
 	ret = malloc(1);
 	if (!ret)
-		return (ft_putstr_fd("ft_parsing: ft_combine: Malloc failure.\n", 2), NULL);
+		return (ft_putstr_fd("ft_combine: Malloc failure.\n", 2), NULL);
 	ret[0] = '\0';
 	p = lst;
 	while (p)
@@ -36,12 +36,14 @@ char	*ft_combine(t_token *lst)
 	return (ret);
 }
 
-void	clear_quote(char **string, t_env *env, int exit_code)
+void	clear_quote(char **string, t_env *env, int exit_code, t_mini *mini)
 {
 	t_token	*pre;
 	char *new;
 
 	pre = ft_break_string(*string);
+	ft_parsing(mini, pre);
+	ft_print_token_lst(pre);
 	ft_process_quote(pre, env, exit_code);
 	new = ft_combine(pre);
 	ft_token_free_lst(pre);
@@ -49,17 +51,17 @@ void	clear_quote(char **string, t_env *env, int exit_code)
 	*string = new;
 }
 
-void    ft_parsing(t_mini *mini)
+void    ft_parsing(t_mini *mini, t_token *lst)
 {
 	t_token	*p;
 
-	p = mini->token_lst;
+	p = lst;
 	while (p)
 	{
-		if (ft_check_quote_pair(p->word) != 3)
-			clear_quote(&(p->word), mini->env, mini->exit_code);
-		else
+		if (p->type == NONE && ft_check_quote_pair(p->word) == 3)
 			expansion(&(p->word), mini->env, mini->exit_code);
+		else if (p->type != NONE && ft_check_quote_pair(p->word) != 3)
+			clear_quote(&(p->word), mini->env, mini->exit_code, mini);
 		p = p->next;
 	}
 }

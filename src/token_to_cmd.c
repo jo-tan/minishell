@@ -23,12 +23,13 @@ t_cmd	*split_into_simplecmds(t_token *tokens)
 
 	prev = NULL;
 	simple_cmds = NULL;
+	type = 1;
 	while (tokens)
 	{
 		while (tokens->type > ARG)
         {
             if (tokens->type > PIPE)
-            	type = tokens->type;
+             	type = tokens->type;
 			tokens = remove_current_token(NULL, tokens);
         }
 		new_cmd = ft_lstnew_cmd(tokens);
