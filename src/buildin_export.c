@@ -1,28 +1,16 @@
 #include "minishell.h"
 
-void	ft_write_export(char **msh_env, int fd)
+void	ft_write_export(t_env *env, int fd)
 {
-	int	i;
-	int	j;
+	t_env *p;
 
-	i = 0;
-	while (msh_env[i])
+	p = env;
+	while (p)
 	{
 		write(fd, "declare -x ", 11);
-		j = 0;
-		while (msh_env[i][j] != '=' && msh_env[i][j] != '\0' )
-		{
-			write(fd, &msh_env[i][j], 1);
-			j++;
-		}
-		if (msh_env[i][j] != '\0')
-		{
-			write(fd, "=\"", 2);
-			write(fd, &msh_env[i][(j + 1)], ft_strlen(&msh_env[i][(j + 1)]));
-			write(fd, "\"", 1);
-		}
+		write(fd, p->line, ft_strlen(p->line));
 		write(fd, "\n", 1);
-		i++;
+		p = p->next;
 	}
 }
 
@@ -52,42 +40,42 @@ int	ft_export_is_valid(char *str)
 	return (1);
 }
 
-int	ft_export_replace_or_add(char ***msh_env, char *str)
+int	ft_export_replace_or_add(t_env *env, char *str)
 {
 	char	*str_copy;
-	int		match_index;
+	t_env	*the_env;
 	int		len;
 
 	len = 0;
 	while (str[len] != '=' && str[len] != '\0')
 		len++;
-	match_index = ft_find_in_env(msh_env[0], str, len);
+	the_env = ft_find_in_env(env, str, len);
 	str_copy = ft_strdup(str);
 	if (!str_copy)
 		return (ft_error(NULL, 0, 1));
-	if (match_index >= 0)
+	if (the_env != NULL)
 	{
-		free(msh_env[0][match_index]);
-		msh_env[0][match_index] = str_copy;
+		free(the_env->line);
+		the_env->line = str_copy;
 		return (0);
 	}
-	return (ft_add_to_msh_env(msh_env, str_copy));
+	return (ft_add_to_msh_env(env, str_copy));
 }
 
-int	ft_export(char **args, char ***msh_env, int fd)
+int	ft_export(char **args, t_env *env, int fd)
 {
 	int		i;
 	int		error_flag;
 
 	if (args[1] == NULL)
-		return (ft_write_export(msh_env[0], fd), 0);
+		return (ft_write_export(env, fd), 0);
 	i = 1;
 	error_flag = 0;
 	while (args[i] != NULL)
 	{
 		if (ft_export_is_valid(args[i]))
 		{
-			if (ft_export_replace_or_add(msh_env, args[i]))
+			if (ft_export_replace_or_add(env, args[i]))
 				return (1);
 		}
 		else

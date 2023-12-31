@@ -1,22 +1,20 @@
 #include "minishell.h"
 
-int	ft_env(char **args, char **msh_env, int fd)
+int	ft_env(char **args, t_env *env, int fd)
 {
-	int	i;
+	t_env *p;
 
+	p = env;
 	if (args[1] != NULL)
-	{
 		write(2, "env: warning: additional arguments to env are ignored\n", 54);
-	}
-	i = 0;
-	while (msh_env[i] != NULL)
+	while (p)
 	{
-		if (ft_str_contains_char(msh_env[i], '='))
+		if (ft_str_contains_char(p->line, '='))
 		{
-			write(fd, msh_env[i], ft_strlen(msh_env[i]));
+			write(fd, p->line, ft_strlen(p->line));
 			write(fd, "\n", 1);
 		}
-		i++;
+		p = p->next;
 	}
 	return (0);
 }

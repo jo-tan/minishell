@@ -86,7 +86,6 @@ typedef struct	s_mini
 {
 	t_token			*token_lst;
 	t_env			*env;
-	char			**env_arr;
 	char			*line;
 	int				exit_code;
 	char			*exit_code_str;
@@ -153,7 +152,7 @@ t_cmd	**lst_to_arr(t_cmd *lst);
 t_cmd	**create_cmd_arr(t_token *tokens);
 
 // EXEC
-int		ft_exec(t_cmd **cmd_list, char **env_arr, int old_exit, t_mini *msh);
+int		ft_exec(t_cmd **cmd_list, t_env *env, int old_exit, t_mini *msh);
 void	ft_exec_msh_free(t_mini *msh);
 // exec_utils
 void	ft_close_all(t_cmd **cmd);
@@ -172,29 +171,31 @@ void	ft_hdoc_sig(char *limitor);
 // exec_set_io_heredoc
 int		ft_set_hdoc(t_cmd **cmd_list);
 // exec_pipeline
-int		ft_child(t_cmd **cmd_list, int i, char **env_arr, int single_flag);
-int		ft_pipeline(t_cmd **cmd_list, int cmd_amt, char **env_arr, t_mini *msh);
+int		ft_child(t_cmd **cmd_list, int i, t_env *env, int single_flag);
+int		ft_pipeline(t_cmd **cmd_list, int cmd_amt, t_env *env, t_mini *msh);
 // exec_child_path
-char	*ft_find_cmd_path(char *cmd_name, char **env);
+char	*ft_find_cmd_path(char *cmd_name, t_env *env);
 // exec_child_args
 char	**ft_make_args(t_token *tokens);
 int		ft_get_arg_amnt(t_token *tokens);
 // buildin
 int		ft_is_buildin(t_token *tokens);
-int		ft_do_buildin(char **args, char ***env, t_cmd **list, int i);
-int		ft_cd(char **args, char ***env, int fd);
+int		ft_do_buildin(char **args, t_env *env, t_cmd **list, int i);
+int		ft_cd(char **args, t_env *env, int fd);
 int		ft_echo(char **args, int fd);
-int		ft_env(char **args, char **env, int fd);
-int		ft_export(char **args, char ***env, int fd);
+int		ft_env(char **args, t_env *env, int fd);
+int		ft_export(char **args, t_env *env, int fd);
 int		ft_pwd(int fd);
-int		ft_unset(char **args, char ***env);
+int		ft_unset(char **args, t_env *env);
 int		ft_exit(char **args, t_cmd **cmd_list, int i);
 // env_utils
-int		ft_add_to_msh_env(char ***env, char *new_str);
-int		ft_find_in_env(char **env, char *target, int len);
+t_env	*ft_new_env_node(char *s);
+void	ft_add_env(t_env *lst, t_env *new);
+int		ft_add_to_msh_env(t_env *env, char *new_str);
+t_env	*ft_find_in_env(t_env *env, char *target, int len);
 size_t	size_env(t_env *lst);
 char	*env_to_str(t_env *lst);
-char	**create_env_arr(t_env *env, t_mini *mini);
+char	**create_env_arr(t_env *env);
 
 int		exit_minishell(t_mini *mini, int exit_status);
 

@@ -89,31 +89,31 @@ char	*ft_name_path(char *cmd_name)
 	return (cmd_path);
 }
 
-char	*ft_find_cmd_path(char *cmd_name, char **msh_env)
+char	*ft_find_cmd_path(char *cmd_name, t_env *env)
 {
-	int		i;
 	int		len;
+	t_env	*p;
 
 	len = ft_strlen(cmd_name);
+	p = env;
 	if (len == 0 || (len == 1 && cmd_name[0] == '.'))
 		return (ft_error(cmd_name, 1, 127), NULL);
 	if (len == 2 && ft_strncmp(cmd_name, "..", 2) == 0)
 		return (NULL);
 	if (ft_str_contains_char(cmd_name, '/'))
 		return (ft_name_path(cmd_name));
-	i = 0;
-	while (msh_env && msh_env[i])
+	while (p)
 	{
-		if (ft_strncmp(msh_env[i], "PATH=", 5) == 0)
+		if (ft_strncmp(p->line, "PATH=", 5) == 0)
 			break ;
-		i++;
+		p = p->next;
 	}
-	if (!msh_env || msh_env[i] == NULL)
+	if (!p || p->line == NULL)
 	{
 		write(2, "minishell: ", 11);
 		write(2, cmd_name, ft_strlen(cmd_name));
 		write(2, ": No such file or directory\n", 28);
 		return (NULL);
 	}
-	return (ft_env_path(cmd_name, ft_split(&msh_env[i][5], ':')));
+	return (ft_env_path(cmd_name, ft_split(p->line + 5, ':')));
 }

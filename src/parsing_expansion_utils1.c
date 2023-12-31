@@ -11,7 +11,7 @@ char    *get_env_value(char *word, t_env *env)
     var_len = ft_strlen(word) - 1;
     var_value = NULL;
     p = env;
-    while (p->next)
+    while (p)
     {
         if (ft_strncmp((word + pos), p->line, var_len) == 0 && *(p->line + var_len) == '=')
         {

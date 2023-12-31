@@ -29,8 +29,6 @@ int	exit_minishell(t_mini *mini, int exit_status)
 		ft_free_envp(mini->env);
 	if (mini->cmd_table != NULL)
 		free_cmd_list(mini->cmd_table);
-	if (mini->env_arr != NULL)
-		ft_free_char_vector(mini->env_arr);
 	if (mini->exit_code_str != NULL)
 		free(mini->exit_code_str);
 	rl_clear_history();
@@ -103,7 +101,8 @@ int	main(int argc, char **argv, char **envp)
 	{
 		if (input_and_parse(&mini))
 			continue ;
-		mini.exit_code = ft_exec(mini.cmd_table, mini.env_arr, mini.exit_code, &mini);
+		print_cmd(mini.cmd_table);
+		mini.exit_code = ft_exec(mini.cmd_table, mini.env, mini.exit_code, &mini);
 		update_exit_status(&mini, mini.exit_code);
 	}
 	return (0);

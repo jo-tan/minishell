@@ -25,7 +25,7 @@ int	ft_get_buildin_num(char	*cmd_name)
 	return (buildin_num);
 }
 
-int	ft_do_buildin(char **args, char ***env, t_cmd **cmd_list, int i)
+int	ft_do_buildin(char **args, t_env *env, t_cmd **cmd_list, int i)
 {
 	int	buildin_num;
 	int	exit_code;
@@ -43,7 +43,7 @@ int	ft_do_buildin(char **args, char ***env, t_cmd **cmd_list, int i)
 	else if (buildin_num == B_UNSET)
 		exit_code = ft_unset(args, env);
 	else if (buildin_num == B_ENV)
-		exit_code = ft_env(args, env[0], cmd_list[i]->out_fd);
+		exit_code = ft_env(args, env, cmd_list[i]->out_fd);
 	else if (buildin_num == B_EXIT)
 		exit_code = ft_exit(args, cmd_list, i);
 	if (cmd_list[i]->out_fd != 1)

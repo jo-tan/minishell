@@ -10,56 +10,47 @@ int	ft_get_vector_size(char **vector)
 	return (i);
 }
 
-void	ft_unset_update(char ***msh_env, char **new_env)
+int	ft_remove_from_env(t_env *env, t_env *the_rm_env)
 {
-	ft_free_char_vector(msh_env[0]);
-	msh_env[0] = new_env;
-}
+	t_env *pos;
 
-int	ft_remove_from_env(char ***msh_env, int match_index)
-{
-	int		i;
-	int		j;
-	char	**new_env;
-
-	new_env = malloc(sizeof(char *) * ft_get_vector_size(msh_env[0]));
-	if (!new_env)
+	if (!env || !the_rm_env)
 		return (ft_error(NULL, 0, 1));
-	i = 0;
-	j = 0;
-	while (msh_env[0][i] != NULL)
+	if (env == the_rm_env)
 	{
-		if (i != match_index)
-		{
-			new_env[j] = ft_strdup(msh_env[0][i]);
-			if (!new_env[j])
-			{
-				ft_error(NULL, 0, 1);
-				return (ft_free_char_vector_index(new_env, (j - 1)), 1);
-			}
-			j++;
-		}
-		i++;
+		env = the_rm_env->next;
+		free(the_rm_env->line);
+		free(the_rm_env);
+		return (0);
 	}
-	new_env[j] = NULL;
-	return (ft_unset_update(msh_env, new_env), 0);
+	pos = env;
+    while (pos != NULL && pos->next != the_rm_env)
+        pos = pos->next;
+    if (pos != NULL)
+    {
+        pos->next = the_rm_env->next;
+        free(the_rm_env->line);
+        free(the_rm_env);
+        return (0);
+    }
+	return (ft_error(NULL, 0, 1));
 }
 
-int	ft_unset(char **args, char ***msh_env)
+int	ft_unset(char **args, t_env *env)
 {
 	int	i;
-	int	m_index;
+	t_env *the_env;
 
 	i = 1;
 	while (args[i] != NULL)
 	{
 		if (ft_str_contains_char(args[i], '='))
-			m_index = -1;
+			the_env = NULL;
 		else
-			m_index = ft_find_in_env(msh_env[0], args[i], ft_strlen(args[i]));
-		if (m_index != -1)
+			the_env = ft_find_in_env(env, args[i], ft_strlen(args[i]));
+		if (the_env != NULL)
 		{
-			if (ft_remove_from_env(msh_env, m_index))
+			if (ft_remove_from_env(env, the_env))
 				return (1);
 		}
 		i++;
