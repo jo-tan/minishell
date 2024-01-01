@@ -197,7 +197,7 @@ size_t	size_env(t_env *lst);
 char	*env_to_str(t_env *lst);
 char	**create_env_arr(t_env *env);
 
-int		exit_minishell(t_mini *mini, int exit_status);
+int		exit_minishell(t_mini **mini, int exit_status);
 
 /*Printf for checking progress*/
 void    ft_print_token_lst(t_token *token_lst);

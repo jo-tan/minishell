@@ -12,6 +12,8 @@ void	free_env_arr(char **env_arr)
 	int	i;
 
 	i = 0;
+	if (!env_arr || !env_arr[i])
+		return ;
 	while (env_arr[i])
 	{
 		if (env_arr[i])
@@ -49,6 +51,7 @@ int	ft_wait(pid_t *pids, int cmd_amnt, t_cmd **cmd_list)
 	while (i < cmd_amnt)
 	{
 		waitpid(pids[i], &status, 0);
+		printf("WAIT:exit_status: %d\n", status);
 		i++;
 	}
 	free(pids);

@@ -1,17 +1,15 @@
 #include "minishell.h"
 
-void	ft_free_all(t_cmd **cmd_list, t_env *msh_env)
+void	ft_free_all(t_cmd **cmd_list, t_env *env)
 {
 	int		i;
 	t_token	*head;
 	t_token	*temp;
 
-	if (msh_env != NULL)
-	{
-		ft_free_envp(msh_env);
-	}
+	if (env != NULL)
+		ft_free_envp(env);
 	i = 0;
-	if (cmd_list != NULL)
+	if (cmd_list != NULL && cmd_list[i] != NULL)
 	{
 		while (cmd_list[i])
 		{

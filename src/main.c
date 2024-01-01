@@ -14,25 +14,27 @@
 
 int	global_signal = 0;
 
-int	exit_minishell(t_mini *mini, int exit_status)
+// mini->line is freed after each readline before execution
+// mini->cmd_table is freed in execution
+void	free_mini(t_mini **mini)
 {
-	if (exit_status)
-		perror("minishell");
+	ft_free_envp((*mini)->env);
+	free((*mini)->exit_code_str);
+	free(*mini);
+	*mini = NULL;
+}
+
+int	exit_minishell(t_mini **mini, int exit_code)
+{
+	if (exit_code)
+		perror("");
 	else
-		write(1, "exit\n", ft_strlen("exit\n"));
-	//free everything
-	if (mini->line != NULL)
-		free(mini->line);
-	if (mini->token_lst != NULL)
-		ft_token_free_lst(mini->token_lst);
-	if (mini->env != NULL)
-		ft_free_envp(mini->env);
-	if (mini->cmd_table != NULL)
-		free_cmd_list(mini->cmd_table);
-	if (mini->exit_code_str != NULL)
-		free(mini->exit_code_str);
+		write(1, "exit\n", 5);
+	free_mini(mini);
 	rl_clear_history();
-	exit (exit_status);
+	if (exit_code)
+		printf("memory allocation failure");
+	exit (exit_code);
 }
 
 static void	parent_signal_handler(int signal)
@@ -51,26 +53,26 @@ void	parent_signal(void)
 	signal(SIGTSTP, SIG_IGN);
 }
 
-void	update_exit_status(t_mini *msh, int exit_status)
+void	update_exit_status(t_mini *mini, int exit_status)
 {
 	char	*str;
 
-	if (msh->exit_code == exit_status)
+	if (mini->exit_code == exit_status)
 		return ;
-	msh->exit_code = exit_status;
+	mini->exit_code = exit_status;
 	str = ft_itoa(exit_status);
 	if (!str)
-		exit_minishell(msh, -1);
-	if (msh->exit_code_str != NULL)
-		free(msh->exit_code_str);
-	msh->exit_code_str = str;
+		exit_minishell(&mini, -1);
+	if (mini->exit_code_str != NULL)
+		free(mini->exit_code_str);
+	mini->exit_code_str = str;
 }
 
 int	input_and_parse(t_mini *mini)
 {
 	mini->line = readline("▼・ᴥ・▼ฅ 𐆑𐆑minishell𐆑𐆑𐰷 ");
 	if (!mini->line)
-		exit_minishell(mini, 0);
+		exit_minishell(&mini, 0);
 	if (!*(mini->line))
 	{
 		if (global_signal)
@@ -85,25 +87,40 @@ int	input_and_parse(t_mini *mini)
 	return (0);
 }
 
+t_mini	*mini_init(char **envp)
+{
+	t_mini	*mini;
+
+	mini = malloc(sizeof(*mini));
+	if (!mini)
+		return (perror("mini_init (mini)"), NULL);
+	if (init_envp(mini, envp) == 1)
+		return (perror("mini_init (mini_env)"), free(mini), NULL);
+	mini->exit_code = 0;
+	mini->exit_code_str = ft_strdup("0");
+	if (!mini->exit_code_str)
+		return (perror("mini_init (mini_exit)"), free_mini(&mini), NULL);
+	return (mini);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
-	t_mini	mini;
+	t_mini	*mini;
+	int		exit_status;
 
 	(void)argv;
 	if (argc != 1)
 		return (ft_putstr_fd("HINT: ./minishell\n", 2), 1);
 	/*Initialize*/
-	if (init_envp(&mini, envp) == 1)
-		return (ft_putstr_fd("Malloc: fail to copy environment variables.\n", 2), 1);
-	mini.exit_code = 0;
+	mini = mini_init(envp);
 	parent_signal();
 	while (1)
 	{
-		if (input_and_parse(&mini))
+		if (input_and_parse(mini))
 			continue ;
-		print_cmd(mini.cmd_table);
-		mini.exit_code = ft_exec(mini.cmd_table, mini.env, mini.exit_code, &mini);
-		update_exit_status(&mini, mini.exit_code);
+		//print_cmd(mini->cmd_table);
+		exit_status = ft_exec(mini->cmd_table, mini->env, mini->exit_code, mini);
+		update_exit_status(mini, exit_status);
 	}
 	return (0);
 }

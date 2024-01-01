@@ -43,7 +43,6 @@ void	clear_quote(char **string, t_env *env, int exit_code, t_mini *mini)
 
 	pre = ft_break_string(*string);
 	ft_parsing(mini, pre);
-	ft_print_token_lst(pre);
 	ft_process_quote(pre, env, exit_code);
 	new = ft_combine(pre);
 	ft_token_free_lst(pre);
