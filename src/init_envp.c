@@ -6,7 +6,7 @@
 /*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 09:33:25 by jo-tan            #+#    #+#             */
-/*   Updated: 2024/01/01 09:38:05 by jo-tan           ###   ########.fr       */
+/*   Updated: 2024/01/01 11:22:42 by jo-tan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int	init_envp(t_mini *mini, char **envp)
 
 	i = 0;
 	env = NULL;
+	new = NULL;
 	while (envp && envp[i])
 	{
 		new = malloc(sizeof(t_env));
@@ -28,7 +29,10 @@ int	init_envp(t_mini *mini, char **envp)
 		new->line = ft_strdup(envp[i]);
 		new->next = NULL;
 		if (!env)
-			mini->env = new;
+		{
+			env = new;
+			mini->env = env;
+		}
 		else
 		{
 			env->next = new;
