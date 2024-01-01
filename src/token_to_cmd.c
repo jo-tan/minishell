@@ -6,7 +6,7 @@
 /*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 09:59:57 by jo-tan            #+#    #+#             */
-/*   Updated: 2024/01/01 10:03:19 by jo-tan           ###   ########.fr       */
+/*   Updated: 2024/01/01 12:05:52 by jo-tan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,39 @@ t_token	*remove_current_token(t_token *prev, t_token *token)
 	return (free_single_token(token), next);
 }
 
+t_token	*split_process(t_token *tokens,
+	t_cmd **simple_cmds, t_token **prev, int *type)
+{
+	t_cmd	*new_cmd;
+
+	while (tokens->type > ARG)
+	{
+		if (tokens->type > PIPE)
+			*type = tokens->type;
+		tokens = remove_current_token(NULL, tokens);
+	}
+	new_cmd = ft_lstnew_cmd(tokens);
+	ft_lstadd_back_cmd(simple_cmds, new_cmd);
+	while (tokens && tokens->type != PIPE)
+	{
+		if (tokens->type > PIPE)
+		{
+			*type = tokens->type;
+			tokens = remove_current_token(*prev, tokens);
+		}
+		*prev = tokens;
+		(*prev)->type = *type;
+		*type = 1;
+		tokens = tokens->next;
+	}
+	if (*prev)
+	(*prev)->next = NULL;
+	return (tokens);
+}
+
 t_cmd	*split_into_simplecmds(t_token *tokens)
 {
 	t_cmd	*simple_cmds;
-	t_cmd	*new_cmd;
 	t_token	*prev;
 	int		type;
 
@@ -38,27 +67,7 @@ t_cmd	*split_into_simplecmds(t_token *tokens)
 	type = 1;
 	while (tokens)
 	{
-		while (tokens->type > ARG)
-		{
-			if (tokens->type > PIPE)
-				type = tokens->type;
-			tokens = remove_current_token(NULL, tokens);
-		}
-		new_cmd = ft_lstnew_cmd(tokens);
-		ft_lstadd_back_cmd(&simple_cmds, new_cmd);
-		while (tokens && tokens->type != PIPE)
-		{
-			if (tokens->type > PIPE)
-			{
-				type = tokens->type;
-				tokens = remove_current_token(prev, tokens);
-			}
-			prev = tokens;
-			prev->type = type;
-			type = 1;
-			tokens = tokens->next;
-		}
-		prev->next = NULL;
+		tokens = split_process(tokens, &simple_cmds, &prev, &type);
 	}
 	return (simple_cmds);
 }

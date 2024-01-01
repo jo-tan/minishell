@@ -6,7 +6,7 @@
 /*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 10:07:06 by jo-tan            #+#    #+#             */
-/*   Updated: 2024/01/01 10:23:44 by jo-tan           ###   ########.fr       */
+/*   Updated: 2024/01/01 12:16:48 by jo-tan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,37 @@ static int	ft_check_semicolon(const char *line)
 	return (1);
 }
 
+char	*check_quote_ext(char *p, int *quote, int *quote_type)
+{
+	int	inquote_len;
+
+	inquote_len = 1;
+	if (ft_isquote(*p))
+	{
+		*quote = 1;
+		if (*p == '\'')
+			*quote_type = 1;
+		else
+			*quote_type = 2;
+		while ((*(p + inquote_len)) != '\0')
+		{
+			if ((*(p + inquote_len)) == *p)
+			{
+				*quote = 0;
+				p += inquote_len;
+				break ;
+			}
+			inquote_len++;
+		}
+		if (*quote != 0)
+			return (p);
+	}
+	return (p + 1);
+}
+
 int	ft_check_quote_pair(const char *string)
 {
 	int		quote;
-	int		inquote_len;
 	int		quote_type;
 	char	*p;
 
@@ -52,28 +79,7 @@ int	ft_check_quote_pair(const char *string)
 	p = (char *)string;
 	while (*p)
 	{
-		if (ft_isquote(*p))
-		{
-			inquote_len = 1;
-			quote = 1;
-			if (*p == '\'')
-				quote_type = 1;
-			else
-				quote_type = 2;
-			while ((*(p + inquote_len)) != '\0')
-			{
-				if ((*(p + inquote_len)) == *p)
-				{
-					quote = 0;
-					p += inquote_len;
-					break ;
-				}
-				inquote_len++;
-			}
-			if (quote != 0)
-				return (0);
-		}
-		p++;
+		p = check_quote_ext(p, &quote, &quote_type);
 	}
 	return (quote_type);
 }

@@ -6,11 +6,25 @@
 /*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 09:33:25 by jo-tan            #+#    #+#             */
-/*   Updated: 2024/01/01 11:22:42 by jo-tan           ###   ########.fr       */
+/*   Updated: 2024/01/01 12:23:37 by jo-tan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static void	init_enp_ext(t_env **env, t_env **mini_env, t_env *new)
+{
+	if (!*env)
+	{
+		*env = new;
+		*mini_env = *env;
+	}
+	else
+	{
+		(*env)->next = new;
+		*env = new;
+	}
+}
 
 int	init_envp(t_mini *mini, char **envp)
 {
@@ -28,16 +42,7 @@ int	init_envp(t_mini *mini, char **envp)
 			return (1);
 		new->line = ft_strdup(envp[i]);
 		new->next = NULL;
-		if (!env)
-		{
-			env = new;
-			mini->env = env;
-		}
-		else
-		{
-			env->next = new;
-			env = new;
-		}
+		init_enp_ext(&env, &mini->env, new);
 		i++;
 	}
 	return (0);

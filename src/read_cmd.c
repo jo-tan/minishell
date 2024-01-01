@@ -6,7 +6,7 @@
 /*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 18:26:48 by jo-tan            #+#    #+#             */
-/*   Updated: 2024/01/01 09:59:18 by jo-tan           ###   ########.fr       */
+/*   Updated: 2024/01/01 12:36:11 by jo-tan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,23 @@ int	ft_count_word_len(const char *line)
 	return (len);
 }
 
+static t_token	*process_token(const char *line, int *word_len)
+{
+	char	*word;
+
+	*word_len = ft_count_word_len(line);
+	word = malloc(*word_len + 1);
+	if (!word)
+		return (NULL);
+	ft_strlcpy(word, line, *word_len + 1);
+	return (ft_newtoken(word));
+}
+
 t_token	*ft_tokenizer(const char *line)
 {
-	int		word_len;
-	char	*word;
 	t_token	*new;
 	t_token	*head;
+	int		word_len;
 
 	head = NULL;
 	new = NULL;
@@ -55,12 +66,9 @@ t_token	*ft_tokenizer(const char *line)
 			line++;
 		else
 		{
-			word_len = ft_count_word_len(line);
-			word = malloc(word_len + 1);
-			if (!word)
+			new = process_token(line, &word_len);
+			if (!new)
 				return (NULL);
-			ft_strlcpy(word, line, word_len + 1);
-			new = ft_newtoken(word);
 			if (head == NULL)
 				head = new;
 			else

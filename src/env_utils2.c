@@ -6,7 +6,7 @@
 /*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 10:24:43 by jo-tan            #+#    #+#             */
-/*   Updated: 2024/01/01 10:27:27 by jo-tan           ###   ########.fr       */
+/*   Updated: 2024/01/01 12:38:47 by jo-tan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,7 @@ char	*env_to_str(t_env *lst)
 		{
 			j = 0;
 			while (lst->line[j])
-			{
-				env[i] = lst->line[j];
-				i++;
-				j++;
-			}
+				env[i++] = lst->line[j++];
 		}
 		if (lst->next->next != NULL)
 			env[i++] = '\n';
