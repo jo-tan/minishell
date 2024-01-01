@@ -6,7 +6,7 @@
 /*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 10:43:45 by jo-tan            #+#    #+#             */
-/*   Updated: 2024/01/01 11:19:47 by jo-tan           ###   ########.fr       */
+/*   Updated: 2024/01/01 11:26:00 by jo-tan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,20 +69,6 @@ int	input_and_parse(t_mini *mini)
 	return (0);
 }
 
-void	ft_print_arr(char **s)
-{
-	int i = 0;
-
-	if (!s)
-		return ;
-	while (s[i])
-	{
-		printf("%d//%s\n", i, s[i]);
-		i++;
-	}
-	printf("END OF ARR\n");
-}
-
 t_mini	*mini_init(char **envp)
 {
 	t_mini	*mini;
@@ -90,10 +76,8 @@ t_mini	*mini_init(char **envp)
 	mini = malloc(sizeof(*mini));
 	if (!mini)
 		return (perror("mini_init (mini)"), NULL);
-	ft_print_arr(envp);
 	if (init_envp(mini, envp) == 1)
 		return (perror("mini_init (mini_env)"), free(mini), NULL);
-	ft_print_env_list(mini->env);
 	mini->exit_code = 0;
 	mini->exit_code_str = ft_strdup("0");
 	if (!mini->exit_code_str)
