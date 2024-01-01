@@ -24,7 +24,7 @@ void	free_env_arr(char **env_arr)
 		free(env_arr);
 }
 
-int	ft_path_err(char **args, t_env *env)
+int	ft_path_err(char **args)
 {
 	struct stat	buf;
 
@@ -36,8 +36,8 @@ int	ft_path_err(char **args, t_env *env)
 		ft_free_char_vector(args);
 		return (126);
 	}
-	ft_free_char_vector(args);
-	ft_free_envp(env);
+	if (args)
+		ft_free_char_vector(args);
 	return (127);
 }
 
@@ -51,7 +51,6 @@ int	ft_wait(pid_t *pids, int cmd_amnt, t_cmd **cmd_list)
 	while (i < cmd_amnt)
 	{
 		waitpid(pids[i], &status, 0);
-		printf("WAIT:exit_status: %d\n", status);
 		i++;
 	}
 	free(pids);
@@ -79,11 +78,11 @@ int	ft_child(t_cmd **cmd_list, int i, t_env *env, int single_flag)
 		return (ft_do_buildin(args, env, cmd_list, i));
 	path = ft_find_cmd_path(args[0], env);
 	if (!path)
-		return (ft_path_err(args, env));
+		return (ft_path_err(args));
 	env_arr = create_env_arr(env);
 	execve(path, args, env_arr);
 	ft_error(args[1], 0, 1);
-	return (ft_free_char_vector(args),ft_free_char_vector(env_arr), free(path), 1);
+	return (free(path), ft_free_char_vector(args),ft_free_char_vector(env_arr), 1);
 }
 
 int	ft_pipeline(t_cmd **cmd_list, int cmd_amnt, t_env *env, t_mini *msh)

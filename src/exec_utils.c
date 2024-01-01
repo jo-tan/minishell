@@ -58,7 +58,7 @@ void	ft_free_char_vector(char **args)
 	i = 0;
 	if (!args || !args[i])
 		return ;
-	while (args[i] != NULL)
+	while (args[i])
 	{
 		free(args[i]);
 		i++;

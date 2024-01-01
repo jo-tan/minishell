@@ -71,9 +71,6 @@ int	ft_exec(t_cmd **cmd_list, t_env *env, int e, t_mini *msh)
 		}
 	}
 	else
-	{
 		exit_status = ft_pipeline(cmd_list, nbr_cmd, env, msh);
-		printf("exit_status: %d\n", exit_status);
-	}
 	return (ft_free_all(cmd_list, NULL), exit_status);
 }
