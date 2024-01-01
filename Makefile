@@ -6,7 +6,7 @@
 #    By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/13 18:25:12 by jo-tan            #+#    #+#              #
-#    Updated: 2023/11/14 15:25:27 by jo-tan           ###   ########.fr        #
+#    Updated: 2024/01/01 10:40:59 by jo-tan           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,7 @@ NAME		= minishell
 
 # Sources
 S_FILES		= src/main.c \
+				src/init_utils.c \
 				src/init_envp.c \
 				src/check_valid_input.c \
 				src/read_cmd.c \
@@ -24,6 +25,7 @@ S_FILES		= src/main.c \
 				src/check_print.c \
 				src/token_list.c \
 				src/cmd_list.c \
+				src/cmd_list2.c \
 				src/token_to_cmd.c \
 				src/buildin_cd.c \
 				src/buildin_echo.c \
@@ -40,7 +42,10 @@ S_FILES		= src/main.c \
 				src/exec_pipeline.c \
 				src/exec_set_io.c \
 				src/exec_set_io_utils.c \
-				src/env_utils.c 
+				src/env_utils.c \
+				src/env_utils2.c \
+				src/signal.c \
+				src/check_syntax.c
 S_DIR		= src
 
 LIBFT		= libft/libft.a

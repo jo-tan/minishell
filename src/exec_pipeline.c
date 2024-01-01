@@ -1,11 +1,16 @@
-#include "minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_pipeline.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/01 09:22:27 by jo-tan            #+#    #+#             */
+/*   Updated: 2024/01/01 09:25:54 by jo-tan           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-void	sigquit_handler(int signum)
-{
-	global_signal = signum;
-	write(2, "Quit (core dumped)\n", 19);
-	return ;
-}
+#include "minishell.h"
 
 void	free_env_arr(char **env_arr)
 {
@@ -82,7 +87,8 @@ int	ft_child(t_cmd **cmd_list, int i, t_env *env, int single_flag)
 	env_arr = create_env_arr(env);
 	execve(path, args, env_arr);
 	ft_error(args[1], 0, 1);
-	return (free(path), ft_free_char_vector(args),ft_free_char_vector(env_arr), 1);
+	free(path);
+	return (ft_free_char_vector(args), ft_free_char_vector(env_arr), 1);
 }
 
 int	ft_pipeline(t_cmd **cmd_list, int cmd_amnt, t_env *env, t_mini *msh)

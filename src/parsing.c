@@ -6,7 +6,7 @@
 /*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 18:26:38 by jo-tan            #+#    #+#             */
-/*   Updated: 2023/11/13 20:17:54 by jo-tan           ###   ########.fr       */
+/*   Updated: 2024/01/01 09:39:52 by jo-tan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ char	*ft_combine(t_token *lst)
 void	clear_quote(char **string, t_env *env, int exit_code, t_mini *mini)
 {
 	t_token	*pre;
-	char *new;
+	char	*new;
 
 	pre = ft_break_string(*string);
 	ft_parsing(mini, pre);
@@ -50,7 +50,7 @@ void	clear_quote(char **string, t_env *env, int exit_code, t_mini *mini)
 	*string = new;
 }
 
-void    ft_parsing(t_mini *mini, t_token *lst)
+void	ft_parsing(t_mini *mini, t_token *lst)
 {
 	t_token	*p;
 

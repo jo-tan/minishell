@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init_envp.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/01 09:33:25 by jo-tan            #+#    #+#             */
+/*   Updated: 2024/01/01 09:38:05 by jo-tan           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	init_envp(t_mini *mini, char **envp)
@@ -10,20 +22,19 @@ int	init_envp(t_mini *mini, char **envp)
 	env = NULL;
 	while (envp && envp[i])
 	{
-		if (!(new = malloc(sizeof(t_env))))
-            return (1);
-
-        new->line = ft_strdup(envp[i]);
-        new->next = NULL;
-
-        if (!env)
-            mini->env = env = new;
-        else
-        {
-            env->next = new;
-            env = new;
-        }
-        i++;
+		new = malloc(sizeof(t_env));
+		if (!new)
+			return (1);
+		new->line = ft_strdup(envp[i]);
+		new->next = NULL;
+		if (!env)
+			mini->env = new;
+		else
+		{
+			env->next = new;
+			env = new;
+		}
+		i++;
 	}
 	return (0);
 }

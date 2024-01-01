@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   buildin_unset.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/01 09:16:20 by jo-tan            #+#    #+#             */
+/*   Updated: 2024/01/01 09:20:10 by jo-tan           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	ft_get_vector_size(char **vector)
@@ -12,7 +24,7 @@ int	ft_get_vector_size(char **vector)
 
 int	ft_remove_from_env(t_env *env, t_env *the_rm_env)
 {
-	t_env *pos;
+	t_env	*pos;
 
 	if (!env || !the_rm_env)
 		return (ft_error(NULL, 0, 1));
@@ -24,22 +36,22 @@ int	ft_remove_from_env(t_env *env, t_env *the_rm_env)
 		return (0);
 	}
 	pos = env;
-    while (pos != NULL && pos->next != the_rm_env)
-        pos = pos->next;
-    if (pos != NULL)
-    {
-        pos->next = the_rm_env->next;
-        free(the_rm_env->line);
-        free(the_rm_env);
-        return (0);
-    }
+	while (pos != NULL && pos->next != the_rm_env)
+		pos = pos->next;
+	if (pos != NULL)
+	{
+		pos->next = the_rm_env->next;
+		free(the_rm_env->line);
+		free(the_rm_env);
+		return (0);
+	}
 	return (ft_error(NULL, 0, 1));
 }
 
 int	ft_unset(char **args, t_env *env)
 {
-	int	i;
-	t_env *the_env;
+	int		i;
+	t_env	*the_env;
 
 	i = 1;
 	while (args[i] != NULL)

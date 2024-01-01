@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token_to_cmd.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/01 09:59:57 by jo-tan            #+#    #+#             */
+/*   Updated: 2024/01/01 10:03:19 by jo-tan           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 // Receives prev & non-NULL token
@@ -19,7 +31,7 @@ t_cmd	*split_into_simplecmds(t_token *tokens)
 	t_cmd	*simple_cmds;
 	t_cmd	*new_cmd;
 	t_token	*prev;
-    int     type;
+	int		type;
 
 	prev = NULL;
 	simple_cmds = NULL;
@@ -27,11 +39,11 @@ t_cmd	*split_into_simplecmds(t_token *tokens)
 	while (tokens)
 	{
 		while (tokens->type > ARG)
-        {
-            if (tokens->type > PIPE)
-             	type = tokens->type;
+		{
+			if (tokens->type > PIPE)
+				type = tokens->type;
 			tokens = remove_current_token(NULL, tokens);
-        }
+		}
 		new_cmd = ft_lstnew_cmd(tokens);
 		ft_lstadd_back_cmd(&simple_cmds, new_cmd);
 		while (tokens && tokens->type != PIPE)
@@ -42,7 +54,7 @@ t_cmd	*split_into_simplecmds(t_token *tokens)
 				tokens = remove_current_token(prev, tokens);
 			}
 			prev = tokens;
-            prev->type = type;
+			prev->type = type;
 			type = 1;
 			tokens = tokens->next;
 		}

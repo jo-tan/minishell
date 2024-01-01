@@ -6,13 +6,13 @@
 /*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 18:26:38 by jo-tan            #+#    #+#             */
-/*   Updated: 2023/11/13 20:17:54 by jo-tan           ###   ########.fr       */
+/*   Updated: 2024/01/01 10:06:40 by jo-tan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_count_quote_len(char  *string)
+int	ft_count_quote_len(char *string)
 {
 	int	len;
 
@@ -40,13 +40,14 @@ t_token	*ft_break_string(char *string)
 	t_token	*new;
 	t_token	*head;
 
-	head = new = NULL;
+	new = NULL;
+	head = new;
 	while (*string)
 	{
 		word_len = ft_count_quote_len(string);
 		word = malloc(word_len + 1);
 		if (!word)
-			return (ft_putstr_fd("ft_parsing: ft_break_string: Malloc failure.\n", 2), NULL);
+			return (NULL);
 		ft_strlcpy(word, string, word_len + 1);
 		new = ft_newtoken(word);
 		if (head == NULL)
@@ -58,7 +59,7 @@ t_token	*ft_break_string(char *string)
 	return (head);
 }
 
-void	process_quote(char	**word)
+void	process_quote(char **word)
 {
 	char	*clean;
 	int		len;
@@ -70,7 +71,7 @@ void	process_quote(char	**word)
 	len = ft_strlen(*word);
 	clean = malloc(len - 1);
 	if (!clean)
-		return (ft_putstr_fd("ft_parsing: process_quote: Malloc failure.\n", 2));
+		return ;
 	while (i < len - 1)
 	{
 		clean[j] = (*word)[i];
@@ -82,13 +83,13 @@ void	process_quote(char	**word)
 	*word = clean;
 }
 
-void	process_double(char	**word, t_env *env, int exit_code)
+void	process_double(char **word, t_env *env, int exit_code)
 {
 	process_quote(word);
 	expansion(word, env, exit_code);
 }
 
-void	ft_process_quote(t_token *lst, t_env *env, int	exit_code)
+void	ft_process_quote(t_token *lst, t_env *env, int exit_code)
 {
 	t_token	*p;
 

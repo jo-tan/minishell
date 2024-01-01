@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_set_io_utils.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/01 09:31:13 by jo-tan            #+#    #+#             */
+/*   Updated: 2024/01/01 09:31:51 by jo-tan           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	ft_dup(t_cmd **cmd_list, int i, int single_flag)
@@ -46,7 +58,9 @@ void	ft_ambig(char *str)
 
 int	find_space(char *word)
 {
-	int	i = 0;
+	int	i;
+
+	i = 0;
 	while (word[i])
 	{
 		if (ft_isspace(word[i]))

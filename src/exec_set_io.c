@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_set_io.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/01 09:30:27 by jo-tan            #+#    #+#             */
+/*   Updated: 2024/01/01 10:18:59 by jo-tan           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	ft_file(t_cmd **cmd_list, int i, char *filename, enum e_type type)
@@ -38,7 +50,7 @@ int	ft_set_io(t_cmd **cmd_list, int i, int single_flag)
 	while (t != NULL && exit_status == 0)
 	{
 		if (t->type == HERE_DOC && find_space(t->word))
-		 	return (ft_ambig(t->word), 1);
+			return (ft_ambig(t->word), 1);
 		if (t->type == FILE_IN || t->type == FILE_OUT || t->type == FILE_OUT_AP)
 			exit_status = ft_file(cmd_list, i, t->word, t->type);
 		t = t->next;
@@ -58,13 +70,13 @@ int	ft_heredoc(char *limitor)
 		return (ft_error(NULL, 0, 0));
 	len = ft_strlen(limitor);
 	str = readline("> ");
-	if (global_signal)
+	if (g_signal)
 		return (close(pipe_ends[0]), close(pipe_ends[1]), 0);
 	while (str && !(len == ft_strlen(str) && !ft_strncmp(limitor, str, len)))
 	{
 		if (ft_hdoc_write(str, pipe_ends) == 0)
 			str = readline("> ");
-		else if (global_signal || !str)
+		else if (g_signal || !str)
 			return (close(pipe_ends[0]), close(pipe_ends[1]), 0);
 	}
 	if (!str)

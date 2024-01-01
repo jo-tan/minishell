@@ -6,34 +6,34 @@
 /*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 18:25:28 by jo-tan            #+#    #+#             */
-/*   Updated: 2023/11/14 15:23:51 by jo-tan           ###   ########.fr       */
+/*   Updated: 2024/01/01 10:55:50 by jo-tan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <stdio.h> //printf
-# include <readline/readline.h>//readline library for readline
-# include <readline/history.h>//readline library for readline history
-# include <stdlib.h> //maloc, free, getenv (get env variables)
-# include <unistd.h> //write, access, exit, getcwd(get_current_directory), chdir (change working directory), unlink (delete a name and possibly the file it refers to), execve (execute program), dup, dup2, pipe, isatty, ttyname, ttyslot
+# include <stdio.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <stdlib.h>
+# include <unistd.h>
 # include <fcntl.h>
-# include <sys/wait.h> // wait, waitpid, wait3, wait4
-# include <signal.h> //signal, sigaction, sigemptyset, sigaddset, kill
-# include <sys/stat.h> //stat, lstat, fstat (get file status)
-# include <sys/types.h> //open, read, close, fork
-# include <dirent.h> //opendir, readdir, closedir
-# include <string.h> //strerror
-# include <errno.h> //perror
-# include <sys/ioctl.h> //ioctl (control device)
-# include <termios.h> //tcsetattr, tcgetattr
-# include <curses.h> //getent, tgetflag, tgetnum, tgetstr, tgoto, tputs (direct curses interface to the terminfo capability database)
-# include <term.h> //with curses.h
+# include <sys/wait.h>
+# include <signal.h>
+# include <sys/stat.h>
+# include <sys/types.h>
+# include <dirent.h>
+# include <string.h>
+# include <errno.h>
+# include <sys/ioctl.h>
+# include <termios.h>
+# include <curses.h>
+# include <term.h>
 # include <limits.h>
 # include "libft.h"
 
-extern int	global_signal;
+extern int	g_signal;
 
 # define B_ECHO 1
 # define B_CD 2
@@ -45,27 +45,22 @@ extern int	global_signal;
 
 enum e_type
 {
-	NONE = 0, //defaullt
-	ARG = 1, // word
-	PIPE = 2, // word == pipe >> not sure if this is needed
-	FILE_IN = 3, // word == '<'
-	//word after '<'. The file name, if not exit, will return error msg: "bash: hey: No such file or directory"
-	HERE_DOC = 4, // word == '<<'
-	// word after '<<' The specific word to end stdin/fd(n)
-	FILE_OUT = 5, // word == '>'
-	//word after '>' overwrite the file or create if not exist. If there is cmd before >, it will write result into the file 
-	FILE_OUT_AP = 6 //word == '>>'
-	//word after '>>', append the file or create if not exist.
+	NONE = 0,
+	ARG = 1,
+	PIPE = 2,
+	FILE_IN = 3,
+	HERE_DOC = 4,
+	FILE_OUT = 5,
+	FILE_OUT_AP = 6
 };
 
-/*This is smallest element of cmd line. */
 typedef struct s_token
 {
 	char			*word;
 	enum e_type		type;
 	int				fd;
 	struct s_token	*next;
-} t_token;
+}	t_token;
 
 typedef struct s_cmd
 {
@@ -80,9 +75,9 @@ typedef struct s_env
 {
 	char			*line;
 	struct s_env	*next;
-} t_env;
+}	t_env;
 
-typedef struct	s_mini
+typedef struct s_mini
 {
 	t_token			*token_lst;
 	t_env			*env;
@@ -90,50 +85,58 @@ typedef struct	s_mini
 	int				exit_code;
 	char			*exit_code_str;
 	t_cmd			**cmd_table;
-} t_mini;
+}	t_mini;
+
+/*init_utils*/
+void	free_mini(t_mini **mini);
+int		exit_minishell(t_mini **mini, int exit_code);
+void	update_exit_status(t_mini *mini, int exit_status);
+int		input_and_parse(t_mini *mini);
+t_mini	*mini_init(char **envp);
 
 /*envp*/
 int		init_envp(t_mini *mini, char **envp);
 void	ft_free_envp(t_env *env);
 
 /*signal*/
+void	sigquit_handler(int signum);
 void	parent_signal(void);
 
 /*check valid input*/
-int 	ft_check_quote_pair(const char *line);
+int		ft_check_quote_pair(const char *line);
 int		ft_valid_line(const char *line);
 int		ft_valid_syntax_order(t_token *token_lst);
 
 /*read_cmd*/
-int 	ft_read_line(t_mini *mini);
-t_token *ft_tokenizer(const char  *line);
-int 	ft_count_word_len(const char *line);
-void    ft_update_token_type(t_token *lst);
+int		ft_read_line(t_mini *mini);
+t_token	*ft_tokenizer(const char *line);
+int		ft_count_word_len(const char *line);
+void	ft_update_token_type(t_token *lst);
 
 /*parsing*/
 void	clear_quote(char **word, t_env *env, int exit_code, t_mini *mini);
 char	*ft_combine(t_token *lst);
-void    ft_parsing(t_mini *mini, t_token *lst);
+void	ft_parsing(t_mini *mini, t_token *lst);
 
 /*parsing quotes*/
-int		ft_count_quote_len(char  *string);
+int		ft_count_quote_len(char *string);
 t_token	*ft_break_string(char *string);
-void	process_quote(char	**word);
+void	process_quote(char **word);
 void	process_double(char	**word, t_env *env, int exit_code);
-void	ft_process_quote(t_token *lst, t_env *env, int	exit_code);
+void	ft_process_quote(t_token *lst, t_env *env, int exit_code);
 
 /*parsing expansion*/
-void    expansion(char **word, t_env *env, int exit_code);
+void	expansion(char **word, t_env *env, int exit_code);
 void	ft_process_env(t_token *pre, t_env *env, int exit_code);
 void	switch_arg_env(char	**word, t_env *env, int exit_code);
-char    *get_env_value(char *word, t_env *env);
+char	*get_env_value(char *word, t_env *env);
 t_token	*ft_divide_arg_env(char *string);
 int		ft_count_parsing_len(char *word);
-int 	check_expansion_sign(char *word);
+int		check_expansion_sign(char *word);
 
 /*token list function*/
-t_token *ft_newtoken(char *s);
-void    ft_addtoken(t_token *lst, t_token *new);
+t_token	*ft_newtoken(char *s);
+void	ft_addtoken(t_token *lst, t_token *token_lst);
 void	free_single_token(t_token *token);
 void	ft_token_free_lst(t_token *lst);
 
@@ -151,7 +154,7 @@ t_cmd	*split_into_simplecmds(t_token *tokens);
 t_cmd	**lst_to_arr(t_cmd *lst);
 t_cmd	**create_cmd_arr(t_token *tokens);
 
-// EXEC
+/*EXEC*/
 int		ft_exec(t_cmd **cmd_list, t_env *env, int old_exit, t_mini *msh);
 void	ft_exec_msh_free(t_mini *msh);
 // exec_utils
@@ -195,13 +198,12 @@ int		ft_add_to_msh_env(t_env *env, char *new_str);
 t_env	*ft_find_in_env(t_env *env, char *target, int len);
 size_t	size_env(t_env *lst);
 char	*env_to_str(t_env *lst);
+char	*ft_get_env(t_env *env, char *var_name);
 char	**create_env_arr(t_env *env);
 
-int		exit_minishell(t_mini **mini, int exit_status);
-
 /*Printf for checking progress*/
-void    ft_print_token_lst(t_token *token_lst);
-void    ft_print_env_list(t_env *env);
+void	ft_print_token_lst(t_token *token_lst);
+void	ft_print_env_list(t_env *env);
 void	print_cmd(t_cmd **arr);
 
 #endif

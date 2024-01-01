@@ -1,40 +1,52 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing_expansion_utils2.c                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/01 09:51:23 by jo-tan            #+#    #+#             */
+/*   Updated: 2024/01/01 09:55:21 by jo-tan           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-int check_expansion_sign(char *word)
+int	check_expansion_sign(char *word)
 {
-    char *p;
+	char	*p;
 
-    p = word;
-    while (*p)
-    {
-        if (*p == '$')
-            return (1);
-        p++;
-    }
-    return (0);
+	p = word;
+	while (*p)
+	{
+		if (*p == '$')
+			return (1);
+		p++;
+	}
+	return (0);
 }
 
-int ft_count_parsing_len(char *word)
+int	ft_count_parsing_len(char *word)
 {
-    char *p;
-    int len;
+	char	*p;
+	int		len;
 
-    p = word;
-    len = 0;
-    if (p[len] == '$')
-    {
-        len++;
-        if (p[len] == '?' || ft_isdigit(p[len]))
-            return (2);
-        while (ft_isenvname(word[len]) && p[len] && p[len] != '$')
-            len++;
-    }
-    else
-    {
-        while (p[len] != '$' && p[len])
-            len++;
-    }
-    return (len);
+	p = word;
+	len = 0;
+	if (p[len] == '$')
+	{
+		len++;
+		if (p[len] == '?' || ft_isdigit(p[len]))
+			return (2);
+		while (ft_isenvname(word[len]) && p[len] && p[len] != '$')
+			len++;
+	}
+	else
+	{
+		while (p[len] != '$' && p[len])
+			len++;
+	}
+	return (len);
 }
 
 t_token	*ft_divide_arg_env(char *string)
@@ -44,13 +56,14 @@ t_token	*ft_divide_arg_env(char *string)
 	t_token	*new;
 	t_token	*head;
 
-	head = new = NULL;
+	new = NULL;
+	head = new;
 	while (*string)
 	{
 		word_len = ft_count_parsing_len(string);
 		word = malloc(word_len + 1);
 		if (!word)
-			return (ft_putstr_fd("ft_parsing: ft_divide_arg_env: Malloc failure.\n", 2), NULL);
+			return (NULL);
 		ft_strlcpy(word, string, word_len + 1);
 		new = ft_newtoken(word);
 		if (head == NULL)

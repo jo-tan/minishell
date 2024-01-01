@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execution.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/01 09:20:41 by jo-tan            #+#    #+#             */
+/*   Updated: 2024/01/01 10:19:14 by jo-tan           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	ft_set_pipes(t_cmd **cmd_list, int nbr_cmd)
@@ -56,8 +68,8 @@ int	ft_exec(t_cmd **cmd_list, t_env *env, int e, t_mini *msh)
 	if (ft_set_hdoc(cmd_list) || ft_set_pipes(cmd_list, nbr_cmd))
 	{
 		ft_close_all(cmd_list);
-		if (global_signal)
-			return (ft_free_all(cmd_list, NULL), global_signal + 128);
+		if (g_signal)
+			return (ft_free_all(cmd_list, NULL), g_signal + 128);
 		return (ft_free_all(cmd_list, NULL), 1);
 	}
 	buildin_num = ft_is_buildin(cmd_list[0]->tokens);
