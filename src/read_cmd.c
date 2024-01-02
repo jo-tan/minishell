@@ -6,7 +6,7 @@
 /*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 18:26:48 by jo-tan            #+#    #+#             */
-/*   Updated: 2024/01/02 11:14:50 by jo-tan           ###   ########.fr       */
+/*   Updated: 2024/01/02 11:45:57 by jo-tan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ void	ft_update_token_type(t_token *lst)
 //form token into cmd list for execution
 int	ft_read_line(t_mini *mini)
 {
-	char *line;
+	char	*line;
 
 	line = skip_spaces(mini->line);
 	if (end_of_cmd(*line))

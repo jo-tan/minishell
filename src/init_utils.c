@@ -6,7 +6,7 @@
 /*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 10:43:45 by jo-tan            #+#    #+#             */
-/*   Updated: 2024/01/01 11:26:00 by jo-tan           ###   ########.fr       */
+/*   Updated: 2024/01/02 11:47:11 by jo-tan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ void	update_exit_status(t_mini *mini, int exit_status)
 
 int	input_and_parse(t_mini *mini)
 {
-	char *mini_str;
-	char *mini_str_temp;
+	char	*mini_str;
+	char	*mini_str_temp;
 
 	mini_str_temp = ft_strjoin("▼・ᴥ・▼ฅ(", mini->exit_code_str);
 	mini_str = ft_strjoin(mini_str_temp, ") 𐆑𐆑minishell𐆑𐆑𐰷 ");

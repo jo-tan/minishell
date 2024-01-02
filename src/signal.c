@@ -6,7 +6,7 @@
 /*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 09:32:53 by jo-tan            #+#    #+#             */
-/*   Updated: 2024/01/01 10:19:21 by jo-tan           ###   ########.fr       */
+/*   Updated: 2024/01/02 11:48:25 by jo-tan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ static void	parent_signal_handler(int signal)
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_done = 1;
-
 }
 
 void	parent_signal(void)
