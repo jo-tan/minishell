@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aauthier <aauthier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 10:55:10 by jo-tan            #+#    #+#             */
-/*   Updated: 2024/01/02 11:46:30 by jo-tan           ###   ########.fr       */
+/*   Updated: 2024/01/02 15:59:55 by aauthier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,8 @@ char	*skip_spaces(char *str)
 
 int	end_of_cmd(int c)
 {
-	return (c == 0 || c == '#');
+	return (c == 0 || c == '#' || c == ':' || c == '!');
 }
+
+//Here i have the char ':' and '!' which need to be treated like '#'
+// Except '!' has an exit code of 1
