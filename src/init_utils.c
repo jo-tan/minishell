@@ -52,19 +52,25 @@ void	update_exit_status(t_mini *mini, int exit_status)
 
 int	input_and_parse(t_mini *mini)
 {
-	mini->line = readline("▼・ᴥ・▼ฅ 𐆑𐆑minishell𐆑𐆑𐰷 ");
+	char *mini_str;
+	char *mini_str_temp;
+
+	mini_str_temp = ft_strjoin("▼・ᴥ・▼ฅ(", mini->exit_code_str);
+	mini_str = ft_strjoin(mini_str_temp, ") 𐆑𐆑minishell𐆑𐆑𐰷 ");
+	mini->line = readline(mini_str);
+	free(mini_str);
+	free(mini_str_temp);
 	if (!mini->line)
 		exit_minishell(&mini, 0);
 	if (!*(mini->line))
 	{
 		if (g_signal)
-			mini->exit_code = 130;
+			update_exit_status(mini, 130);
 		return (free(mini->line), 1);
 	}
-	if (ft_strlen(mini->line) > 0)
-		add_history(mini->line);
-	if (ft_read_line(mini) == -1)
-		return (free(mini->line), 1);
+	add_history(mini->line);
+	if (ft_read_line(mini))
+		return (free(mini->line), 2);
 	free(mini->line);
 	return (0);
 }

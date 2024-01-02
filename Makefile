@@ -18,6 +18,7 @@ S_FILES		= src/main.c \
 				src/init_envp.c \
 				src/check_valid_input.c \
 				src/read_cmd.c \
+				src/parsing_utils.c \
 				src/parsing.c \
 				src/parsing_quote_utils.c \
 				src/parsing_expansion_utils1.c \

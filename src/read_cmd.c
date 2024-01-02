@@ -60,6 +60,7 @@ t_token	*ft_tokenizer(const char *line)
 
 	head = NULL;
 	new = NULL;
+	word_len = 0;
 	while (*line)
 	{
 		if (ft_isspace(*line))
@@ -107,15 +108,31 @@ void	ft_update_token_type(t_token *lst)
 	}
 }
 
+//READ_LINE:
+//check the input
+//tokenized words with space or meta characters
+//check syntax
+//update token->type
+//parse quote expansion
+//retokenized for string with space
+//form token into cmd list for execution
 int	ft_read_line(t_mini *mini)
 {
+	char *line;
+
+	line = skip_spaces(mini->line);
+	if (end_of_cmd(*line))
+		return (1);
 	if (!ft_valid_line(mini->line))
-		return (-1);
+		return (update_exit_status(mini, 2), 2);
 	mini->token_lst = ft_tokenizer(mini->line);
 	ft_update_token_type(mini->token_lst);
 	if (!ft_valid_syntax_order(mini->token_lst))
-		return (-1);
+		return (ft_token_free_lst(mini->token_lst),
+			update_exit_status(mini, 258), 2);
 	ft_parsing(mini, mini->token_lst);
+	//mini->token_lst = ft_re_tokenize(mini->token_lst);
 	mini->cmd_table = create_cmd_arr(mini->token_lst);
+	//print_cmd(mini->cmd_table);
 	return (0);
 }

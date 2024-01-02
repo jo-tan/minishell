@@ -26,6 +26,7 @@ int	main(int argc, char **argv, char **envp)
 	parent_signal();
 	while (1)
 	{
+		g_signal = 0;
 		if (input_and_parse(mini))
 			continue ;
 		exit_status = ft_exec

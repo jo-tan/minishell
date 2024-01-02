@@ -19,17 +19,24 @@ void	sigquit_handler(int signum)
 	return ;
 }
 
+static int	check_rl_done(void)
+{
+	return (0);
+}
+
 static void	parent_signal_handler(int signal)
 {
 	g_signal = signal;
 	write(1, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);
-	rl_redisplay();
+	rl_done = 1;
+
 }
 
 void	parent_signal(void)
 {
+	rl_event_hook = check_rl_done;
 	signal(SIGINT, &parent_signal_handler);
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGTSTP, SIG_IGN);

@@ -113,6 +113,11 @@ t_token	*ft_tokenizer(const char *line);
 int		ft_count_word_len(const char *line);
 void	ft_update_token_type(t_token *lst);
 
+/*parsing_utils*/
+char	*skip_spaces(char *str);
+int		end_of_cmd(int c);
+t_token *ft_re_tokenize(t_token *token_lst);
+
 /*parsing*/
 void	clear_quote(char **word, t_env *env, int exit_code, t_mini *mini);
 char	*ft_combine(t_token *lst);
