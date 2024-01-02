@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   buildin_echo.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aauthier <aauthier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 09:12:05 by jo-tan            #+#    #+#             */
-/*   Updated: 2024/01/01 09:12:10 by jo-tan           ###   ########.fr       */
+/*   Updated: 2024/01/02 12:14:07 by aauthier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	ft_echo(char **args, int fd)
 	}
 	option_flag = 0;
 	i = 1;
-	while (ft_echo_is_flag(args[i]))
+	while (args[i] && ft_echo_is_flag(args[i]))
 	{
 		option_flag = 1;
 		i++;
