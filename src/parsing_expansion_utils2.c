@@ -6,7 +6,7 @@
 /*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 09:51:23 by jo-tan            #+#    #+#             */
-/*   Updated: 2024/01/01 09:55:21 by jo-tan           ###   ########.fr       */
+/*   Updated: 2024/01/02 11:36:28 by jo-tan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ int	ft_count_parsing_len(char *word)
 {
 	char	*p;
 	int		len;
+	int		inquote;
 
 	p = word;
 	len = 0;
@@ -44,7 +45,16 @@ int	ft_count_parsing_len(char *word)
 	else
 	{
 		while (p[len] != '$' && p[len])
+		{
+			if (ft_isquote(p[len]))
+			{
+				inquote = 1;
+				while (p[len + inquote] != p[len])
+					inquote++;
+				len += inquote;
+			}
 			len++;
+		}
 	}
 	return (len);
 }

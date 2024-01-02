@@ -6,7 +6,7 @@
 /*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 18:25:28 by jo-tan            #+#    #+#             */
-/*   Updated: 2024/01/01 10:55:50 by jo-tan           ###   ########.fr       */
+/*   Updated: 2024/01/02 11:39:54 by jo-tan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,6 @@ void	ft_update_token_type(t_token *lst);
 /*parsing_utils*/
 char	*skip_spaces(char *str);
 int		end_of_cmd(int c);
-t_token *ft_re_tokenize(t_token *token_lst);
 
 /*parsing*/
 void	clear_quote(char **word, t_env *env, int exit_code, t_mini *mini);

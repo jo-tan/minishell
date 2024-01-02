@@ -6,7 +6,7 @@
 /*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 18:26:48 by jo-tan            #+#    #+#             */
-/*   Updated: 2024/01/01 12:36:11 by jo-tan           ###   ########.fr       */
+/*   Updated: 2024/01/02 11:14:50 by jo-tan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,14 +125,13 @@ int	ft_read_line(t_mini *mini)
 		return (1);
 	if (!ft_valid_line(mini->line))
 		return (update_exit_status(mini, 2), 2);
+	expansion(&mini->line, mini->env, mini->exit_code);
 	mini->token_lst = ft_tokenizer(mini->line);
 	ft_update_token_type(mini->token_lst);
 	if (!ft_valid_syntax_order(mini->token_lst))
 		return (ft_token_free_lst(mini->token_lst),
 			update_exit_status(mini, 258), 2);
 	ft_parsing(mini, mini->token_lst);
-	//mini->token_lst = ft_re_tokenize(mini->token_lst);
 	mini->cmd_table = create_cmd_arr(mini->token_lst);
-	//print_cmd(mini->cmd_table);
 	return (0);
 }
