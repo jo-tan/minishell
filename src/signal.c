@@ -38,5 +38,5 @@ void	parent_signal(void)
 	rl_event_hook = check_rl_done;
 	signal(SIGINT, &parent_signal_handler);
 	signal(SIGQUIT, SIG_IGN);
-	signal(SIGTSTP, SIG_IGN);
+	//signal(SIGTSTP, SIG_IGN);
 }

@@ -26,6 +26,7 @@ int	main(int argc, char **argv, char **envp)
 	parent_signal();
 	while (1)
 	{
+		//signal(SIGQUIT, SIG_IGN);
 		g_signal = 0;
 		if (input_and_parse(mini))
 			continue ;
