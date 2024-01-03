@@ -42,6 +42,8 @@ int	ft_valid_syntax_order(t_token *current)
 {
 	t_token	*prev;
 
+	if (current->next == NULL && current->type == ARG)
+		return (1);
 	if (current->type == PIPE)
 		return (print_syntax_err(current), 0);
 	while (current)

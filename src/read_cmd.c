@@ -61,6 +61,11 @@ t_token	*ft_tokenizer(const char *line)
 	head = NULL;
 	new = NULL;
 	word_len = 0;
+	if (line[0] == '\0')
+	{
+		head = ft_newtoken("\0");
+		return (head);
+	}
 	while (*line)
 	{
 		if (ft_isspace(*line))
@@ -91,13 +96,15 @@ void	ft_update_token_type(t_token *lst)
 	{
 		if (p->type == NONE)
 		{
-			if (ft_strncmp(p->word, "|", ft_strlen(p->word)) == 0)
+			if (p->word[0] == '\0')
+				p->type = ARG;
+			else if (ft_strncmp(p->word, "|", ft_strlen(p->word)) == 0)
 				p->type = PIPE;
 			else if (ft_strncmp(p->word, "<", ft_strlen(p->word)) == 0)
 				p->type = FILE_IN;
 			else if (ft_strncmp(p->word, "<<", ft_strlen(p->word)) == 0)
 			{
-				if (find_quote(p->next->word))
+				if (p->next != NULL && find_quote(p->next->word))
 					p->type = DELIMITER_Q;
 				else
 					p->type = DELIMITER;

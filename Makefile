@@ -70,7 +70,7 @@ RM			= rm -rf
 all:		$(LIBFT) $(NAME)
 
 $(NAME):	$(O_FILES)
-	@$(CC) -o $(NAME) $(O_FILES) -L $(LIBFT_DIR) -lreadline -lft -L /usr/local/Cellar/readline/8.2.1/lib $(INC)
+	@$(CC) -fsanitize=address -g -o $(NAME) $(O_FILES) -L $(LIBFT_DIR) -lreadline -lft -L /usr/local/Cellar/readline/8.2.1/lib $(INC)
 	@echo " [ ok ] | minishell is ready!"
 
 -include $(D_FILES)

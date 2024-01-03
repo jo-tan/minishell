@@ -21,7 +21,7 @@ void	ft_free_all(t_cmd **cmd_list, t_env *env)
 	if (env != NULL)
 		ft_free_envp(env);
 	i = 0;
-	if (cmd_list != NULL && cmd_list[i] != NULL)
+	if (cmd_list != NULL)
 	{
 		while (cmd_list[i])
 		{
@@ -30,14 +30,15 @@ void	ft_free_all(t_cmd **cmd_list, t_env *env)
 			{
 				temp = head;
 				head = head->next;
-				free(temp->word);
+				if (temp->word != NULL)
+					free(temp->word);
 				free(temp);
 			}
-			free(cmd_list[i]);
-			i++;
+		free(cmd_list[i]);
+		i++;
 		}
-		free(cmd_list);
 	}
+	free(cmd_list);
 }
 
 void	ft_close_all(t_cmd **cmd_list)
@@ -68,14 +69,15 @@ void	ft_free_char_vector(char **args)
 	int	i;
 
 	i = 0;
-	if (!args || !args[i])
-		return ;
-	while (args[i])
+	if (args != NULL)
 	{
-		free(args[i]);
-		i++;
+		while (args[i] != NULL)
+		{
+			free(args[i]);
+			i++;
+		}
+		free(args);
 	}
-	free(args);
 }
 
 int	ft_error(char *name, int type, int exit_code)
