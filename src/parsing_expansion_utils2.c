@@ -53,10 +53,10 @@ int	ft_count_parsing_len(char *word)
 
 	p = word;
 	len = 0;
-	if (p[len] == '$' && (ft_isspace(p[len + 1]) || !p[len + 1]))
-		return (1);
 	if (p[len] == '$' && (p[len + 1] == '$' || p[len + 1] == '?'))
 		return (2);
+	if (p[len] == '$' && (ft_isspace(p[len + 1]) || !p[len + 1] || !ft_isenvname(p[len + 1])))
+		return (1);
 	if (p[len] == '$' && ft_isenvname(p[len + 1]))
 	{
 		len++;
@@ -83,6 +83,8 @@ t_token	*ft_divide_arg_env(char *str)
 	head = NULL;
 	while (*str)
 	{
+		if (*str == '$' && ft_isquote(*(str + 1)))
+			str++;
 		word_len = ft_count_parsing_len(str);
 		word = malloc(word_len + 1);
 		if (!word)

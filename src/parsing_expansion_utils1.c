@@ -62,7 +62,7 @@ void	ft_process_env(t_token *pre, t_env *env, int exit_code)
 	p = pre;
 	while (p)
 	{
-		if ((p->word[0]) == '$' && p->word[1])
+		if ((p->word[0]) == '$')
 			switch_arg_env(&(p->word), env, exit_code);
 		p = p->next;
 	}

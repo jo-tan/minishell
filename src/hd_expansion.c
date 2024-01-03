@@ -7,7 +7,7 @@ int	ft_count_parsing_len_hd(char *word)
 
 	p = word;
 	len = 0;
-    if (p[len] == '$' && (ft_isspace(p[len + 1]) || !p[len + 1]))
+    if (p[len] == '$' && (ft_isspace(p[len + 1]) || !p[len + 1] || !ft_isenvname(p[len + 1])))
 		return (1);
 	if (p[len] == '$' && (p[len + 1] == '$' || p[len + 1] == '?'))
 		return (2);

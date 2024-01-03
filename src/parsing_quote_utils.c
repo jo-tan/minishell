@@ -86,7 +86,7 @@ void	process_quote(char **word)
 void	process_double(char **word, t_env *env, int exit_code)
 {
 	process_quote(word);
-	expansion(word, env, exit_code);
+	hd_expansion(word, env, exit_code);
 }
 
 void	ft_process_quote(t_token *lst, t_env *env, int exit_code)
