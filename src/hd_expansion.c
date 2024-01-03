@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   hd_expansion.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/03 10:32:50 by jo-tan            #+#    #+#             */
+/*   Updated: 2024/01/03 10:43:56 by jo-tan           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	ft_count_parsing_len_hd(char *word)
@@ -7,7 +19,8 @@ int	ft_count_parsing_len_hd(char *word)
 
 	p = word;
 	len = 0;
-    if (p[len] == '$' && (ft_isspace(p[len + 1]) || !p[len + 1] || !ft_isenvname(p[len + 1])))
+	if (p[len] == '$' && (ft_isspace(p[len + 1])
+			|| !p[len + 1] || !ft_isenvname(p[len + 1])))
 		return (1);
 	if (p[len] == '$' && (p[len + 1] == '$' || p[len + 1] == '?'))
 		return (2);
@@ -22,7 +35,7 @@ int	ft_count_parsing_len_hd(char *word)
 	else
 	{
 		while (p[len] != '$' && p[len])
-            len++;
+			len++;
 	}
 	return (len);
 }

@@ -6,7 +6,7 @@
 /*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 09:30:27 by jo-tan            #+#    #+#             */
-/*   Updated: 2024/01/01 10:18:59 by jo-tan           ###   ########.fr       */
+/*   Updated: 2024/01/03 10:38:32 by jo-tan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ int	ft_set_io(t_cmd **cmd_list, int i, int single_flag)
 	{
 		if (t->type == DELIMITER && find_space(t->word))
 			return (ft_ambig(t->word), 1);
-			
 		if (t->type == FILE_IN || t->type == FILE_OUT || t->type == FILE_OUT_AP)
 			exit_status = ft_file(cmd_list, i, t->word, t->type);
 		if (t->type == DELIMITER || t->type == DELIMITER_Q)

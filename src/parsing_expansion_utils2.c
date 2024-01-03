@@ -6,7 +6,7 @@
 /*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 09:51:23 by jo-tan            #+#    #+#             */
-/*   Updated: 2024/01/02 12:00:07 by jo-tan           ###   ########.fr       */
+/*   Updated: 2024/01/03 14:43:04 by jo-tan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ int	ft_count_parsing_len(char *word)
 	len = 0;
 	if (p[len] == '$' && (p[len + 1] == '$' || p[len + 1] == '?'))
 		return (2);
-	if (p[len] == '$' && (ft_isspace(p[len + 1]) || !p[len + 1] || !ft_isenvname(p[len + 1])))
+	if (p[len] == '$' && (ft_isspace(p[len + 1])
+			|| !p[len + 1] || !ft_isenvname(p[len + 1])))
 		return (1);
 	if (p[len] == '$' && ft_isenvname(p[len + 1]))
 	{

@@ -6,11 +6,34 @@
 /*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 18:26:22 by jo-tan            #+#    #+#             */
-/*   Updated: 2024/01/01 10:37:43 by jo-tan           ###   ########.fr       */
+/*   Updated: 2024/01/03 15:37:02 by jo-tan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static char	*enum_to_str(t_token *p)
+{
+	char	*type;
+
+	if (p->type == NONE)
+		type = "NONE";
+	if (p->type == ARG)
+		type = "ARG";
+	if (p->type == PIPE)
+		type = "PIPE";
+	if (p->type == FILE_IN)
+		type = "FILE_IN";
+	if (p->type == FILE_OUT)
+		type = "FILE_OUT";
+	if (p->type == FILE_OUT_AP)
+		type = "FILE_OUT_AP";
+	if (p->type == DELIMITER)
+		type = "DELIMITER";
+	if (p->type == DELIMITER_Q)
+		type = "DELIMITER_Q";
+	return (type);
+}
 
 void	ft_print_token_lst(t_token *token_lst)
 {
@@ -20,22 +43,7 @@ void	ft_print_token_lst(t_token *token_lst)
 	p = token_lst;
 	while (p)
 	{
-		if (p->type == NONE)
-			type = "NONE";
-		if (p->type == ARG)
-			type = "ARG";
-		if (p->type == PIPE)
-			type = "PIPE";
-		if (p->type == FILE_IN)
-			type = "FILE_IN";
-		if (p->type == FILE_OUT)
-			type = "FILE_OUT";
-		if (p->type == FILE_OUT_AP)
-			type = "FILE_OUT_AP";
-		if (p->type == DELIMITER)
-			type = "DELIMITER";
-		if (p->type == DELIMITER_Q)
-			type = "DELIMITER_Q";
+		type = enum_to_str(p);
 		printf("❮%d%s/%s❯   ", p->type, type, p->word);
 		p = p->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 18:25:57 by jo-tan            #+#    #+#             */
-/*   Updated: 2024/01/01 10:44:47 by jo-tan           ###   ########.fr       */
+/*   Updated: 2024/01/03 10:35:26 by jo-tan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ int	main(int argc, char **argv, char **envp)
 	parent_signal();
 	while (1)
 	{
-		//signal(SIGQUIT, SIG_IGN);
 		g_signal = 0;
 		if (input_and_parse(mini))
 			continue ;

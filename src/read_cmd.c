@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aauthier <aauthier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 18:26:48 by jo-tan            #+#    #+#             */
-/*   Updated: 2024/01/02 16:05:59 by aauthier         ###   ########.fr       */
+/*   Updated: 2024/01/03 15:36:08 by jo-tan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static t_token	*process_token(const char *line, int *word_len)
 	return (ft_newtoken(word));
 }
 
-t_token	*ft_tokenizer(const char *line)
+static t_token	*create_tokenized_list(const char *line)
 {
 	t_token	*new;
 	t_token	*head;
@@ -61,11 +61,6 @@ t_token	*ft_tokenizer(const char *line)
 	head = NULL;
 	new = NULL;
 	word_len = 0;
-	if (line[0] == '\0')
-	{
-		head = ft_newtoken("\0");
-		return (head);
-	}
 	while (*line)
 	{
 		if (ft_isspace(*line))
@@ -85,39 +80,18 @@ t_token	*ft_tokenizer(const char *line)
 	return (head);
 }
 
-void	ft_update_token_type(t_token *lst)
+t_token	*ft_tokenizer(const char *line)
 {
-	t_token	*p;
+	t_token	*head;
 
-	if (!lst)
-		return ;
-	p = lst;
-	while (p)
+	head = NULL;
+	if (line[0] == '\0')
 	{
-		if (p->type == NONE)
-		{
-			if (p->word[0] == '\0')
-				p->type = ARG;
-			else if (ft_strncmp(p->word, "|", ft_strlen(p->word)) == 0)
-				p->type = PIPE;
-			else if (ft_strncmp(p->word, "<", ft_strlen(p->word)) == 0)
-				p->type = FILE_IN;
-			else if (ft_strncmp(p->word, "<<", ft_strlen(p->word)) == 0)
-			{
-				if (p->next != NULL && find_quote(p->next->word))
-					p->type = DELIMITER_Q;
-				else
-					p->type = DELIMITER;
-			}
-			else if (ft_strncmp(p->word, ">", ft_strlen(p->word)) == 0)
-				p->type = FILE_OUT;
-			else if (ft_strncmp(p->word, ">>", ft_strlen(p->word)) == 0)
-				p->type = FILE_OUT_AP;
-			else
-				p->type = ARG;
-		}
-		p = p->next;
+		head = ft_newtoken("\0");
+		return (head);
 	}
+	head = create_tokenized_list(line);
+	return (head);
 }
 
 //READ_LINE:
@@ -131,12 +105,12 @@ void	ft_update_token_type(t_token *lst)
 int	ft_read_line(t_mini *mini)
 {
 	char	*line;
+	int		exit;
 
 	line = skip_spaces(mini->line);
-	if (end_of_cmd(*line) == 2)
-		return (update_exit_status(mini, 1), 1);
-	if (end_of_cmd(*line) == 1)
-		return (update_exit_status(mini, 0), 1);
+	exit = end_of_cmd(*line);
+	if (exit)
+		return (update_exit_status(mini, exit - 1), 1);
 	if (!ft_valid_line(mini->line))
 		return (update_exit_status(mini, 2), 2);
 	expansion(&mini->line, mini->env, mini->exit_code);

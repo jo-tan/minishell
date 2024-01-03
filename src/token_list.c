@@ -6,7 +6,7 @@
 /*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 18:26:12 by jo-tan            #+#    #+#             */
-/*   Updated: 2024/01/01 09:59:35 by jo-tan           ###   ########.fr       */
+/*   Updated: 2024/01/03 11:08:24 by jo-tan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,14 @@ t_token	*ft_newtoken(char *s)
 	new = malloc(sizeof(t_token));
 	if (!new)
 	{
-		free(s);
+		if (s != NULL)
+			free(s);
 		return (NULL);
 	}
-	new->word = s;
+	if (s[0] == '\0')
+		new->word = ft_strdup("\0");
+	else
+		new->word = s;
 	new->type = NONE;
 	new->next = NULL;
 	return (new);

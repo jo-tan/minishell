@@ -6,7 +6,7 @@
 /*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 09:32:07 by jo-tan            #+#    #+#             */
-/*   Updated: 2024/01/01 09:32:09 by jo-tan           ###   ########.fr       */
+/*   Updated: 2024/01/03 10:39:48 by jo-tan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ void	ft_free_all(t_cmd **cmd_list, t_env *env)
 					free(temp->word);
 				free(temp);
 			}
-		free(cmd_list[i]);
-		i++;
+			free(cmd_list[i]);
+			i++;
 		}
 	}
 	free(cmd_list);

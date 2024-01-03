@@ -6,7 +6,7 @@
 #    By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/13 18:25:12 by jo-tan            #+#    #+#              #
-#    Updated: 2024/01/01 10:40:59 by jo-tan           ###   ########.fr        #
+#    Updated: 2024/01/03 15:13:33 by jo-tan           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,8 +17,10 @@ S_FILES		= src/main.c \
 				src/init_utils.c \
 				src/init_envp.c \
 				src/check_valid_input.c \
+				src/check_quote_pair.c \
 				src/read_cmd.c \
 				src/parsing_utils.c \
+				src/parsing_token_type.c \
 				src/parsing.c \
 				src/parsing_quote_utils.c \
 				src/parsing_expansion_utils1.c \
@@ -47,7 +49,8 @@ S_FILES		= src/main.c \
 				src/env_utils.c \
 				src/env_utils2.c \
 				src/signal.c \
-				src/check_syntax.c
+				src/check_syntax.c \
+				src/utils_find_char.c
 S_DIR		= src
 
 LIBFT		= libft/libft.a
@@ -70,7 +73,7 @@ RM			= rm -rf
 all:		$(LIBFT) $(NAME)
 
 $(NAME):	$(O_FILES)
-	@$(CC) -fsanitize=address -g -o $(NAME) $(O_FILES) -L $(LIBFT_DIR) -lreadline -lft -L /usr/local/Cellar/readline/8.2.1/lib $(INC)
+	@$(CC) -o $(NAME) $(O_FILES) -L $(LIBFT_DIR) -lreadline -lft -L /usr/local/Cellar/readline/8.2.1/lib $(INC)
 	@echo " [ ok ] | minishell is ready!"
 
 -include $(D_FILES)

@@ -6,7 +6,7 @@
 /*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 18:26:38 by jo-tan            #+#    #+#             */
-/*   Updated: 2024/01/01 10:06:40 by jo-tan           ###   ########.fr       */
+/*   Updated: 2024/01/03 13:41:53 by jo-tan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ void	ft_process_quote(t_token *lst, t_env *env, int exit_code)
 	{
 		if ((p->word[0]) == '\'')
 			process_quote(&(p->word));
-		if ((p->word[0]) == '\"')
+		else if ((p->word[0]) == '\"')
 			process_double(&(p->word), env, exit_code);
 		p = p->next;
 	}
