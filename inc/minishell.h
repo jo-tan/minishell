@@ -49,9 +49,10 @@ enum e_type
 	ARG = 1,
 	PIPE = 2,
 	FILE_IN = 3,
-	HERE_DOC = 4,
-	FILE_OUT = 5,
-	FILE_OUT_AP = 6
+	DELIMITER = 4,
+	DELIMITER_Q = 5,
+	FILE_OUT = 6,
+	FILE_OUT_AP = 7
 };
 
 typedef struct s_token
@@ -171,12 +172,20 @@ int		ft_str_contains_char(char *str, char c);
 void	ft_dup(t_cmd **cmd_list, int i, int single_flag);
 void	ft_ambig(char *str);
 int		find_space(char *word);
+int		find_quote(char *word);
+int		find_dollar(char *word);
 // exec_set_io
 int		ft_set_io(t_cmd **cmd, int i, int single_flag);
 int		ft_hdoc_write(char *str, int *pipe_ends);
 void	ft_hdoc_sig(char *limitor);
-// exec_set_io_heredoc
-int		ft_set_hdoc(t_cmd **cmd_list);
+int		ft_heredoc(char *limitor, enum e_type type, int old_exit, t_env *msh_env);
+int		ft_set_hdoc(t_cmd **cmd_list, int e, t_env *msh_env);
+// hd_expansion
+int	ft_count_parsing_len_hd(char *word);
+t_token	*ft_divide_arg_env_hd(char *string);
+void	hd_expansion(char **word, t_env *env, int exit_code);
+char	*ft_heredoc_expand(
+	char *str, enum e_type type, t_env *env, int old_exit);
 // exec_pipeline
 int		ft_child(t_cmd **cmd_list, int i, t_env *env, int single_flag);
 int		ft_pipeline(t_cmd **cmd_list, int cmd_amt, t_env *env, t_mini *msh);

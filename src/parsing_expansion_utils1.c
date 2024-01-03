@@ -42,7 +42,10 @@ void	switch_arg_env(char **word, t_env *env, int exit_code)
 {
 	char	*var_value;
 
-	if ((*word)[1] == '?')
+	var_value = NULL;
+	if ((*word)[1] == '$')
+		var_value = ft_itoa(getpid());
+	else if ((*word)[1] == '?')
 		var_value = ft_itoa(exit_code);
 	else if (ft_isdigit((*word)[1]))
 		var_value = ft_strdup("");
@@ -59,7 +62,7 @@ void	ft_process_env(t_token *pre, t_env *env, int exit_code)
 	p = pre;
 	while (p)
 	{
-		if ((p->word[0]) == '$')
+		if ((p->word[0]) == '$' && p->word[1])
 			switch_arg_env(&(p->word), env, exit_code);
 		p = p->next;
 	}

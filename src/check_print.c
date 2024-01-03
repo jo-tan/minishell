@@ -28,12 +28,14 @@ void	ft_print_token_lst(t_token *token_lst)
 			type = "PIPE";
 		if (p->type == FILE_IN)
 			type = "FILE_IN";
-		if (p->type == HERE_DOC)
-			type = "HERE_DOC";
 		if (p->type == FILE_OUT)
 			type = "FILE_OUT";
 		if (p->type == FILE_OUT_AP)
 			type = "FILE_OUT_AP";
+		if (p->type == DELIMITER)
+			type = "DELIMITER";
+		if (p->type == DELIMITER_Q)
+			type = "DELIMITER_Q";
 		printf("❮%d%s/%s❯   ", p->type, type, p->word);
 		p = p->next;
 	}

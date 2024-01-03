@@ -65,7 +65,7 @@ int	ft_exec(t_cmd **cmd_list, t_env *env, int e, t_mini *msh)
 	int		buildin_num;
 
 	nbr_cmd = ft_exec_init(cmd_list, e);
-	if (ft_set_hdoc(cmd_list) || ft_set_pipes(cmd_list, nbr_cmd))
+	if (ft_set_hdoc(cmd_list, e, env) || ft_set_pipes(cmd_list, nbr_cmd))
 	{
 		ft_close_all(cmd_list);
 		if (g_signal)

@@ -96,7 +96,12 @@ void	ft_update_token_type(t_token *lst)
 			else if (ft_strncmp(p->word, "<", ft_strlen(p->word)) == 0)
 				p->type = FILE_IN;
 			else if (ft_strncmp(p->word, "<<", ft_strlen(p->word)) == 0)
-				p->type = HERE_DOC;
+			{
+				if (find_quote(p->next->word))
+					p->type = DELIMITER_Q;
+				else
+					p->type = DELIMITER;
+			}
 			else if (ft_strncmp(p->word, ">", ft_strlen(p->word)) == 0)
 				p->type = FILE_OUT;
 			else if (ft_strncmp(p->word, ">>", ft_strlen(p->word)) == 0)

@@ -69,3 +69,31 @@ int	find_space(char *word)
 	}
 	return (0);
 }
+
+int	find_quote(char *word)
+{
+	int	i;
+
+	i = 0;
+	while (word[i])
+	{
+		if (ft_isquote(word[i]))
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+int	find_dollar(char *word)
+{
+	int	i;
+
+	i = 0;
+	while (word[i])
+	{
+		if (word[i] == '$')
+			return (1);
+		i++;
+	}
+	return (0);
+}

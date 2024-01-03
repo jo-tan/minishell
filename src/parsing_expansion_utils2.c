@@ -53,10 +53,14 @@ int	ft_count_parsing_len(char *word)
 
 	p = word;
 	len = 0;
-	if (p[len] == '$')
+	if (p[len] == '$' && (ft_isspace(p[len + 1]) || !p[len + 1]))
+		return (1);
+	if (p[len] == '$' && (p[len + 1] == '$' || p[len + 1] == '?'))
+		return (2);
+	if (p[len] == '$' && ft_isenvname(p[len + 1]))
 	{
 		len++;
-		if (p[len] == '?' || ft_isdigit(p[len]))
+		if (ft_isdigit(p[len]))
 			return (2);
 		while (ft_isenvname(word[len]) && p[len] && p[len] != '$')
 			len++;
@@ -68,7 +72,7 @@ int	ft_count_parsing_len(char *word)
 	return (len);
 }
 
-t_token	*ft_divide_arg_env(char *string)
+t_token	*ft_divide_arg_env(char *str)
 {
 	int		word_len;
 	char	*word;
@@ -76,20 +80,20 @@ t_token	*ft_divide_arg_env(char *string)
 	t_token	*head;
 
 	new = NULL;
-	head = new;
-	while (*string)
+	head = NULL;
+	while (*str)
 	{
-		word_len = ft_count_parsing_len(string);
+		word_len = ft_count_parsing_len(str);
 		word = malloc(word_len + 1);
 		if (!word)
 			return (NULL);
-		ft_strlcpy(word, string, word_len + 1);
+		ft_strlcpy(word, str, word_len + 1);
 		new = ft_newtoken(word);
 		if (head == NULL)
 			head = new;
 		else
 			ft_addtoken(head, new);
-		string += word_len;
+		str += word_len;
 	}
 	return (head);
 }

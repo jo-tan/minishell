@@ -43,6 +43,7 @@ S_FILES		= src/main.c \
 				src/exec_pipeline.c \
 				src/exec_set_io.c \
 				src/exec_set_io_utils.c \
+				src/hd_expansion.c \
 				src/env_utils.c \
 				src/env_utils2.c \
 				src/signal.c \
