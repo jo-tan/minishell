@@ -126,8 +126,10 @@ int	ft_read_line(t_mini *mini)
 	char	*line;
 
 	line = skip_spaces(mini->line);
-	if (end_of_cmd(*line))
-		return (1);
+	if (end_of_cmd(*line) == 2)
+		return (update_exit_status(mini, 1), 1);
+	if (end_of_cmd(*line) == 1)
+		return (update_exit_status(mini, 0), 1);
 	if (!ft_valid_line(mini->line))
 		return (update_exit_status(mini, 2), 2);
 	expansion(&mini->line, mini->env, mini->exit_code);

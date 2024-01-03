@@ -23,7 +23,12 @@ char	*skip_spaces(char *str)
 
 int	end_of_cmd(int c)
 {
-	return (c == 0 || c == '#' || c == ':' || c == '!');
+	if (c == 0 || c == '#' || c == ':')
+		return (1);
+	if (c == '!')
+		return (2);
+	else
+		return (0);
 }
 
 //Here i have the char ':' and '!' which need to be treated like '#'
