@@ -57,12 +57,16 @@ void	free_single_token(t_token *token)
 
 void	ft_token_free_lst(t_token *lst)
 {
+	t_token *next;;
+
 	if (!lst)
 		return ;
 	while (lst)
 	{
-		if (lst->word != NULL)
+		if (lst->word != NULL || lst->word[0] == '\0')
 			free(lst->word);
-		lst = lst->next;
+		next = lst->next;
+        free(lst);
+        lst = next;
 	}
 }
