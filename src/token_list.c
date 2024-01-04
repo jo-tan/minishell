@@ -6,7 +6,7 @@
 /*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 18:26:12 by jo-tan            #+#    #+#             */
-/*   Updated: 2024/01/03 11:08:24 by jo-tan           ###   ########.fr       */
+/*   Updated: 2024/01/04 10:24:37 by jo-tan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	free_single_token(t_token *token)
 
 void	ft_token_free_lst(t_token *lst)
 {
-	t_token *next;;
+	t_token	*next;
 
 	if (!lst)
 		return ;
@@ -66,7 +66,7 @@ void	ft_token_free_lst(t_token *lst)
 		if (lst->word != NULL || lst->word[0] == '\0')
 			free(lst->word);
 		next = lst->next;
-        free(lst);
-        lst = next;
+		free(lst);
+		lst = next;
 	}
 }

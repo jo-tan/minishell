@@ -6,7 +6,7 @@
 /*   By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 09:33:25 by jo-tan            #+#    #+#             */
-/*   Updated: 2024/01/01 12:23:37 by jo-tan           ###   ########.fr       */
+/*   Updated: 2024/01/04 10:37:59 by jo-tan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,15 @@ int	init_envp(t_mini *mini, char **envp)
 
 void	ft_free_envp(t_env *env)
 {
+	t_env	*next;
+
 	if (!env)
 		return ;
 	while (env)
 	{
 		free(env->line);
-		env = env->next;
+		next = env->next;
+		free(env);
+		env = next;
 	}
 }
