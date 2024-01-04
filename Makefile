@@ -6,7 +6,7 @@
 #    By: jo-tan <jo-tan@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/13 18:25:12 by jo-tan            #+#    #+#              #
-#    Updated: 2024/01/03 15:13:33 by jo-tan           ###   ########.fr        #
+#    Updated: 2024/01/04 10:58:27 by jo-tan           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -65,7 +65,7 @@ D_FILES		= $(patsubst $(S_DIR)/%.c,$(O_DIR)/%.d,$(S_FILES))
 # Compilation
 CC			= cc
 CF			= -Wall -Wextra -Werror #-MMD -MP
-INC			= -I inc/ -I $(LIBFT_DIR) -I/usr/local/Cellar/readline/8.2.1/include
+INC			= -I inc/ -I $(LIBFT_DIR)
 
 # Cleaning
 RM			= rm -rf
@@ -73,7 +73,7 @@ RM			= rm -rf
 all:		$(LIBFT) $(NAME)
 
 $(NAME):	$(O_FILES)
-	@$(CC) -fsanitize=address -g -o $(NAME) $(O_FILES) -L $(LIBFT_DIR) -lreadline -lft -L /usr/local/Cellar/readline/8.2.1/lib $(INC)
+	@$(CC) -o $(NAME) $(O_FILES) -L $(LIBFT_DIR) -lreadline -lft $(INC)
 	@echo " [ ok ] | minishell is ready!"
 
 -include $(D_FILES)
