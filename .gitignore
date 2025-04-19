@@ -1,5 +1,5 @@
 # Files to be ignored by Git
-
+.DS_Store
 # Binaries
 obj/
 *.o
